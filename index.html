@@ -14,6 +14,8 @@
             --success-color: #2ecc71;
             --border-color: #e1e4e8;
             --sidebar-bg: #fcfcfc;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         * {
@@ -25,7 +27,7 @@
 
         body, html {
             height: 100%;
-            overflow: hidden; /* 防止整个页面出现滚动条 */
+            overflow: hidden;
             background-color: #fff;
         }
 
@@ -92,157 +94,181 @@
         /* --- 主布局 (2:8 分离) --- */
         #app-container {
             display: grid;
-            grid-template-columns: 280px 1fr; /* 左侧固定宽度，右侧自适应，约等于 2:8 视觉比例 */
-            height: 100vh; /* 占满全屏高度 */
-            opacity: 0; /* 初始隐藏，登录后显示 */
+            grid-template-columns: 280px 1fr;
+            height: 100vh;
+            opacity: 0;
             transition: opacity 0.5s ease;
         }
 
-        /* --- 左侧边栏 (优化排版) --- */
+        /* --- 左侧边栏 (重构布局) --- */
         .sidebar {
             background-color: var(--sidebar-bg);
-            padding: 30px 20px;
+            padding: 25px 20px 30px;
             border-right: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
             height: 100%;
-            overflow-y: auto; /* 如果侧边栏太高，它自己也可以滚，但通常不需要 */
+            overflow-y: auto;
             position: relative;
             z-index: 5;
         }
 
-        /* 日期区域 */
-        .date-display {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-color);
-            margin-bottom: 5px;
-            text-align: center;
-        }
-
+        /* 重构：时间显示置顶 - 加粗放大 */
         .time-display {
-            font-size: 2.5rem;
-            font-weight: 200; /* 细体显得更高级 */
+            font-size: 4.2rem; /* 显著放大 */
+            font-weight: 800; /* 超粗体 */
             color: var(--primary-color);
-            margin-bottom: 30px;
             text-align: center;
+            margin-bottom: 8px; /* 紧凑间距 */
             font-variant-numeric: tabular-nums;
-            letter-spacing: -1px;
+            letter-spacing: -1.5px;
+            line-height: 1;
+            text-shadow: 0 2px 4px rgba(74, 144, 226, 0.15);
         }
 
-        /* 日历样式优化 */
-        .calendar-container {
-            margin-bottom: 30px;
-            padding: 0 5px;
-        }
-
-        .calendar-header {
-            text-align: center;
-            margin-bottom: 15px;
-            font-size: 0.95rem;
+        /* 重构：日期显示移至日历上方 */
+        .calendar-date-header {
+            font-size: 1.45rem;
+            font-weight: 700;
             color: var(--text-color);
-            font-weight: 600;
+            text-align: center;
+            margin: 12px 0 18px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+            letter-spacing: 1px;
+        }
+
+        /* 日历容器优化 */
+        .calendar-container {
+            margin-bottom: 25px;
+            padding: 0 8px;
         }
 
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 8px;
+            gap: 6px;
             text-align: center;
         }
 
         .calendar-day-label {
-            font-size: 0.75rem;
+            font-size: 0.78rem;
             color: var(--text-light);
-            margin-bottom: 8px;
+            font-weight: 500;
+            padding: 4px 0;
+            text-transform: uppercase;
         }
 
-/* 替换原有的 .calendar-day 样式 */
-.calendar-day {
-    font-size: 0.9rem; /* 稍微缩小字体，避免挤压 */
-    border-radius: 50%;
-    cursor: default;
-    color: var(--text-color);
-    transition: background 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    aspect-ratio: 1 / 1; /* 核心：强制宽高1:1 */
-    padding: 0; /* 移除原有padding，避免破坏比例 */
-    line-height: 1; /* 防止字体行高影响垂直居中 */
-}
-
-/* 优化今日样式（避免阴影导致视觉偏移） */
-.calendar-day.today {
-    background-color: var(--primary-color);
-    color: white;
-    font-weight: bold;
-    box-shadow: 0 2px 4px rgba(74, 144, 226, 0.3); /* 减小阴影扩散值 */
-    /* 移除原有 box-shadow 的垂直偏移，保持居中 */
-}
-
-        /* 统计卡片优化 */
-        .stats-box {
-            background-color: white;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-            border: 1px solid #eee;
-        }
-
-        .stats-count {
-            font-size: 2.8rem;
-            font-weight: 700;
+        .calendar-day {
+            font-size: 0.95rem;
+            border-radius: 50%;
+            cursor: default;
             color: var(--text-color);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1 / 1;
+            padding: 0;
             line-height: 1;
-            margin-bottom: 5px;
-        }
-
-        .stats-label {
-            font-size: 0.85rem;
-            color: var(--text-light);
+            position: relative;
             font-weight: 500;
         }
 
-        /* 底部清空按钮 - 自动推到底部 */
+        /* 当日强调 - 完美正圆 */
+        .calendar-day.today {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 2px 5px rgba(74, 144, 226, 0.35);
+            transform: scale(1.05);
+        }
+
+        .calendar-day.today::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            background: rgba(74, 144, 226, 0.15);
+            z-index: -1;
+        }
+
+        /* 统计卡片优化 */
+        .stats-box {
+            background: white;
+            padding: 22px 15px;
+            border-radius: 14px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 22px;
+            border: 1px solid #f0f2f5;
+            transition: transform 0.3s ease;
+        }
+
+        .stats-box:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stats-count {
+            font-size: 3.1rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-color), #2a64c6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1;
+            margin-bottom: 4px;
+            letter-spacing: -1px;
+        }
+
+        .stats-label {
+            font-size: 0.92rem;
+            color: var(--text-light);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* 底部清空按钮 */
         .sidebar-footer {
-            margin-top: auto; /* 关键：利用 Flexbox 把这下面的内容推到底部 */
+            margin-top: auto;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
         }
 
         .clear-btn {
             width: 100%;
             padding: 14px;
-            background-color: white;
+            background: linear-gradient(to right, #fff, #f8f9ff);
             border: 1px solid var(--danger-color);
             color: var(--danger-color);
-            border-radius: 8px;
-            font-size: 0.95rem;
+            border-radius: 10px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.25s;
+            box-shadow: 0 2px 4px rgba(231, 76, 60, 0.1);
         }
 
         .clear-btn:hover {
-            background-color: var(--danger-color);
+            background: linear-gradient(to right, var(--danger-color), #d62c1a);
             color: white;
-            box-shadow: 0 4px 10px rgba(231, 76, 60, 0.2);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(231, 76, 60, 0.25);
         }
 
-        /* --- 右侧内容区 (80%) --- */
+        /* --- 右侧内容区 --- */
         .main-content {
             display: flex;
             flex-direction: column;
             height: 100%;
             background-color: #fff;
-            overflow: hidden; /* 右侧容器本身不滚，只让内部列表滚 */
+            overflow: hidden;
             position: relative;
         }
 
-        /* 顶部固定功能区 */
         .top-bar {
-            height: 80px; /* 增加高度，让视觉更宽敞 */
+            height: 80px;
             padding: 0 40px;
             display: flex;
             justify-content: space-between;
@@ -250,11 +276,11 @@
             border-bottom: 1px solid var(--border-color);
             background-color: #fff;
             z-index: 20;
-            flex-shrink: 0; /* 防止被压缩 */
+            flex-shrink: 0;
         }
 
         .page-title {
-            font-size: 1.4rem;
+            font-size: 1.45rem;
             font-weight: 700;
             color: var(--text-color);
         }
@@ -268,97 +294,110 @@
             background: #f8f9fa;
             border: 1px solid var(--border-color);
             cursor: pointer;
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             color: var(--text-color);
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            transition: all 0.2s;
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            transition: all 0.25s;
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: var(--shadow-sm);
         }
 
         .icon-btn:hover {
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), #3a7bd5);
             color: white;
             border-color: var(--primary-color);
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(74, 144, 226, 0.25);
         }
 
         .icon-btn.active {
-            background-color: #fff0f0;
+            background: linear-gradient(135deg, #ffebee, #ffccd4);
             color: var(--danger-color);
             border-color: var(--danger-color);
+            transform: scale(1.05);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.15);
         }
 
-        /* 任务列表容器 - 独立滚动区域 */
+        /* 任务列表容器 */
         .task-list-container {
-            flex: 1; /* 占据剩余所有空间 */
-            overflow-y: auto; /* 开启垂直滚动 */
+            flex: 1;
+            overflow-y: auto;
             padding: 30px 40px;
             background-color: #fff;
-            
-            /* --- 强制显示滚动条样式 (要求1) --- */
-            scrollbar-width: auto; /* Firefox */
-            scrollbar-color: #b0b0b0 #f0f0f0; /* 滑块颜色 / 轨道颜色 */
+            scrollbar-width: auto;
+            scrollbar-color: #b0b0b0 #f0f0f0;
         }
 
-        /* Webkit (Chrome/Edge/Safari) 滚动条样式 */
         .task-list-container::-webkit-scrollbar {
-            width: 12px; /* 宽度足够大，方便点击 */
+            width: 12px;
         }
 
         .task-list-container::-webkit-scrollbar-track {
-            background: #f1f1f1; 
+            background: #f5f7fa;
+            border-radius: 6px;
         }
 
         .task-list-container::-webkit-scrollbar-thumb {
-            background-color: #b0b0b0; 
+            background-color: #c1c7d0;
             border-radius: 6px;
-            border: 3px solid #f1f1f1; /* 制造留白效果 */
+            border: 3px solid #f5f7fa;
         }
 
         .task-list-container::-webkit-scrollbar-thumb:hover {
-            background-color: #888; 
+            background-color: #95a1b0;
         }
 
-        /* 按日期分组 */
         .date-group {
-            margin-bottom: 40px;
+            margin-bottom: 35px;
         }
 
         .date-divider {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 700;
             color: var(--text-color);
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             padding-left: 15px;
-            border-left: 5px solid var(--primary-color);
+            border-left: 4px solid var(--primary-color);
+            display: flex;
+            align-items: center;
         }
 
-        /* 单个任务项 */
+        .date-divider::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
         .task-item {
             display: flex;
             align-items: center;
-            padding: 18px 20px;
+            padding: 18px 22px;
             background: white;
-            border: 1px solid #eee;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            transition: all 0.2s;
+            border: 1px solid #f0f2f5;
+            border-radius: 12px;
+            margin-bottom: 14px;
+            transition: all 0.25s;
+            box-shadow: var(--shadow-sm);
         }
 
         .task-item:hover {
-            border-color: #d0d0d0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            border-color: #e1e5eb;
+            transform: translateX(3px);
+            box-shadow: var(--shadow-md);
         }
 
         .checkbox-custom {
-            width: 24px;
-            height: 24px;
-            border: 2px solid #ccc;
+            width: 26px;
+            height: 26px;
+            border: 2px solid #cbd5e1;
             border-radius: 50%;
             margin-right: 20px;
             cursor: pointer;
@@ -367,35 +406,51 @@
             justify-content: center;
             transition: all 0.2s;
             flex-shrink: 0;
+            background: white;
         }
 
         .task-item.completed .checkbox-custom {
             background-color: var(--success-color);
             border-color: var(--success-color);
+            transform: scale(1.1);
         }
 
         .task-item.completed .task-text {
             text-decoration: line-through;
-            color: #aaa;
+            color: #a0aec0;
+            opacity: 0.85;
         }
 
         .task-text {
-            font-size: 1.05rem;
+            font-size: 1.08rem;
             color: var(--text-color);
             cursor: pointer;
             flex: 1;
-            line-height: 1.4;
+            line-height: 1.5;
+            font-weight: 500;
+            transition: color 0.2s;
         }
 
         .delete-btn {
             margin-left: 15px;
-            background: none;
-            border: none;
+            background: linear-gradient(to right, #fff5f5, #ffebee);
+            border: 1px solid var(--danger-color);
             color: var(--danger-color);
             cursor: pointer;
-            padding: 5px 10px;
-            font-size: 0.9rem;
+            padding: 6px 14px;
+            font-size: 0.92rem;
+            border-radius: 8px;
+            font-weight: 500;
             display: none;
+            transition: all 0.2s;
+            box-shadow: 0 1px 3px rgba(231, 76, 60, 0.15);
+        }
+        
+        .delete-btn:hover {
+            background: var(--danger-color);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(231, 76, 60, 0.3);
         }
         
         body.batch-mode .delete-btn {
@@ -406,6 +461,11 @@
             text-align: center;
             color: var(--text-light);
             margin-top: 80px;
+            font-size: 1.1rem;
+            padding: 20px;
+            background: var(--secondary-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
         }
 
         /* --- 模态框 --- */
@@ -415,107 +475,205 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.4);
+            background: rgba(0,0,0,0.45);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 2000;
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(6px);
         }
 
         .modal {
             background: white;
             padding: 35px;
-            border-radius: 16px;
-            width: 420px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-radius: 20px;
+            width: 440px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+            opacity: 1;
         }
 
         .modal h3 {
             margin-bottom: 25px;
-            font-size: 1.3rem;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            text-align: center;
+            position: relative;
+            padding-bottom: 12px;
+        }
+        
+        .modal h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 3px;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 22px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
             font-weight: 600;
             color: var(--text-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .form-group label::before {
+            content: '•';
+            color: var(--primary-color);
+            margin-right: 6px;
+            font-weight: bold;
         }
 
         .form-control {
             width: 100%;
-            padding: 12px;
+            padding: 14px 16px;
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border 0.2s;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            transition: all 0.25s;
+            background: #fafbfc;
         }
         
         .form-control:focus {
             outline: none;
             border-color: var(--primary-color);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15);
         }
 
         .modal-buttons {
             display: flex;
-            justify-content: flex-end;
-            gap: 15px;
-            margin-top: 30px;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
         }
 
         .btn {
-            padding: 10px 24px;
-            border-radius: 8px;
+            padding: 12px 32px;
+            border-radius: 12px;
             border: none;
             cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
+            font-size: 1.05rem;
+            font-weight: 600;
+            transition: all 0.25s;
+            letter-spacing: 0.5px;
+            width: 120px;
         }
 
         .btn-cancel {
-            background: #f0f0f0;
-            color: #333;
+            background: linear-gradient(to right, #f0f2f5, #e4e7eb);
+            color: #5a6474;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .btn-cancel:hover {
+            background: linear-gradient(to right, #e6e9ed, #d8dce1);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
         }
 
         .btn-save {
-            background: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), #3a7bd5);
             color: white;
+            box-shadow: 0 4px 10px rgba(74, 144, 226, 0.3);
         }
         
         .btn-save:hover {
-            background-color: #357abd;
+            background: linear-gradient(135deg, #3a7bd5, #2a64c6);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(74, 144, 226, 0.4);
         }
 
         /* --- Toast --- */
         #toast {
             visibility: hidden;
-            min-width: 250px;
-            background-color: #333;
+            min-width: 280px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
             color: #fff;
             text-align: center;
-            border-radius: 8px;
-            padding: 16px;
+            border-radius: 50px;
+            padding: 16px 25px;
             position: fixed;
             z-index: 3000;
             left: 50%;
-            bottom: 40px;
-            transform: translateX(-50%);
-            font-size: 15px;
+            bottom: 30px;
+            transform: translateX(-50%) translateY(50px);
+            font-size: 16px;
+            font-weight: 500;
             opacity: 0;
-            transition: opacity 0.3s, bottom 0.3s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            letter-spacing: 0.5px;
         }
 
         #toast.show {
             visibility: visible;
             opacity: 1;
-            bottom: 60px;
+            transform: translateX(-50%) translateY(0);
+            bottom: 40px;
+        }
+        
+        #toast::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, white, transparent);
+            border-radius: 2px;
+        }
+
+        /* 响应式优化 */
+        @media (max-width: 900px) {
+            #app-container {
+                grid-template-columns: 240px 1fr;
+            }
+            
+            .time-display {
+                font-size: 3.6rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            #app-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                height: auto;
+                max-height: 40vh;
+                padding-bottom: 15px;
+            }
+            
+            .time-display {
+                font-size: 3.2rem;
+            }
+            
+            .stats-box {
+                margin-bottom: 15px;
+            }
         }
     </style>
 </head>
@@ -534,13 +692,17 @@
     <!-- 主界面 -->
     <div id="app-container">
         
-        <!-- 左侧 (2) - 优化版 -->
+        <!-- 左侧边栏 (重构布局) -->
         <aside class="sidebar">
-            <div class="date-display" id="current-date">YYYY年MM月DD日</div>
+            <!-- 时间置顶：加粗放大 -->
             <div class="time-display" id="current-time">00:00:00</div>
-
+            
+            <!-- 日历区域 -->
             <div class="calendar-container">
-                <div class="calendar-header" id="calendar-month-year">Month Year</div>
+                <!-- 日期移至日历上方 -->
+                <div class="calendar-date-header" id="calendar-date">YYYY年MM月DD日</div>
+                
+                <!-- 星期标签 -->
                 <div class="calendar-grid">
                     <div class="calendar-day-label">日</div>
                     <div class="calendar-day-label">一</div>
@@ -550,22 +712,26 @@
                     <div class="calendar-day-label">五</div>
                     <div class="calendar-day-label">六</div>
                 </div>
+                
+                <!-- 日期网格 -->
                 <div class="calendar-grid" id="calendar-days">
                     <!-- JS 生成 -->
                 </div>
             </div>
 
+            <!-- 统计卡片 -->
             <div class="stats-box">
                 <div class="stats-count" id="uncompleted-count">0</div>
                 <div class="stats-label">右侧未完成事项</div>
             </div>
 
+            <!-- 底部清空按钮 -->
             <div class="sidebar-footer">
                 <button class="clear-btn" onclick="clearAllData()">清空所有录入数据</button>
             </div>
         </aside>
 
-        <!-- 右侧 (8) - 强制滚动条与分离版 -->
+        <!-- 右侧内容区 -->
         <main class="main-content">
             <header class="top-bar">
                 <div class="page-title">我的待办事项</div>
@@ -657,9 +823,21 @@
         // --- 时钟日历 ---
         function updateClock() {
             const now = new Date();
-            const dateStr = now.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '年').replace(/(\d+)$/, '$1日');
-            document.getElementById('current-date').textContent = dateStr;
-            document.getElementById('current-time').textContent = now.toLocaleTimeString('zh-CN', { hour12: false });
+            // 更新顶部大时间
+            document.getElementById('current-time').textContent = now.toLocaleTimeString('zh-CN', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: false 
+            });
+            
+            // 更新日历上方的日期（完整格式）
+            const dateStr = now.toLocaleDateString('zh-CN', { 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit' 
+            }).replace(/\//g, '年').replace(/(\d+)$/, '$1日');
+            document.getElementById('calendar-date').textContent = dateStr;
+            
             renderCalendar();
         }
 
@@ -667,21 +845,20 @@
             const now = new Date();
             const year = now.getFullYear();
             const month = now.getMonth(); 
-            const monthNames = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
-            document.getElementById('calendar-month-year').textContent = `${year}年 ${monthNames[month]}`;
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const today = now.getDate();
+            const firstDayIndex = new Date(year, month, 1).getDay();
 
             const daysContainer = document.getElementById('calendar-days');
             daysContainer.innerHTML = "";
 
-            const firstDayIndex = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const today = now.getDate();
-
+            // 添加空白占位（上月日期）
             for (let i = 0; i < firstDayIndex; i++) {
                 const empty = document.createElement('div');
                 daysContainer.appendChild(empty);
             }
 
+            // 生成当月日期
             for (let i = 1; i <= daysInMonth; i++) {
                 const dayEl = document.createElement('div');
                 dayEl.classList.add('calendar-day');
@@ -702,7 +879,7 @@
             listContainer.innerHTML = '';
 
             if (todos.length === 0) {
-                listContainer.innerHTML = '<div class="empty-state">暂无事项，点击右上角 + 添加</div>';
+                listContainer.innerHTML = '<div class="empty-state">✨ 暂无事项，点击右上角 + 添加新任务</div>';
                 document.getElementById('uncompleted-count').textContent = 0;
                 return;
             }
@@ -728,7 +905,9 @@
 
                 const dateTitle = document.createElement('div');
                 dateTitle.classList.add('date-divider');
-                dateTitle.textContent = date;
+                // 格式化日期显示：2026年02月01日
+                const formattedDate = date.replace(/(\d{4})-(\d{2})-(\d{2})/, '$1年$2月$3日');
+                dateTitle.textContent = formattedDate;
                 groupDiv.appendChild(dateTitle);
 
                 grouped[date].forEach(todo => {
@@ -773,46 +952,66 @@
             if (todo) {
                 todo.completed = !todo.completed;
                 saveToLocal();
+                showToast(todo.completed ? "任务已完成" : "任务恢复未完成");
             }
         }
 
         function deleteTask(id) {
             todos = todos.filter(t => t.id !== id);
             saveToLocal();
-            showToast("已删除");
+            showToast("已删除任务");
         }
 
         function clearAllData() {
-            if(confirm("确定要清空所有数据吗？此操作不可恢复。")) {
+            if(confirm("⚠️ 确定要清空所有数据吗？此操作不可恢复！")) {
                 todos = [];
                 saveToLocal();
-                showToast("所有数据已清空");
+                showToast("✓ 所有数据已清空");
             }
         }
 
         // --- 交互 ---
         function openModal() {
             document.getElementById('add-modal').style.display = 'flex';
+            document.getElementById('add-modal').classList.add('active');
             document.getElementById('new-task-content').focus();
+            // 防止背景滚动
+            document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
-            document.getElementById('add-modal').style.display = 'none';
-            document.getElementById('new-task-content').value = '';
+            document.getElementById('add-modal').classList.remove('active');
+            setTimeout(() => {
+                document.getElementById('add-modal').style.display = 'none';
+                document.getElementById('new-task-content').value = '';
+                // 恢复背景滚动
+                document.body.style.overflow = '';
+            }, 400);
         }
 
         function saveTask() {
             const content = document.getElementById('new-task-content').value.trim();
             const date = document.getElementById('new-task-date').value;
 
-            if (!content) { showToast("请输入事项内容"); return; }
-            if (!date) { showToast("请选择日期"); return; }
+            if (!content) { 
+                showToast("❗ 请输入事项内容"); 
+                return; 
+            }
+            if (!date) { 
+                showToast("❗ 请选择日期"); 
+                return; 
+            }
 
-            const newTodo = { id: Date.now(), text: content, date: date, completed: false };
+            const newTodo = { 
+                id: Date.now(), 
+                text: content, 
+                date: date, 
+                completed: false 
+            };
             todos.push(newTodo);
             saveToLocal();
             closeModal();
-            showToast("添加成功");
+            showToast("✓ 任务添加成功");
         }
 
         function toggleBatchMode() {
@@ -821,11 +1020,11 @@
             if (isBatchMode) {
                 document.body.classList.add('batch-mode');
                 btn.classList.add('active');
-                showToast("进入批量管理模式");
+                showToast("✎ 已进入批量管理模式");
             } else {
                 document.body.classList.remove('batch-mode');
                 btn.classList.remove('active');
-                showToast("已退出批量管理模式");
+                showToast("✓ 已退出批量管理模式");
             }
         }
 
@@ -833,13 +1032,25 @@
             const toast = document.getElementById("toast");
             toast.textContent = message;
             toast.className = "show";
-            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+            setTimeout(() => { 
+                toast.className = toast.className.replace("show", ""); 
+            }, 3000);
         }
 
+        // 点击模态框背景关闭
         window.onclick = function(event) {
             const modal = document.getElementById('add-modal');
-            if (event.target == modal) closeModal();
+            if (event.target == modal) {
+                closeModal();
+            }
         }
+        
+        // ESC键关闭模态框
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('add-modal').style.display === 'flex') {
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>
