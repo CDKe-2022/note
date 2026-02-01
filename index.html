@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>提醒事项</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="main-body">
+    <div class="container">
+        <!-- 左侧 20% -->
+        <div class="left-sidebar">
+            <div class="date-display" id="date">加载中...</div>
+            <div class="time-display" id="time">00:00:00</div>
+            <div class="calendar-header">
+                <div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div>
+            </div>
+            <div class="calendar" id="calendar">
+                <!-- 日历由 JS 生成 -->
+            </div>
+            <div class="stats" id="stats">未完成事项: <span id="pending-count">0</span></div>
+            <button class="clear-btn" id="clear-btn">🗑️ 清空所有数据</button>
+        </div>
+        
+        <!-- 右侧 80% -->
+        <div class="right-content">
+            <div class="header">
+                <button class="add-task-btn" id="add-task" title="新增事项">+</button>
+                <button class="bulk-edit-btn" id="bulk-edit" title="切换显示">≡</button>
+            </div>
+            <div class="task-list" id="task-list">
+                <!-- 任务列表由 JS 生成 -->
+                <div class="empty-tips">暂无事项，点击右上角 ➕ 添加</div>
+            </div>
+        </div>
+    </div>
+    <!-- 脚本必须放在 body 底部！ -->
+    <script src="script.js"></script>
+</body>
+</html>
