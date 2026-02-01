@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日事项管理 - 登录</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <div class="login-header">
+            <h1><i class="fas fa-tasks"></i> 每日事项管理</h1>
+            <p>记录您的工作与生活计划</p>
+        </div>
+        
+        <div class="login-form">
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" placeholder="请输入访问密码" autocomplete="current-password">
+            </div>
+            <button id="loginBtn" class="login-btn">
+                <i class="fas fa-sign-in-alt"></i> 登录
+            </button>
+            <div id="loginError" class="error-message"></div>
+        </div>
+        
+        <div class="login-footer">
+            <p>默认密码：123456（首次登录后可在设置中修改）</p>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.getElementById('password');
+            const loginBtn = document.getElementById('loginBtn');
+            const errorMsg = document.getElementById('loginError');
+            
+            // 设置默认密码
+            const DEFAULT_PASSWORD = '123456';
+            
+            // 从localStorage获取存储的密码，如果没有则使用默认密码
+            function getStoredPassword() {
+                return localStorage.getItem('daily-reminders-password') || DEFAULT_PASSWORD;
+            }
+            
+            // 登录功能
+            function login() {
+                const inputPassword = passwordInput.value.trim();
+                const storedPassword = getStoredPassword();
+                
+                if (inputPassword === storedPassword) {
+                    // 密码正确，跳转到主页面
+                    window.location.href = 'app.html';
+                } else {
+                    errorMsg.textContent = '密码错误，请重试';
+                    passwordInput.focus();
+                }
+            }
+            
+            // 回车键登录
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    login();
+                }
+            });
+            
+            // 点击登录
+            loginBtn.addEventListener('click', login);
+            
+            // 自动聚焦到密码输入框
+            passwordInput.focus();
+        });
+    </script>
+</body>
+</html>
