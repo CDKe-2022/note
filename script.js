@@ -22,12 +22,21 @@ class DailyRemindersApp {
         setInterval(() => this.updateDateTime(), 1000);
     }
     
-    checkAuthentication() {
-        const savedPassword = localStorage.getItem('daily-reminders-password') || '123456';
-        if (!sessionStorage.getItem('authenticated')) {
-            window.location.href = 'index.html';
-        }
+checkAuthentication() {
+    // 双重验证：检查 sessionStorage 和 localStorage
+    const sessionAuth = sessionStorage.getItem('daily-reminders-authenticated') === 'true';
+    const tokenAuth = localStorage.getItem('daily-reminders-auth-token') !== null;
+    
+    // 如果都没有认证标志，跳转到登录页
+    if (!sessionAuth && !tokenAuth) {
+        window.location.href = 'index.html';
     }
+    
+    // 如果 sessionStorage 没有但 localStorage 有，重新设置 sessionStorage
+    if (!sessionAuth && tokenAuth) {
+        sessionStorage.setItem('daily-reminders-authenticated', 'true');
+    }
+}
     
     initElements() {
         // 日期时间元素
@@ -507,10 +516,14 @@ class DailyRemindersApp {
         this.updateStats();
     }
     
-    logout() {
-        sessionStorage.removeItem('authenticated');
-        window.location.href = 'index.html';
-    }
+logout() {
+    // 清除所有认证信息
+    sessionStorage.removeItem('daily-reminders-authenticated');
+    localStorage.removeItem('daily-reminders-auth-token');
+    // 跳转到登录页
+    window.location.href = 'index.html';
+}
+
     
     changePassword() {
         const currentPassword = document.getElementById('currentPassword').value;
