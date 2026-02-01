@@ -8,12 +8,12 @@
         :root {
             --primary-color: #4a90e2;
             --secondary-color: #f5f7fa;
-            --text-color: #333;
-            --text-light: #999;
+            --text-color: #2c3e50;
+            --text-light: #7f8c8d;
             --danger-color: #e74c3c;
             --success-color: #2ecc71;
             --border-color: #e1e4e8;
-            --sidebar-width: 20%;
+            --sidebar-bg: #fcfcfc;
         }
 
         * {
@@ -25,7 +25,7 @@
 
         body, html {
             height: 100%;
-            overflow: hidden; /* 防止整个页面滚动，只让右侧内容区滚动 */
+            overflow: hidden; /* 防止整个页面出现滚动条 */
             background-color: #fff;
         }
 
@@ -36,7 +36,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -63,7 +63,7 @@
             padding: 12px;
             margin-bottom: 20px;
             border: 1px solid var(--border-color);
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 16px;
             outline: none;
             transition: border-color 0.3s;
@@ -79,7 +79,7 @@
             background-color: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 16px;
             cursor: pointer;
             transition: background-color 0.3s;
@@ -89,107 +89,130 @@
             background-color: #357abd;
         }
 
-        /* --- 主布局 --- */
+        /* --- 主布局 (2:8 分离) --- */
         #app-container {
             display: grid;
-            grid-template-columns: var(--sidebar-width) 1fr; /* 2:8 比例 */
-            height: 100vh;
+            grid-template-columns: 280px 1fr; /* 左侧固定宽度，右侧自适应，约等于 2:8 视觉比例 */
+            height: 100vh; /* 占满全屏高度 */
             opacity: 0; /* 初始隐藏，登录后显示 */
             transition: opacity 0.5s ease;
         }
 
-        /* --- 左侧边栏 (2) --- */
+        /* --- 左侧边栏 (优化排版) --- */
         .sidebar {
-            background-color: var(--secondary-color);
-            padding: 20px;
+            background-color: var(--sidebar-bg);
+            padding: 30px 20px;
             border-right: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
             height: 100%;
+            overflow-y: auto; /* 如果侧边栏太高，它自己也可以滚，但通常不需要 */
+            position: relative;
+            z-index: 5;
         }
 
+        /* 日期区域 */
         .date-display {
-            font-size: 1.2rem;
-            font-weight: bold;
+            font-size: 1.1rem;
+            font-weight: 600;
             color: var(--text-color);
             margin-bottom: 5px;
             text-align: center;
         }
 
         .time-display {
-            font-size: 1.5rem;
-            font-weight: 300;
+            font-size: 2.5rem;
+            font-weight: 200; /* 细体显得更高级 */
             color: var(--primary-color);
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             text-align: center;
-            font-variant-numeric: tabular-nums; /* 防止数字跳动 */
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -1px;
         }
 
-        /* 日历样式 */
+        /* 日历样式优化 */
         .calendar-container {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            padding: 0 5px;
         }
 
         .calendar-header {
             text-align: center;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
-            color: var(--text-light);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            font-weight: 600;
         }
 
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
+            gap: 8px;
             text-align: center;
         }
 
         .calendar-day-label {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: var(--text-light);
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
 
         .calendar-day {
-            font-size: 0.9rem;
-            padding: 8px 0;
-            border-radius: 50%; /* 圆形 */
+            font-size: 0.95rem;
+            padding: 10px 0;
+            border-radius: 50%;
             cursor: default;
             color: var(--text-color);
+            transition: background 0.2s;
         }
 
-        /* 强调当日：实心圆，白色数字 */
+        /* 当日强调 */
         .calendar-day.today {
             background-color: var(--primary-color);
             color: white;
             font-weight: bold;
+            box-shadow: 0 4px 6px rgba(74, 144, 226, 0.3);
         }
 
-        /* 统计与底部 */
+        /* 统计卡片优化 */
         .stats-box {
-            margin-top: auto;
-            margin-bottom: 20px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
             text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            border: 1px solid #eee;
         }
 
         .stats-count {
-            font-size: 2rem;
-            font-weight: bold;
+            font-size: 2.8rem;
+            font-weight: 700;
             color: var(--text-color);
+            line-height: 1;
+            margin-bottom: 5px;
         }
 
         .stats-label {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-light);
+            font-weight: 500;
+        }
+
+        /* 底部清空按钮 - 自动推到底部 */
+        .sidebar-footer {
+            margin-top: auto; /* 关键：利用 Flexbox 把这下面的内容推到底部 */
         }
 
         .clear-btn {
             width: 100%;
-            padding: 10px;
+            padding: 14px;
             background-color: white;
             border: 1px solid var(--danger-color);
             color: var(--danger-color);
-            border-radius: 6px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
         }
@@ -197,107 +220,140 @@
         .clear-btn:hover {
             background-color: var(--danger-color);
             color: white;
+            box-shadow: 0 4px 10px rgba(231, 76, 60, 0.2);
         }
 
-        /* --- 右侧内容区 (8) --- */
+        /* --- 右侧内容区 (80%) --- */
         .main-content {
-            position: relative;
             display: flex;
             flex-direction: column;
             height: 100%;
             background-color: #fff;
+            overflow: hidden; /* 右侧容器本身不滚，只让内部列表滚 */
+            position: relative;
         }
 
         /* 顶部固定功能区 */
         .top-bar {
-            height: 70px;
-            padding: 0 30px;
+            height: 80px; /* 增加高度，让视觉更宽敞 */
+            padding: 0 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid var(--border-color);
-            background-color: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(5px);
-            position: sticky;
-            top: 0;
-            z-index: 10;
+            background-color: #fff;
+            z-index: 20;
+            flex-shrink: 0; /* 防止被压缩 */
         }
 
         .page-title {
-            font-size: 1.2rem;
-            font-weight: bold;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-color);
         }
 
         .action-buttons {
             display: flex;
-            gap: 15px;
+            gap: 20px;
         }
 
         .icon-btn {
-            background: none;
-            border: none;
+            background: #f8f9fa;
+            border: 1px solid var(--border-color);
             cursor: pointer;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             color: var(--text-color);
-            padding: 5px;
-            border-radius: 50%;
-            transition: background 0.2s;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .icon-btn:hover {
-            background-color: var(--secondary-color);
-            color: var(--primary-color);
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
         .icon-btn.active {
-            background-color: var(--secondary-color);
-            color: var(--danger-color); /* 批量模式下变红 */
+            background-color: #fff0f0;
+            color: var(--danger-color);
+            border-color: var(--danger-color);
         }
 
-        /* 任务列表区域 */
+        /* 任务列表容器 - 独立滚动区域 */
         .task-list-container {
-            flex: 1;
-            overflow-y: auto; /* 允许垂直滚动 */
-            padding: 20px 30px;
+            flex: 1; /* 占据剩余所有空间 */
+            overflow-y: auto; /* 开启垂直滚动 */
+            padding: 30px 40px;
+            background-color: #fff;
+            
+            /* --- 强制显示滚动条样式 (要求1) --- */
+            scrollbar-width: auto; /* Firefox */
+            scrollbar-color: #b0b0b0 #f0f0f0; /* 滑块颜色 / 轨道颜色 */
+        }
+
+        /* Webkit (Chrome/Edge/Safari) 滚动条样式 */
+        .task-list-container::-webkit-scrollbar {
+            width: 12px; /* 宽度足够大，方便点击 */
+        }
+
+        .task-list-container::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+
+        .task-list-container::-webkit-scrollbar-thumb {
+            background-color: #b0b0b0; 
+            border-radius: 6px;
+            border: 3px solid #f1f1f1; /* 制造留白效果 */
+        }
+
+        .task-list-container::-webkit-scrollbar-thumb:hover {
+            background-color: #888; 
         }
 
         /* 按日期分组 */
         .date-group {
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         .date-divider {
-            font-size: 1rem;
-            color: var(--text-light);
-            margin-bottom: 10px;
-            padding-left: 10px;
-            border-left: 4px solid var(--primary-color);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 20px;
+            padding-left: 15px;
+            border-left: 5px solid var(--primary-color);
         }
 
         /* 单个任务项 */
         .task-item {
             display: flex;
             align-items: center;
-            padding: 15px;
+            padding: 18px 20px;
             background: white;
-            border-bottom: 1px solid #f0f0f0;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 12px;
             transition: all 0.2s;
         }
 
         .task-item:hover {
-            background-color: #fafafa;
+            border-color: #d0d0d0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
         }
 
-        /* 复选框样式 */
         .checkbox-custom {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--text-light);
+            width: 24px;
+            height: 24px;
+            border: 2px solid #ccc;
             border-radius: 50%;
-            margin-right: 15px;
+            margin-right: 20px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -313,21 +369,28 @@
 
         .task-item.completed .task-text {
             text-decoration: line-through;
-            color: var(--text-light);
+            color: #aaa;
         }
 
-        /* 批量操作下的删除按钮 */
+        .task-text {
+            font-size: 1.05rem;
+            color: var(--text-color);
+            cursor: pointer;
+            flex: 1;
+            line-height: 1.4;
+        }
+
         .delete-btn {
-            margin-left: auto;
+            margin-left: 15px;
             background: none;
             border: none;
             color: var(--danger-color);
             cursor: pointer;
-            padding: 5px;
-            display: none; /* 默认隐藏 */
+            padding: 5px 10px;
+            font-size: 0.9rem;
+            display: none;
         }
         
-        /* 批量管理模式显示 */
         body.batch-mode .delete-btn {
             display: block;
         }
@@ -335,70 +398,81 @@
         .empty-state {
             text-align: center;
             color: var(--text-light);
-            margin-top: 50px;
+            margin-top: 80px;
         }
 
-        /* --- 模态框 (新增/编辑) --- */
+        /* --- 模态框 --- */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.4);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 2000;
+            backdrop-filter: blur(4px);
         }
 
         .modal {
             background: white;
-            padding: 30px;
-            border-radius: 8px;
-            width: 400px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            padding: 35px;
+            border-radius: 16px;
+            width: 420px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
 
         .modal h3 {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            font-size: 1.3rem;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-size: 0.9rem;
-            color: var(--text-light);
+            font-weight: 600;
+            color: var(--text-color);
         }
 
         .form-control {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid var(--border-color);
-            border-radius: 4px;
+            border-radius: 8px;
             font-size: 1rem;
+            transition: border 0.2s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
         }
 
         .modal-buttons {
             display: flex;
             justify-content: flex-end;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 15px;
+            margin-top: 30px;
         }
 
         .btn {
-            padding: 8px 16px;
-            border-radius: 4px;
+            padding: 10px 24px;
+            border-radius: 8px;
             border: none;
             cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
         }
 
         .btn-cancel {
-            background: #eee;
+            background: #f0f0f0;
             color: #333;
         }
 
@@ -406,55 +480,58 @@
             background: var(--primary-color);
             color: white;
         }
+        
+        .btn-save:hover {
+            background-color: #357abd;
+        }
 
-        /* --- Toast 消息提示 --- */
+        /* --- Toast --- */
         #toast {
             visibility: hidden;
             min-width: 250px;
             background-color: #333;
             color: #fff;
             text-align: center;
-            border-radius: 4px;
+            border-radius: 8px;
             padding: 16px;
             position: fixed;
             z-index: 3000;
             left: 50%;
-            bottom: 30px;
+            bottom: 40px;
             transform: translateX(-50%);
-            font-size: 14px;
+            font-size: 15px;
             opacity: 0;
-            transition: opacity 0.5s, bottom 0.5s;
+            transition: opacity 0.3s, bottom 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
         #toast.show {
             visibility: visible;
             opacity: 1;
-            bottom: 50px;
+            bottom: 60px;
         }
-
     </style>
 </head>
 <body>
 
-    <!-- 1. 登录页面 -->
+    <!-- 登录层 -->
     <div id="login-overlay">
         <div class="login-card">
             <h2>欢迎回来</h2>
-            <p style="margin-bottom: 20px; color: #666;">请输入密码进入</p>
+            <p style="margin-bottom: 25px; color: #666;">请输入密码进入</p>
             <input type="password" id="password-input" class="login-input" placeholder="输入密码 (默认: 123456)">
             <button class="login-btn" onclick="handleLogin()">登 录</button>
         </div>
     </div>
 
-    <!-- 主应用容器 -->
+    <!-- 主界面 -->
     <div id="app-container">
         
-        <!-- 2. 左侧边栏 (20%) -->
+        <!-- 左侧 (2) - 优化版 -->
         <aside class="sidebar">
             <div class="date-display" id="current-date">YYYY年MM月DD日</div>
             <div class="time-display" id="current-time">00:00:00</div>
 
-            <!-- 日历 -->
             <div class="calendar-container">
                 <div class="calendar-header" id="calendar-month-year">Month Year</div>
                 <div class="calendar-grid">
@@ -467,35 +544,32 @@
                     <div class="calendar-day-label">六</div>
                 </div>
                 <div class="calendar-grid" id="calendar-days">
-                    <!-- JS动态生成日期 -->
+                    <!-- JS 生成 -->
                 </div>
             </div>
 
-            <!-- 统计 -->
             <div class="stats-box">
                 <div class="stats-count" id="uncompleted-count">0</div>
                 <div class="stats-label">右侧未完成事项</div>
             </div>
 
-            <!-- 底部清空 -->
-            <button class="clear-btn" onclick="clearAllData()">清空所有录入数据</button>
+            <div class="sidebar-footer">
+                <button class="clear-btn" onclick="clearAllData()">清空所有录入数据</button>
+            </div>
         </aside>
 
-        <!-- 3. 右侧内容 (80%) -->
+        <!-- 右侧 (8) - 强制滚动条与分离版 -->
         <main class="main-content">
-            <!-- 顶部固定功能区 -->
             <header class="top-bar">
                 <div class="page-title">我的待办事项</div>
                 <div class="action-buttons">
-                    <!-- 三个横线：批量管理 -->
                     <button class="icon-btn" id="batch-btn" title="批量管理" onclick="toggleBatchMode()">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="3" y1="12" x2="21" y2="12"></line>
                             <line x1="3" y1="6" x2="21" y2="6"></line>
                             <line x1="3" y1="18" x2="21" y2="18"></line>
                         </svg>
                     </button>
-                    <!-- 加号：新增 -->
                     <button class="icon-btn" title="新增事项" onclick="openModal()">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -505,20 +579,19 @@
                 </div>
             </header>
 
-            <!-- 任务列表容器 (可滚动) -->
             <div class="task-list-container" id="task-list">
-                <!-- JS动态渲染内容 -->
+                <!-- JS 渲染列表 -->
             </div>
         </main>
     </div>
 
-    <!-- 新增任务模态框 -->
+    <!-- 弹窗 -->
     <div class="modal-overlay" id="add-modal">
         <div class="modal">
             <h3>新增事项</h3>
             <div class="form-group">
                 <label>事项内容</label>
-                <input type="text" id="new-task-content" class="form-control" placeholder="例如：下午3点开会">
+                <input type="text" id="new-task-content" class="form-control" placeholder="例如：下午3点开会" autocomplete="off">
             </div>
             <div class="form-group">
                 <label>日期</label>
@@ -531,35 +604,30 @@
         </div>
     </div>
 
-    <!-- Toast 提示框 -->
     <div id="toast">操作成功</div>
 
     <script>
-        // --- 配置与状态 ---
-        const PASSWORD = "123456"; // 设置你的登录密码
+        // --- 配置 ---
+        const PASSWORD = "123456"; 
         let todos = JSON.parse(localStorage.getItem('myTodos')) || [];
         let isBatchMode = false;
 
         // --- 初始化 ---
         document.addEventListener('DOMContentLoaded', () => {
-            // 检查登录状态
             if (sessionStorage.getItem('isLoggedIn') === 'true') {
                 showApp();
             }
             
-            // 设置日期选择器默认值为今天
             document.getElementById('new-task-date').valueAsDate = new Date();
             
-            // 启动时钟
             updateClock();
             setInterval(updateClock, 1000);
             
-            // 渲染数据
             renderCalendar();
             renderTodos();
         });
 
-        // --- 登录逻辑 ---
+        // --- 登录 ---
         function handleLogin() {
             const input = document.getElementById('password-input');
             if (input.value === PASSWORD) {
@@ -579,61 +647,44 @@
             document.getElementById('app-container').style.opacity = '1';
         }
 
-        // --- 时钟与日历 ---
+        // --- 时钟日历 ---
         function updateClock() {
             const now = new Date();
-            
-            // 日期格式：YYYY年MM月DD日
             const dateStr = now.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '年').replace(/(\d+)$/, '$1日');
             document.getElementById('current-date').textContent = dateStr;
-
-            // 时间格式：HH:mm:ss
-            const timeStr = now.toLocaleTimeString('zh-CN', { hour12: false });
-            document.getElementById('current-time').textContent = timeStr;
-            
-            // 每天零点刷新日历（简单处理：每次秒跳都检查一下日期变化，或者用户刷新时渲染）
+            document.getElementById('current-time').textContent = now.toLocaleTimeString('zh-CN', { hour12: false });
             renderCalendar();
         }
 
         function renderCalendar() {
             const now = new Date();
             const year = now.getFullYear();
-            const month = now.getMonth(); // 0-11
-            
-            const monthNames = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
+            const month = now.getMonth(); 
+            const monthNames = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
             document.getElementById('calendar-month-year').textContent = `${year}年 ${monthNames[month]}`;
 
             const daysContainer = document.getElementById('calendar-days');
             daysContainer.innerHTML = "";
 
-            // 获取当月第一天是周几
             const firstDayIndex = new Date(year, month, 1).getDay();
-            // 获取当月有多少天
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             const today = now.getDate();
 
-            // 填充空白
             for (let i = 0; i < firstDayIndex; i++) {
                 const empty = document.createElement('div');
                 daysContainer.appendChild(empty);
             }
 
-            // 填充日期
             for (let i = 1; i <= daysInMonth; i++) {
                 const dayEl = document.createElement('div');
                 dayEl.classList.add('calendar-day');
                 dayEl.textContent = i;
-                
-                if (i === today) {
-                    dayEl.classList.add('today');
-                }
-                
+                if (i === today) dayEl.classList.add('today');
                 daysContainer.appendChild(dayEl);
             }
         }
 
-        // --- 任务管理逻辑 ---
-        
+        // --- 任务逻辑 ---
         function saveToLocal() {
             localStorage.setItem('myTodos', JSON.stringify(todos));
             renderTodos();
@@ -655,7 +706,6 @@
                 return a.completed - b.completed;
             });
 
-            // 按日期分组
             const grouped = sortedTodos.reduce((groups, item) => {
                 const date = item.date;
                 if (!groups[date]) groups[date] = [];
@@ -665,18 +715,15 @@
 
             let uncompletedTotal = 0;
 
-            // 渲染分组
             Object.keys(grouped).sort((a, b) => new Date(b) - new Date(a)).forEach(date => {
                 const groupDiv = document.createElement('div');
                 groupDiv.classList.add('date-group');
 
-                // 日期标题
                 const dateTitle = document.createElement('div');
                 dateTitle.classList.add('date-divider');
                 dateTitle.textContent = date;
                 groupDiv.appendChild(dateTitle);
 
-                // 该日期下的任务
                 grouped[date].forEach(todo => {
                     if (!todo.completed) uncompletedTotal++;
 
@@ -684,33 +731,23 @@
                     itemDiv.classList.add('task-item');
                     if (todo.completed) itemDiv.classList.add('completed');
 
-                    // 空心圆圈
                     const checkbox = document.createElement('div');
                     checkbox.classList.add('checkbox-custom');
                     checkbox.onclick = () => toggleComplete(todo.id);
                     
-                    // 绘制对勾 SVG (当完成时)
                     if (todo.completed) {
-                        checkbox.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+                        checkbox.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
                     }
 
-                    // 文本
                     const textSpan = document.createElement('span');
                     textSpan.classList.add('task-text');
                     textSpan.textContent = todo.text;
-                    // 点击文本也能切换（如果在非批量模式下）
-                    textSpan.onclick = () => {
-                        if (!isBatchMode) toggleComplete(todo.id);
-                    };
+                    textSpan.onclick = () => { if (!isBatchMode) toggleComplete(todo.id); };
 
-                    // 批量删除按钮
                     const deleteBtn = document.createElement('button');
                     deleteBtn.classList.add('delete-btn');
                     deleteBtn.innerHTML = '删除';
-                    deleteBtn.onclick = (e) => {
-                        e.stopPropagation();
-                        deleteTask(todo.id);
-                    };
+                    deleteBtn.onclick = (e) => { e.stopPropagation(); deleteTask(todo.id); };
 
                     itemDiv.appendChild(checkbox);
                     itemDiv.appendChild(textSpan);
@@ -721,7 +758,6 @@
                 listContainer.appendChild(groupDiv);
             });
 
-            // 更新左侧统计
             document.getElementById('uncompleted-count').textContent = uncompletedTotal;
         }
 
@@ -747,8 +783,7 @@
             }
         }
 
-        // --- 交互功能 ---
-
+        // --- 交互 ---
         function openModal() {
             document.getElementById('add-modal').style.display = 'flex';
             document.getElementById('new-task-content').focus();
@@ -763,22 +798,10 @@
             const content = document.getElementById('new-task-content').value.trim();
             const date = document.getElementById('new-task-date').value;
 
-            if (!content) {
-                showToast("请输入事项内容");
-                return;
-            }
-            if (!date) {
-                showToast("请选择日期");
-                return;
-            }
+            if (!content) { showToast("请输入事项内容"); return; }
+            if (!date) { showToast("请选择日期"); return; }
 
-            const newTodo = {
-                id: Date.now(),
-                text: content,
-                date: date,
-                completed: false
-            };
-
+            const newTodo = { id: Date.now(), text: content, date: date, completed: false };
             todos.push(newTodo);
             saveToLocal();
             closeModal();
@@ -788,11 +811,10 @@
         function toggleBatchMode() {
             isBatchMode = !isBatchMode;
             const btn = document.getElementById('batch-btn');
-            
             if (isBatchMode) {
                 document.body.classList.add('batch-mode');
                 btn.classList.add('active');
-                showToast("进入批量管理模式，点击红色按钮删除");
+                showToast("进入批量管理模式");
             } else {
                 document.body.classList.remove('batch-mode');
                 btn.classList.remove('active');
@@ -800,20 +822,16 @@
             }
         }
 
-        // --- 工具函数：Toast 提示 ---
         function showToast(message) {
             const toast = document.getElementById("toast");
             toast.textContent = message;
             toast.className = "show";
-            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
         }
 
-        // 关闭模态框点击外部
         window.onclick = function(event) {
             const modal = document.getElementById('add-modal');
-            if (event.target == modal) {
-                closeModal();
-            }
+            if (event.target == modal) closeModal();
         }
     </script>
 </body>
