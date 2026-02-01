@@ -157,22 +157,29 @@
             margin-bottom: 8px;
         }
 
-        .calendar-day {
-            font-size: 0.95rem;
-            padding: 10px 0;
-            border-radius: 50%;
-            cursor: default;
-            color: var(--text-color);
-            transition: background 0.2s;
-        }
+/* 替换原有的 .calendar-day 样式 */
+.calendar-day {
+    font-size: 0.9rem; /* 稍微缩小字体，避免挤压 */
+    border-radius: 50%;
+    cursor: default;
+    color: var(--text-color);
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1; /* 核心：强制宽高1:1 */
+    padding: 0; /* 移除原有padding，避免破坏比例 */
+    line-height: 1; /* 防止字体行高影响垂直居中 */
+}
 
-        /* 当日强调 */
-        .calendar-day.today {
-            background-color: var(--primary-color);
-            color: white;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(74, 144, 226, 0.3);
-        }
+/* 优化今日样式（避免阴影导致视觉偏移） */
+.calendar-day.today {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(74, 144, 226, 0.3); /* 减小阴影扩散值 */
+    /* 移除原有 box-shadow 的垂直偏移，保持居中 */
+}
 
         /* 统计卡片优化 */
         .stats-box {
