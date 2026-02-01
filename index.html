@@ -45,12 +45,17 @@
             }
             
             // 登录功能
+            // 修改登录功能
             function login() {
                 const inputPassword = passwordInput.value.trim();
                 const storedPassword = getStoredPassword();
                 
                 if (inputPassword === storedPassword) {
-                    // 密码正确，跳转到主页面
+                    // 设置认证标志到 sessionStorage
+                    sessionStorage.setItem('daily-reminders-authenticated', 'true');
+                    // 同时设置一个长期有效的认证令牌
+                    localStorage.setItem('daily-reminders-auth-token', Date.now().toString());
+                    // 跳转到主页面
                     window.location.href = 'app.html';
                 } else {
                     errorMsg.textContent = '密码错误，请重试';
