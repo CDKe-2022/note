@@ -534,7 +534,7 @@
         /* ============================================================
          *  API 请求函数（与 Cloudflare Workers 交互）
          * ============================================================ */
-        const API_BASE = '/api/notes'; // Workers API 路径
+        const API_BASE = 'https://note2.kehuang2022.workers.dev/'; // Workers API 路径
 
         async function apiRequest(method, data = null) {
             const token = localStorage.getItem('token'); // 假设 token 存储在 localStorage
