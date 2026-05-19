@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TextVault — 多端共享备忘录</title>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"></script>
   <style>
     :root {
@@ -17,7 +17,7 @@
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     html, body { height:100%; overflow:hidden; }
     body {
-      font-family: 'Noto Sans SC', sans-serif;
+      font-family: 'Songti SC', 'SimSun', 'Noto Serif SC', serif;
       background: var(--bg); color: var(--text);
       display: grid; grid-template-rows: 52px 1fr 28px;
     }
@@ -37,9 +37,12 @@
       33%{transform:translate(25px,-35px) scale(1.04)}
       66%{transform:translate(-15px,25px) scale(.96)}
     }
+
+    /* 顶栏 */
     header {
       position:relative; z-index:20; display:flex; align-items:center;
       padding:0 20px; background:var(--bg-card); border-bottom:1px solid var(--border);
+      grid-row: 1;
     }
     .h-left,.h-right { display:flex; align-items:center; gap:5px; }
     .h-left { flex:1; }
@@ -63,7 +66,14 @@
     .btn-i svg { display:block; }
     .btn.danger:hover { border-color:var(--danger); color:var(--danger); }
     .sep { width:1px; height:20px; background:var(--border); margin:0 3px; flex-shrink:0; }
-    .app-body { position:relative; z-index:10; display:flex; overflow:hidden; min-height:0; }
+
+    /* 主体布局 */
+    .app-body {
+      position:relative; z-index:10; display:flex; overflow:hidden; min-height:0;
+      grid-row: 2;
+    }
+
+    /* 侧栏 */
     .sidebar {
       width:var(--side-w); flex-shrink:0; background:var(--bg-side);
       border-right:1px solid var(--border); display:flex; flex-direction:column;
@@ -96,8 +106,18 @@
     .fi-icon { color:var(--text-3); flex-shrink:0; display:flex; }
     .file-item.active .fi-icon { color:var(--accent); }
     .fi-info { flex:1; min-width:0; }
-    .fi-name { font-size:13px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .fi-meta { font-size:11px; color:var(--text-3); margin-top:1px; font-family:'JetBrains Mono',monospace; }
+    .fi-name {
+      font-size:13px; font-weight:500; white-space:nowrap;
+      overflow:hidden; text-overflow:ellipsis; display:block;
+    }
+    /* ★ 修改：元信息另起一行，字号调小 */
+    .fi-meta {
+      display:block;
+      font-size:10px;
+      color:var(--text-3);
+      margin-top:2px;
+      font-family:'JetBrains Mono',monospace;
+    }
     .fi-acts { display:flex; gap:2px; opacity:0; transition:opacity .15s; flex-shrink:0; }
     .file-item:hover .fi-acts { opacity:1; }
     .file-item.active .fi-acts { opacity:1; }
@@ -110,8 +130,11 @@
     .fa-btn.del:hover { color:var(--danger); }
     .rename-input {
       width:100%; border:1px solid var(--accent); border-radius:4px; padding:1px 5px;
-      font:500 13px 'Noto Sans SC',sans-serif; background:var(--bg-card); color:var(--text); outline:none;
+      font:500 13px 'Songti SC','SimSun','Noto Serif SC',serif;
+      background:var(--bg-card); color:var(--text); outline:none;
     }
+
+    /* 工具栏 */
     .toolbar {
       display:flex; align-items:center; justify-content:space-between;
       padding:5px 20px; background:var(--bg-card); border-bottom:1px solid var(--border); flex-shrink:0;
@@ -125,8 +148,8 @@
     }
     .fmt-btn:hover { background:var(--bg-hover); color:var(--text); }
     .fmt-btn.on { background:var(--bg-card); color:var(--accent); box-shadow:0 1px 3px rgba(0,0,0,.07); }
-    .fmt-b { font-weight:800; font-family:'Noto Sans SC'; }
-    .fmt-u { text-decoration:underline; font-weight:600; font-family:'Noto Sans SC'; text-underline-offset:2px; }
+    .fmt-b { font-weight:800; font-family:'Songti SC','SimSun','Noto Serif SC',serif; }
+    .fmt-u { text-decoration:underline; font-weight:600; font-family:'Songti SC','SimSun','Noto Serif SC',serif; text-underline-offset:2px; }
     .t-btn {
       width:32px; height:28px; border:1px solid transparent; border-radius:5px;
       background:transparent; color:var(--text-3); cursor:pointer; transition:all .15s;
@@ -142,13 +165,16 @@
     }
     .fs-btn:hover { border-color:var(--accent); color:var(--accent); }
     .fs-val { min-width:26px; text-align:center; font:12px 'JetBrains Mono',monospace; color:var(--text-2); }
+
+    /* 编辑器 */
     .main-area { flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden; }
     .editor-wrap { flex:1; min-height:0; position:relative; overflow:hidden; }
     #editor {
       position:absolute; top:0; left:0; right:0; bottom:0;
       padding:24px 32px; background:transparent; border:none; outline:none;
-      color:var(--text); font-family:'Noto Sans SC',sans-serif; font-size:16px;
-      line-height:1.8; overflow-y:auto; overflow-x:hidden;
+      color:var(--text);
+      font-family:'Songti SC','SimSun','Noto Serif SC',serif;
+      font-size:16px; line-height:1.8; overflow-y:auto; overflow-x:hidden;
       white-space:pre-wrap; word-wrap:break-word; caret-color:var(--accent);
     }
     #editor::-webkit-scrollbar { width:6px; }
@@ -177,17 +203,20 @@
       display:inline-block; padding:1px 5px; border:1px solid var(--border);
       border-radius:3px; font:11px 'JetBrains Mono',monospace; background:var(--bg-card);
     }
+
+    /* 底栏 */
     footer {
       position:relative; z-index:20; display:flex; align-items:center;
       justify-content:space-between; padding:0 20px;
       background:var(--bg-card); border-top:1px solid var(--border);
+      grid-row: 3;
     }
     .st-l,.st-r { display:flex; align-items:center; gap:14px; }
     .st { font:11px 'JetBrains Mono',monospace; color:var(--text-3); display:flex; align-items:center; gap:3px; }
     .st .dot { width:5px; height:5px; border-radius:50%; background:var(--success); animation:pulse 2s ease-in-out infinite; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
     .save-ind {
-      font:11px 'Noto Sans SC',sans-serif; color:var(--text-3); opacity:0;
+      font:11px 'Songti SC','SimSun','Noto Serif SC',serif; color:var(--text-3); opacity:0;
       transition:opacity .25s; display:flex; align-items:center; gap:4px;
     }
     .save-ind.on { opacity:1; }
@@ -209,11 +238,14 @@
     }
     .drop-ov.on { display:flex; }
     .drop-ov span { font-size:17px; color:var(--accent); font-weight:500; }
-    body.focus { grid-template-rows:0px 1fr 0px; }
+
+    /* ★ 修复：专注模式 */
+    body.focus { grid-template-rows: 1fr; }
     body.focus header { display:none; }
     body.focus footer { display:none; }
     body.focus .sidebar { display:none; }
     body.focus .toolbar { display:none; }
+    body.focus .app-body { grid-row: 1; }
     body.focus #editor { padding:40px 72px; }
     body.focus .focus-exit { display:flex; }
     .focus-exit {
@@ -225,6 +257,8 @@
     }
     .focus-exit:hover { color:var(--text); border-color:var(--text-3); }
     #fileInput { display:none; }
+
+    /* 响应式 */
     @media (max-width:768px) {
       .sidebar { position:absolute; z-index:30; height:100%; box-shadow:4px 0 16px rgba(0,0,0,.08); }
       .sidebar.collapsed { margin-left:calc(-1 * var(--side-w)); }
@@ -236,6 +270,7 @@
       .sep { display:none; }
       footer { padding:0 12px; }
       .st-r { display:none; }
+      body.focus #editor { padding:24px 16px; }
     }
   </style>
 </head>
@@ -291,7 +326,7 @@
             <button class="fmt-btn" id="btnULine" title="下划线 (Ctrl+U)"><span class="fmt-u">U</span></button>
           </div>
           <div class="sep"></div>
-          <button class="t-btn on" id="btnWrap" title="自动换行">
+          <button class="t-btn on" id="btnWrap" title="自动换行：开启后长文本在边缘自动折行，关闭后需横向滚动">
             <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h12M2 7h12M2 11h8"/><path d="M10 11l-2.5-2M10 11l-2.5 2"/></svg>
           </button>
         </div>
@@ -383,7 +418,7 @@
       trash: '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5h10"/><path d="M5.5 4.5V3h5v1.5"/><path d="M4.5 4.5l.8 9h5.4l.8-9"/></svg>',
     };
 
-    /* ===== API 请求（指向后端域名 + RESTful 路径参数） ===== */
+    /* ===== API ===== */
     const API_BASE = 'https://note2.kehuang.eu.org/api/notes';
 
     async function apiRequest(method, data, id) {
@@ -409,23 +444,18 @@
       return res.json();
     }
 
-    // 获取笔记列表（不含 content，减少传输量）
     async function fetchNotes() { return apiRequest('GET'); }
-    // 获取单条笔记详情（含 content）
     async function fetchNote(id) { return apiRequest('GET', null, id); }
-    // 创建笔记
     async function createNote(name, content) { return apiRequest('POST', { name, content }); }
-    // 更新笔记（只发变化的字段）
     async function updateNote(id, content, name) {
       const data = {};
       if (content !== undefined) data.content = content;
       if (name !== undefined) data.name = name;
       return apiRequest('PUT', data, id);
     }
-    // 删除笔记
     async function deleteNote(id) { return apiRequest('DELETE', null, id); }
 
-    /* ===== 加载状态锁（防止切换笔记时误保存） ===== */
+    /* ===== 加载锁 ===== */
     let loadingNote = false;
 
     /* ===== Store ===== */
@@ -441,7 +471,6 @@
         return this.files.find(f => f.id === this.activeId) || null;
       },
 
-      // 标准化笔记数据
       _norm(note, withContent) {
         return {
           id: String(note.id),
@@ -454,16 +483,13 @@
         };
       },
 
-      // 从 API 获取所有笔记（列表不含 content）
       async restore() {
         try {
           const notes = await fetchNotes();
           this.files = notes.map(n => this._norm(n, false));
           const cnt = this.files.filter(n => n.name.startsWith('未命名')).length;
           this.counter = cnt + 1;
-          if (this.files.length > 0) {
-            this.activeId = this.files[0].id;
-          }
+          if (this.files.length > 0) this.activeId = this.files[0].id;
           return true;
         } catch (err) {
           toast('获取笔记失败: ' + err.message);
@@ -471,7 +497,6 @@
         }
       },
 
-      // 创建新笔记
       async createFile(silent, name, content) {
         try {
           const fileName = name || ('未命名 ' + this.counter++);
@@ -489,7 +514,6 @@
         }
       },
 
-      // 切换笔记（先保存旧的，再加载新的）
       async switchFile(id) {
         if (String(id) === String(this.activeId)) return;
         await this.saveCurrent();
@@ -498,7 +522,6 @@
         await loadEditor();
       },
 
-      // 删除笔记（幂等，借鉴 TODO 方案）
       async deleteFile(id) {
         try {
           await deleteNote(id);
@@ -517,7 +540,6 @@
         }
       },
 
-      // 重命名笔记（调用 API 持久化）
       async renameFile(id, newName) {
         const f = this.files.find(x => x.id === String(id));
         if (f && newName.trim()) {
@@ -532,13 +554,11 @@
         }
       },
 
-      // 保存当前笔记（从编辑器读取最新内容）
       async saveCurrent() {
         if (!this.activeId || loadingNote) return;
         const f = this.active;
         if (!f || !f._loaded) return;
         const content = editor.innerHTML;
-        // 脏检查：内容没变就不发请求
         if (content === f.content) return;
         try {
           const updated = await updateNote(f.id, content);
@@ -551,7 +571,6 @@
         }
       },
 
-      // 清空当前笔记（调用 API 持久化）
       async clearCurrent() {
         const f = this.active;
         if (!f || !f._loaded) return;
@@ -570,7 +589,6 @@
         toast('已清空: ' + f.name);
       },
 
-      // 下载当前笔记
       downloadCurrent() {
         const f = this.active;
         const text = getEditorText().trim();
@@ -628,7 +646,7 @@
       statsRaf = requestAnimationFrame(() => { updateStats(); updateEmpty(); statsRaf = null; });
     }
 
-    /* ===== 文件列表渲染（用 charCount 和 updatedAt） ===== */
+    /* ===== 文件列表渲染 ===== */
     function renderList() {
       fileListEl.innerHTML = store.files.map(f => {
         const isActive = String(f.id) === String(store.activeId);
@@ -647,7 +665,7 @@
       }).join('');
     }
 
-    /* ===== 编辑器核心（列表不含 content，切换时懒加载） ===== */
+    /* ===== 编辑器核心 ===== */
     document.execCommand('defaultParagraphSeparator', false, 'br');
 
     async function loadEditor() {
@@ -657,8 +675,6 @@
         scheduleStats();
         return;
       }
-
-      // 如果 content 未加载，从后端获取
       if (!f._loaded) {
         loadingNote = true;
         try {
@@ -676,7 +692,6 @@
         }
         loadingNote = false;
       }
-
       editor.innerHTML = safeSanitize(f.content || '');
       scheduleStats();
     }
@@ -699,7 +714,6 @@
     applyWrap(store.wordWrap);
     document.getElementById('btnWrap').addEventListener('click', () => applyWrap(!store.wordWrap));
 
-    // ★ 关键优化：3 秒 debounce + 脏检查
     let saveTimer = null;
     editor.addEventListener('input', () => { scheduleStats(); autoSave(); });
 
@@ -715,10 +729,9 @@
             })
             .catch(err => toast('自动保存失败: ' + err.message));
         }
-      }, 3000); // 700ms → 3000ms，写查询减少 4 倍
+      }, 3000);
     }
 
-    // 安全粘贴
     editor.addEventListener('paste', e => {
       e.preventDefault();
       const text = e.clipboardData.getData('text/plain');
@@ -830,7 +843,6 @@
       }
     });
 
-    // ★ 关键优化：页面关闭前保存未保存的内容
     window.addEventListener('beforeunload', () => {
       const f = store.active;
       if (f && f._loaded && editor.innerHTML !== f.content) {
