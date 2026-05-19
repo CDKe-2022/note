@@ -7,57 +7,82 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"></script>
   <style>
+    /* ===== 浅色主题变量 ===== */
     :root {
-      --bg: #f5f2ec;
-      --bg-side: #eae6dd;
+      --bg: #f3f1eb;
+      --bg-side: #ebe7de;
       --bg-card: #ffffff;
       --bg-hover: #f0ece5;
       --bg-active: #e4dfd6;
       --border: #d5cfc4;
-      --text: #2a2520;
+      --text: #26231f;
       --text-2: #6e6860;
-      --text-3: #a09a90;
+      --text-3: #9e9890;
       --accent: #b87333;
       --accent-h: #cc8844;
-      --accent-bg: rgba(184,115,51,0.1);
+      --accent-bg: rgba(184,115,51,0.10);
       --accent-bg2: rgba(184,115,51,0.06);
       --danger: #a84040;
       --success: #3a8850;
       --side-w: 260px;
       --font-body: 'Times New Roman', 'Songti SC', 'SimSun', 'Noto Serif SC', serif;
       --font-mono: 'JetBrains Mono', monospace;
+      --editor-max: 820px;
+      --shadow-card: 0 1px 2px rgba(0,0,0,.04), 0 6px 18px rgba(0,0,0,.03);
     }
+
+    /* ===== 深色主题变量 ===== */
+    body.dark {
+      --bg: #1a1918;
+      --bg-side: #1f1e1c;
+      --bg-card: #252422;
+      --bg-hover: #2e2c29;
+      --bg-active: #363330;
+      --border: #3d3a36;
+      --text: #d6d1c7;
+      --text-2: #a09a90;
+      --text-3: #6e6860;
+      --accent: #cc9044;
+      --accent-h: #dda050;
+      --accent-bg: rgba(204,144,68,0.12);
+      --accent-bg2: rgba(204,144,68,0.06);
+      --danger: #c45050;
+      --success: #4a9960;
+      --shadow-card: 0 1px 2px rgba(0,0,0,.2), 0 6px 18px rgba(0,0,0,.15);
+    }
+
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     html, body { height:100%; overflow:hidden; }
     body {
       font-family: var(--font-body);
       background: var(--bg); color: var(--text);
       display: grid; grid-template-rows: 52px 1fr 28px;
+      transition: background .4s ease, color .3s ease;
     }
 
     /* 背景装饰 */
     .bg-deco { position:fixed; inset:0; pointer-events:none; z-index:0; }
     .bg-deco::before {
       content:''; position:absolute; top:-12%; right:-8%; width:520px; height:520px;
-      background:radial-gradient(circle, var(--accent-bg) 0%, transparent 65%);
-      border-radius:50%; animation:orb 24s ease-in-out infinite;
+      background:radial-gradient(circle, var(--accent-bg2) 0%, transparent 65%);
+      border-radius:50%; animation:orb 50s ease-in-out infinite;
     }
     .bg-deco::after {
       content:''; position:absolute; bottom:-8%; left:-6%; width:420px; height:420px;
       background:radial-gradient(circle, var(--accent-bg2) 0%, transparent 65%);
-      border-radius:50%; animation:orb 30s ease-in-out infinite reverse;
+      border-radius:50%; animation:orb 60s ease-in-out infinite reverse;
     }
     @keyframes orb {
       0%,100%{transform:translate(0,0) scale(1)}
-      33%{transform:translate(25px,-35px) scale(1.04)}
-      66%{transform:translate(-15px,25px) scale(.96)}
+      33%{transform:translate(25px,-35px) scale(1.03)}
+      66%{transform:translate(-15px,25px) scale(.97)}
     }
 
     /* 顶栏 */
     header {
       position:relative; z-index:20; display:flex; align-items:center;
       padding:0 20px; background:var(--bg-card); border-bottom:1px solid var(--border);
-      grid-row:1;
+      grid-row:1; transition: background .4s, border-color .3s;
     }
     .h-left,.h-right { display:flex; align-items:center; gap:5px; }
     .h-left { flex:1; }
@@ -68,10 +93,7 @@
       border-radius:8px; display:flex; align-items:center; justify-content:center; color:#fff;
       box-shadow:0 2px 8px rgba(184,115,51,0.25);
     }
-    .logo-name {
-      font-weight:700; font-size:21px; letter-spacing:-0.5px;
-      font-family: var(--font-body);
-    }
+    .logo-name { font-weight:700; font-size:22px; letter-spacing:-0.5px; }
     .logo-name span { color:var(--accent); }
     .btn {
       display:inline-flex; align-items:center; gap:6px; padding:6px 12px;
@@ -84,9 +106,8 @@
     .btn-i { padding:6px 8px; }
     .btn-i svg { display:block; }
     .btn.danger:hover { border-color:var(--danger); color:var(--danger); }
-    /* ★ 加粗按钮文字 */
     .btn .lbl { font-weight:600; }
-    .sep { width:1px; height:20px; background:var(--border); margin:0 3px; flex-shrink:0; }
+    .sep { width:1px; height:20px; background:var(--border); margin:0 3px; flex-shrink:0; transition:background .3s; }
 
     /* 主体布局 */
     .app-body {
@@ -98,18 +119,11 @@
     .sidebar {
       width:var(--side-w); flex-shrink:0; background:var(--bg-side);
       border-right:1px solid var(--border); display:flex; flex-direction:column;
-      overflow:hidden; transition:margin-left .3s cubic-bezier(.4,0,.2,1);
+      overflow:hidden; transition:margin-left .3s cubic-bezier(.4,0,.2,1), background .4s;
     }
     .sidebar.collapsed { margin-left:calc(-1 * var(--side-w)); }
-    .side-head {
-      display:flex; align-items:center; justify-content:space-between;
-      padding:14px 16px 10px; flex-shrink:0;
-    }
-    /* ★ 加粗"文件列表" */
-    .side-title {
-      font-size:13px; font-weight:700; color:var(--text-2);
-      text-transform:uppercase; letter-spacing:1.5px;
-    }
+    .side-head { display:flex; align-items:center; justify-content:space-between; padding:14px 16px 10px; flex-shrink:0; }
+    .side-title { font-size:13px; font-weight:700; color:var(--text-2); text-transform:uppercase; letter-spacing:1.5px; }
     .side-new {
       width:28px; height:28px; border:1px dashed var(--border); border-radius:6px;
       background:transparent; color:var(--text-3); cursor:pointer;
@@ -128,23 +142,17 @@
     .file-item:hover { background:var(--bg-hover); }
     .file-item.active {
       background:var(--bg-card); border-color:var(--border);
-      box-shadow:0 1px 6px rgba(0,0,0,.06);
+      box-shadow: var(--shadow-card);
     }
     .file-item.active::before {
-      content:''; position:absolute; left:-1px; top:6px; bottom:6px;
+      content:''; position:absolute; left:-1px; top:4px; bottom:4px;
       width:3px; border-radius:0 3px 3px 0; background:var(--accent);
     }
     .fi-icon { color:var(--text-3); flex-shrink:0; display:flex; }
     .file-item.active .fi-icon { color:var(--accent); }
     .fi-info { flex:1; min-width:0; }
-    .fi-name {
-      font-size:13px; font-weight:600; white-space:nowrap;
-      overflow:hidden; text-overflow:ellipsis; display:block;
-    }
-    .fi-meta {
-      display:block; font-size:10px; color:var(--text-3);
-      margin-top:2px; font-family:var(--font-mono);
-    }
+    .fi-name { font-size:14px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block; }
+    .fi-meta { display:block; font-size:10px; color:var(--text-3); margin-top:2px; font-family:var(--font-mono); }
     .fi-acts { display:flex; gap:2px; opacity:0; transition:opacity .15s; flex-shrink:0; }
     .file-item:hover .fi-acts { opacity:1; }
     .file-item.active .fi-acts { opacity:1; }
@@ -157,21 +165,22 @@
     .fa-btn.del:hover { color:var(--danger); }
     .rename-input {
       width:100%; border:1px solid var(--accent); border-radius:4px; padding:1px 5px;
-      font:600 13px var(--font-body); background:var(--bg-card); color:var(--text); outline:none;
+      font:600 14px var(--font-body); background:var(--bg-card); color:var(--text); outline:none;
     }
 
     /* 工具栏 */
     .toolbar {
       display:flex; align-items:center; justify-content:space-between;
-      padding:5px 20px; background:var(--bg-card); border-bottom:1px solid var(--border); flex-shrink:0;
+      padding:5px 20px; background:var(--bg-card); border-bottom:1px solid var(--border);
+      flex-shrink:0; transition:background .4s, border-color .3s;
     }
     .tb-left,.tb-right { display:flex; align-items:center; gap:4px; }
-    .fmt-group { display:flex; background:var(--bg); border:1px solid var(--border); border-radius:7px; padding:2px; }
+    .fmt-group { display:flex; background:var(--bg); border:1px solid var(--border); border-radius:7px; padding:2px; transition:background .4s, border-color .3s; }
     .fmt-btn {
       width:34px; height:28px; border:none; border-radius:5px; background:transparent;
       color:var(--text-2); cursor:pointer; transition:all .15s;
       display:flex; align-items:center; justify-content:center; font-size:14px;
-      font-family: var(--font-body);
+      font-family:var(--font-body);
     }
     .fmt-btn:hover { background:var(--bg-hover); color:var(--text); }
     .fmt-btn.on { background:var(--bg-card); color:var(--accent); box-shadow:0 1px 3px rgba(0,0,0,.07); }
@@ -196,22 +205,28 @@
     /* 编辑器 */
     .main-area { flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden; }
     .editor-wrap {
-      flex:1; min-height:0; position:relative; overflow:hidden;
-      background:var(--bg-card);
-      box-shadow:inset 0 1px 3px rgba(0,0,0,.03);
+      flex:1; min-height:0; position:relative;
+      overflow-y:auto; overflow-x:hidden;
+      background:var(--bg-card); transition:background .4s;
     }
+    .editor-wrap::-webkit-scrollbar { width:6px; }
+    .editor-wrap::-webkit-scrollbar-track { background:transparent; }
+    .editor-wrap::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+    .editor-wrap::-webkit-scrollbar-thumb:hover { background:var(--text-3); }
+
     #editor {
-      position:absolute; top:0; left:0; right:0; bottom:0;
-      padding:28px 36px; background:transparent; border:none; outline:none;
+      max-width: var(--editor-max);
+      margin: 0 auto;
+      padding: 52px 40px 80px;
+      background:transparent; border:none; outline:none;
       color:var(--text); font-family:var(--font-body);
-      font-size:16px; line-height:1.9; overflow-y:auto; overflow-x:hidden;
+      font-size:17px; line-height:2; letter-spacing:.01em;
       white-space:pre-wrap; word-wrap:break-word; caret-color:var(--accent);
+      min-height:100%;
+      transition:color .3s;
     }
-    #editor::-webkit-scrollbar { width:6px; }
-    #editor::-webkit-scrollbar-track { background:transparent; }
-    #editor::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
-    #editor::-webkit-scrollbar-thumb:hover { background:var(--text-3); }
     #editor ::selection, #editor *::selection { background:var(--accent-bg); color:var(--text); }
+
     .empty {
       position:absolute; inset:0; display:flex; flex-direction:column;
       align-items:center; justify-content:center; gap:12px;
@@ -221,11 +236,11 @@
     .empty-ico {
       width:72px; height:72px; border:2px dashed var(--border); border-radius:14px;
       display:flex; align-items:center; justify-content:center; color:var(--text-3);
-      animation:breathe 3s ease-in-out infinite;
+      animation:breathe 5s ease-in-out infinite;
     }
     @keyframes breathe {
       0%,100% { opacity:.5; transform:scale(1); }
-      50% { opacity:.75; transform:scale(1.02); }
+      50% { opacity:.7; transform:scale(1.015); }
     }
     .empty-t { font-size:15px; color:var(--text-3); }
     .empty-h { font-size:12px; color:var(--text-3); opacity:.6; }
@@ -239,11 +254,11 @@
       position:relative; z-index:20; display:flex; align-items:center;
       justify-content:space-between; padding:0 20px;
       background:var(--bg-card); border-top:1px solid var(--border);
-      grid-row:3;
+      grid-row:3; transition:background .4s, border-color .3s;
     }
     .st-l,.st-r { display:flex; align-items:center; gap:14px; }
     .st { font:11px var(--font-mono); color:var(--text-3); display:flex; align-items:center; gap:3px; }
-    .st .dot { width:5px; height:5px; border-radius:50%; background:var(--success); animation:pulse 2s ease-in-out infinite; }
+    .st .dot { width:5px; height:5px; border-radius:50%; background:var(--success); animation:pulse 3s ease-in-out infinite; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
     .save-ind {
       font:11px var(--font-body); color:var(--text-3); opacity:0;
@@ -256,7 +271,7 @@
     .toast-box { position:fixed; top:64px; right:20px; z-index:999; display:flex; flex-direction:column; gap:6px; }
     .toast {
       display:flex; align-items:center; gap:8px; padding:9px 14px; border-radius:8px;
-      background:var(--bg-card); border:1px solid var(--border); box-shadow:0 6px 24px rgba(0,0,0,.1);
+      background:var(--bg-card); border:1px solid var(--border); box-shadow:var(--shadow-card);
       font-size:13px; color:var(--text); transform:translateX(120%); opacity:0;
       transition:all .3s cubic-bezier(.34,1.56,.64,1);
     }
@@ -280,7 +295,7 @@
     body.focus .sidebar { display:none; }
     body.focus .toolbar { display:none; }
     body.focus .app-body { grid-row:1; }
-    body.focus #editor { padding:48px 80px; }
+    body.focus #editor { padding:60px 40px 100px; max-width:720px; }
     body.focus .focus-exit { display:flex; }
     .focus-exit {
       display:none; position:fixed; top:14px; right:14px; z-index:200;
@@ -292,19 +307,33 @@
     .focus-exit:hover { color:var(--text); border-color:var(--text-3); }
     #fileInput { display:none; }
 
+    /* 主题切换按钮 */
+    .btn-theme {
+      width:34px; height:28px; border:1px solid var(--border); border-radius:7px;
+      background:var(--bg-card); color:var(--text-3); cursor:pointer;
+      display:flex; align-items:center; justify-content:center; transition:all .18s;
+    }
+    .btn-theme:hover { background:var(--bg-hover); color:var(--text); border-color:var(--text-3); }
+    .btn-theme svg { transition: transform .3s ease; }
+    .btn-theme:hover svg { transform: rotate(20deg); }
+    body.dark .btn-theme .icon-sun { display:block; }
+    body.dark .btn-theme .icon-moon { display:none; }
+    body:not(.dark) .btn-theme .icon-sun { display:none; }
+    body:not(.dark) .btn-theme .icon-moon { display:block; }
+
     /* 响应式 */
     @media (max-width:768px) {
       .sidebar { position:absolute; z-index:30; height:100%; box-shadow:4px 0 16px rgba(0,0,0,.08); }
       .sidebar.collapsed { margin-left:calc(-1 * var(--side-w)); }
       header { padding:0 12px; }
       .toolbar { padding:5px 12px; }
-      #editor { padding:18px 14px; }
+      #editor { padding:28px 18px 60px; max-width:100%; }
       .btn .lbl { display:none; }
       .logo-name { display:none; }
       .sep { display:none; }
       footer { padding:0 12px; }
       .st-r { display:none; }
-      body.focus #editor { padding:24px 16px; }
+      body.focus #editor { padding:28px 16px 60px; max-width:100%; }
     }
   </style>
 </head>
@@ -340,6 +369,10 @@
       <button class="btn btn-i" id="btnFocus" title="专注模式">
         <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 2 2 6 2"/><polyline points="10 2 14 2 14 6"/><polyline points="14 10 14 14 10 14"/><polyline points="6 14 2 14 2 10"/></svg>
       </button>
+      <button class="btn-theme" id="btnTheme" title="切换深色模式">
+        <svg class="icon-moon" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8.5A6 6 0 0 1 7.5 2 6 6 0 1 0 14 8.5z"/></svg>
+        <svg class="icon-sun" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3"/><path d="M8 1.5v1M8 13.5v1M1.5 8h1M13.5 8h1M3.4 3.4l.7.7M11.9 11.9l.7.7M3.4 12.6l.7-.7M11.9 4.1l.7-.7"/></svg>
+      </button>
     </div>
   </header>
   <div class="app-body">
@@ -369,7 +402,7 @@
             <button class="fs-btn" id="fsMinus" title="缩小字体">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="8" x2="13" y2="8"/></svg>
             </button>
-            <span class="fs-val" id="fsVal">16</span>
+            <span class="fs-val" id="fsVal">17</span>
             <button class="fs-btn" id="fsPlus" title="放大字体">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="3" x2="8" y2="13"/><line x1="3" y1="8" x2="13" y2="8"/></svg>
             </button>
@@ -418,320 +451,145 @@
 
     const PURIFY_CFG = {
       ALLOWED_TAGS: ['br','b','strong','u','i','em','span','div','p'],
-      ALLOWED_ATTR: ['style'],
-      ALLOW_DATA_ATTR: false,
+      ALLOWED_ATTR: ['style'], ALLOW_DATA_ATTR: false,
     };
-
     function safeSanitize(html) {
       if (window.DOMPurify) return DOMPurify.sanitize(html, PURIFY_CFG);
-      return html.replace(/<[^>]*(style|on\w+)[^>]*>/gi, '')
-                 .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+      return html.replace(/<[^>]*(style|on\w+)[^>]*>/gi,'').replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,'');
     }
-
-    function esc(s) {
-      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-    }
-
+    function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
     function timeAgo(ts) {
       if (!ts) return '';
-      const d = Date.now() - ts;
-      const m = Math.floor(d / 60000);
-      if (m < 1) return '刚刚';
-      if (m < 60) return m + '分钟前';
-      const h = Math.floor(m / 60);
-      if (h < 24) return h + '小时前';
-      const day = Math.floor(h / 24);
-      if (day < 30) return day + '天前';
+      const d=Date.now()-ts, m=Math.floor(d/60000);
+      if(m<1) return '刚刚'; if(m<60) return m+'分钟前';
+      const h=Math.floor(m/60); if(h<24) return h+'小时前';
+      const day=Math.floor(h/24); if(day<30) return day+'天前';
       return new Date(ts).toLocaleDateString('zh-CN');
     }
-
     const IC = {
-      file: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 1.5h6.5L13 5v9.5a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-13a1 1 0 0 1 1-1z"/><path d="M9.5 1.5V5H13"/></svg>',
-      edit: '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 2.5l2 2-8 8-3 1 1-3z"/><path d="M10 4l2 2"/></svg>',
-      trash: '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5h10"/><path d="M5.5 4.5V3h5v1.5"/><path d="M4.5 4.5l.8 9h5.4l.8-9"/></svg>',
+      file:'<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 1.5h6.5L13 5v9.5a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-13a1 1 0 0 1 1-1z"/><path d="M9.5 1.5V5H13"/></svg>',
+      edit:'<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 2.5l2 2-8 8-3 1 1-3z"/><path d="M10 4l2 2"/></svg>',
+      trash:'<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5h10"/><path d="M5.5 4.5V3h5v1.5"/><path d="M4.5 4.5l.8 9h5.4l.8-9"/></svg>',
     };
 
+    /* ===== API ===== */
     const API_BASE = 'https://note2.kehuang.eu.org/api/notes';
-
     async function apiRequest(method, data, id) {
-      const token = localStorage.getItem('token') || '';
-      const headers = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
-      let url = API_BASE;
-      if (id !== undefined && id !== null) url += '/' + id;
-      const options = { method, headers };
-      if (data && method !== 'GET' && method !== 'DELETE') options.body = JSON.stringify(data);
-      const res = await fetch(url, options);
-      if (!res.ok) {
-        let msg;
-        try { msg = (await res.json()).error || res.statusText; } catch { msg = res.statusText; }
-        throw new Error(msg);
-      }
-      if (res.status === 204) return null;
-      return res.json();
+      const token = localStorage.getItem('token')||'';
+      const headers = {'Authorization':'Bearer '+token,'Content-Type':'application/json'};
+      let url = API_BASE; if(id!==undefined&&id!==null) url+='/'+id;
+      const options = {method,headers};
+      if(data&&method!=='GET'&&method!=='DELETE') options.body=JSON.stringify(data);
+      const res = await fetch(url,options);
+      if(!res.ok){let msg;try{msg=(await res.json()).error||res.statusText}catch{msg=res.statusText}throw new Error(msg);}
+      if(res.status===204) return null; return res.json();
     }
-
-    async function fetchNotes() { return apiRequest('GET'); }
-    async function fetchNote(id) { return apiRequest('GET', null, id); }
-    async function createNote(name, content) { return apiRequest('POST', { name, content }); }
-    async function updateNote(id, content, name) {
-      const data = {};
-      if (content !== undefined) data.content = content;
-      if (name !== undefined) data.name = name;
-      return apiRequest('PUT', data, id);
-    }
-    async function deleteNote(id) { return apiRequest('DELETE', null, id); }
+    async function fetchNotes(){return apiRequest('GET');}
+    async function fetchNote(id){return apiRequest('GET',null,id);}
+    async function createNote(name,content){return apiRequest('POST',{name,content});}
+    async function updateNote(id,content,name){const d={};if(content!==undefined)d.content=content;if(name!==undefined)d.name=name;return apiRequest('PUT',d,id);}
+    async function deleteNote(id){return apiRequest('DELETE',null,id);}
 
     let loadingNote = false;
 
+    /* ===== Store ===== */
     const store = {
-      files: [], activeId: null, counter: 1, fontSize: 16, wordWrap: true, isFocus: false,
-      get active() { return this.files.find(f => f.id === this.activeId) || null; },
-      _norm(note, withContent) {
-        return {
-          id: String(note.id), name: note.name || '未命名',
-          content: withContent ? (note.content || '') : null,
-          charCount: note.charCount || 0, _loaded: !!withContent,
-          createdAt: note.createdAt || Date.now(), updatedAt: note.updatedAt || Date.now(),
-        };
-      },
-      async restore() {
-        try {
-          const notes = await fetchNotes();
-          this.files = notes.map(n => this._norm(n, false));
-          this.counter = this.files.filter(n => n.name.startsWith('未命名')).length + 1;
-          if (this.files.length > 0) this.activeId = this.files[0].id;
-          return true;
-        } catch (err) { toast('获取笔记失败: ' + err.message); return false; }
-      },
-      async createFile(silent, name, content) {
-        try {
-          const fileName = name || ('未命名 ' + this.counter++);
-          const newNote = await createNote(fileName, content || '');
-          const n = this._norm(newNote, true);
-          this.files.unshift(n); this.activeId = n.id;
-          renderList(); await loadEditor();
-          if (!silent) toast('已新建: ' + n.name);
-          return n;
-        } catch (err) { toast('创建笔记失败: ' + err.message); return null; }
-      },
-      async switchFile(id) {
-        if (String(id) === String(this.activeId)) return;
-        await this.saveCurrent(); this.activeId = String(id);
-        renderList(); await loadEditor();
-      },
-      async deleteFile(id) {
-        try {
-          await deleteNote(id);
-          const idx = this.files.findIndex(f => f.id === String(id));
-          if (idx === -1) return;
-          const name = this.files[idx].name; this.files.splice(idx, 1);
-          if (String(this.activeId) === String(id)) this.activeId = this.files.length ? this.files[0].id : null;
-          renderList(); await loadEditor(); toast('已删除: ' + name);
-        } catch (err) { toast('删除笔记失败: ' + err.message); }
-      },
-      async renameFile(id, newName) {
-        const f = this.files.find(x => x.id === String(id));
-        if (f && newName.trim()) {
-          try {
-            const updated = await updateNote(id, undefined, newName.trim());
-            f.name = updated.name || newName.trim(); f.updatedAt = updated.updatedAt || Date.now();
-          } catch (err) { toast('重命名失败: ' + err.message); }
-          renderList();
-        }
-      },
-      async saveCurrent() {
-        if (!this.activeId || loadingNote) return;
-        const f = this.active; if (!f || !f._loaded) return;
-        const content = editor.innerHTML; if (content === f.content) return;
-        try {
-          const updated = await updateNote(f.id, content);
-          f.content = updated.content || content; f.updatedAt = updated.updatedAt || Date.now();
-          f.charCount = content.replace(/<[^>]*>/g, '').length; renderList();
-        } catch (err) { toast('保存失败: ' + err.message); }
-      },
-      async clearCurrent() {
-        const f = this.active; if (!f || !f._loaded) return;
-        if (!getEditorText().trim()) return;
-        editor.innerHTML = '';
-        try {
-          const updated = await updateNote(f.id, '');
-          f.content = ''; f.charCount = 0; f.updatedAt = updated.updatedAt || Date.now();
-        } catch (err) { toast('清空失败: ' + err.message); }
-        scheduleStats(); renderList(); toast('已清空: ' + f.name);
-      },
-      downloadCurrent() {
-        const f = this.active; const text = getEditorText().trim();
-        if (!text) { toast('当前文件为空'); return; }
-        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-        const url = URL.createObjectURL(blob); const a = document.createElement('a');
-        a.href = url; a.download = (f ? f.name : 'textvault') + '.txt'; a.click();
-        URL.revokeObjectURL(url); toast('已下载: ' + a.download);
-      },
+      files:[],activeId:null,counter:1,fontSize:17,wordWrap:true,isFocus:false,
+      get active(){return this.files.find(f=>f.id===this.activeId)||null;},
+      _norm(n,w){return{id:String(n.id),name:n.name||'未命名',content:w?(n.content||''):null,charCount:n.charCount||0,_loaded:!!w,createdAt:n.createdAt||Date.now(),updatedAt:n.updatedAt||Date.now()};},
+      async restore(){try{const ns=await fetchNotes();this.files=ns.map(n=>this._norm(n,false));this.counter=this.files.filter(n=>n.name.startsWith('未命名')).length+1;if(this.files.length>0)this.activeId=this.files[0].id;return true;}catch(e){toast('获取笔记失败: '+e.message);return false;}},
+      async createFile(silent,name,content){try{const fn=name||('未命名 '+this.counter++);const n=await createNote(fn,content||'');const nr=this._norm(n,true);this.files.unshift(nr);this.activeId=nr.id;renderList();await loadEditor();if(!silent)toast('已新建: '+nr.name);return nr;}catch(e){toast('创建笔记失败: '+e.message);return null;}},
+      async switchFile(id){if(String(id)===String(this.activeId))return;await this.saveCurrent();this.activeId=String(id);renderList();await loadEditor();},
+      async deleteFile(id){try{await deleteNote(id);const i=this.files.findIndex(f=>f.id===String(id));if(i===-1)return;const nm=this.files[i].name;this.files.splice(i,1);if(String(this.activeId)===String(id))this.activeId=this.files.length?this.files[0].id:null;renderList();await loadEditor();toast('已删除: '+nm);}catch(e){toast('删除笔记失败: '+e.message);}},
+      async renameFile(id,nm){const f=this.files.find(x=>x.id===String(id));if(f&&nm.trim()){try{const u=await updateNote(id,undefined,nm.trim());f.name=u.name||nm.trim();f.updatedAt=u.updatedAt||Date.now();}catch(e){toast('重命名失败: '+e.message);}renderList();}},
+      async saveCurrent(){if(!this.activeId||loadingNote)return;const f=this.active;if(!f||!f._loaded)return;const c=editor.innerHTML;if(c===f.content)return;try{const u=await updateNote(f.id,c);f.content=u.content||c;f.updatedAt=u.updatedAt||Date.now();f.charCount=c.replace(/<[^>]*>/g,'').length;renderList();}catch(e){toast('保存失败: '+e.message);}},
+      async clearCurrent(){const f=this.active;if(!f||!f._loaded)return;if(!getEditorText().trim())return;editor.innerHTML='';try{const u=await updateNote(f.id,'');f.content='';f.charCount=0;f.updatedAt=u.updatedAt||Date.now();}catch(e){toast('清空失败: '+e.message);}scheduleStats();renderList();toast('已清空: '+f.name);},
+      downloadCurrent(){const f=this.active;const t=getEditorText().trim();if(!t){toast('当前文件为空');return;}const b=new Blob([t],{type:'text/plain;charset=utf-8'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=(f?f.name:'textvault')+'.txt';a.click();URL.revokeObjectURL(u);toast('已下载: '+a.download);},
     };
 
-    const editor = document.getElementById('editor');
-    const emptyState = document.getElementById('emptyState');
-    const fileListEl = document.getElementById('fileList');
-    const sidebar = document.getElementById('sidebar');
-    const fsVal = document.getElementById('fsVal');
-    const stChars = document.getElementById('stChars');
-    const stWords = document.getElementById('stWords');
-    const stLines = document.getElementById('stLines');
-    const saveInd = document.getElementById('saveInd');
-    const toastBox = document.getElementById('toastBox');
-    const dropOv = document.getElementById('dropOv');
-    const fileInput = document.getElementById('fileInput');
-    const btnBold = document.getElementById('btnBold');
-    const btnULine = document.getElementById('btnULine');
+    /* ===== DOM ===== */
+    const editor=document.getElementById('editor'),emptyState=document.getElementById('emptyState'),
+      fileListEl=document.getElementById('fileList'),sidebar=document.getElementById('sidebar'),
+      fsVal=document.getElementById('fsVal'),stChars=document.getElementById('stChars'),
+      stWords=document.getElementById('stWords'),stLines=document.getElementById('stLines'),
+      saveInd=document.getElementById('saveInd'),toastBox=document.getElementById('toastBox'),
+      dropOv=document.getElementById('dropOv'),fileInput=document.getElementById('fileInput'),
+      btnBold=document.getElementById('btnBold'),btnULine=document.getElementById('btnULine');
 
-    function getEditorText() { return editor.innerText.replace(/\u00A0/g, ' ').trimEnd(); }
-    function countWords(text) {
-      if (!text) return 0;
-      const cjk = text.match(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff\u3000-\u303f]/g);
-      const cjkCount = cjk ? cjk.length : 0;
-      const remaining = text.replace(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/g, ' ');
-      return cjkCount + remaining.trim().split(/\s+/).filter(w => w.length > 0).length;
-    }
-    function updateStats() {
-      const text = getEditorText();
-      stChars.textContent = '字符: ' + text.length;
-      stWords.textContent = '字数: ' + countWords(text);
-      stLines.textContent = '行数: ' + (text ? text.split('\n').length : 0);
-    }
-    function updateEmpty() { emptyState.classList.toggle('hide', getEditorText().length > 0); }
-    let statsRaf = null;
-    function scheduleStats() {
-      if (statsRaf) return;
-      statsRaf = requestAnimationFrame(() => { updateStats(); updateEmpty(); statsRaf = null; });
-    }
+    function getEditorText(){return editor.innerText.replace(/\u00A0/g,' ').trimEnd();}
+    function countWords(t){if(!t)return 0;const c=t.match(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff\u3000-\u303f]/g);const cc=c?c.length:0;const r=t.replace(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/g,' ');return cc+r.trim().split(/\s+/).filter(w=>w.length>0).length;}
+    function updateStats(){const t=getEditorText();stChars.textContent='字符: '+t.length;stWords.textContent='字数: '+countWords(t);stLines.textContent='行数: '+(t?t.split('\n').length:0);}
+    function updateEmpty(){emptyState.classList.toggle('hide',getEditorText().length>0);}
+    let statsRaf=null;function scheduleStats(){if(statsRaf)return;statsRaf=requestAnimationFrame(()=>{updateStats();updateEmpty();statsRaf=null;});}
 
-    function renderList() {
-      fileListEl.innerHTML = store.files.map(f => {
-        const isActive = String(f.id) === String(store.activeId);
-        const chars = f.charCount || 0;
-        return '<div class="file-item' + (isActive ? ' active' : '') + '" data-id="' + f.id + '">' +
-          '<span class="fi-icon">' + IC.file + '</span>' +
-          '<span class="fi-info">' +
-            '<span class="fi-name">' + esc(f.name) + '</span>' +
-            '<span class="fi-meta">' + chars + ' 字 &middot; ' + timeAgo(f.updatedAt) + '</span>' +
-          '</span>' +
-          '<span class="fi-acts">' +
-            '<button class="fa-btn act-rename" title="重命名">' + IC.edit + '</button>' +
-            '<button class="fa-btn del act-del" title="删除">' + IC.trash + '</button>' +
-          '</span>' +
-        '</div>';
-      }).join('');
-    }
+    function renderList(){fileListEl.innerHTML=store.files.map(f=>{const a=String(f.id)===String(store.activeId);const c=f.charCount||0;return '<div class="file-item'+(a?' active':'')+'" data-id="'+f.id+'"><span class="fi-icon">'+IC.file+'</span><span class="fi-info"><span class="fi-name">'+esc(f.name)+'</span><span class="fi-meta">'+c+' 字 &middot; '+timeAgo(f.updatedAt)+'</span></span><span class="fi-acts"><button class="fa-btn act-rename" title="重命名">'+IC.edit+'</button><button class="fa-btn del act-del" title="删除">'+IC.trash+'</button></span></div>';}).join('');}
 
-    document.execCommand('defaultParagraphSeparator', false, 'br');
-    async function loadEditor() {
-      const f = store.active;
-      if (!f) { editor.innerHTML = ''; scheduleStats(); return; }
-      if (!f._loaded) {
-        loadingNote = true;
-        try {
-          const note = await fetchNote(f.id);
-          f.content = note.content || ''; f.charCount = note.content ? note.content.replace(/<[^>]*>/g, '').length : 0;
-          f._loaded = true; renderList();
-        } catch (err) { toast('加载笔记失败: ' + err.message); editor.innerHTML = ''; loadingNote = false; scheduleStats(); return; }
-        loadingNote = false;
-      }
-      editor.innerHTML = safeSanitize(f.content || ''); scheduleStats();
-    }
+    document.execCommand('defaultParagraphSeparator',false,'br');
+    async function loadEditor(){const f=store.active;if(!f){editor.innerHTML='';scheduleStats();return;}if(!f._loaded){loadingNote=true;try{const n=await fetchNote(f.id);f.content=n.content||'';f.charCount=n.content?n.content.replace(/<[^>]*>/g,'').length:0;f._loaded=true;renderList();}catch(e){toast('加载笔记失败: '+e.message);editor.innerHTML='';loadingNote=false;scheduleStats();return;}loadingNote=false;}editor.innerHTML=safeSanitize(f.content||'');scheduleStats();}
 
-    function applyFontSize(s) { store.fontSize = Math.max(12, Math.min(30, s)); fsVal.textContent = store.fontSize; editor.style.fontSize = store.fontSize + 'px'; }
+    function applyFontSize(s){store.fontSize=Math.max(12,Math.min(30,s));fsVal.textContent=store.fontSize;editor.style.fontSize=store.fontSize+'px';}
     applyFontSize(store.fontSize);
-    document.getElementById('fsMinus').addEventListener('click', () => applyFontSize(store.fontSize - 1));
-    document.getElementById('fsPlus').addEventListener('click', () => applyFontSize(store.fontSize + 1));
-    function applyWrap(w) { store.wordWrap = w; editor.style.whiteSpace = w ? 'pre-wrap' : 'pre'; editor.style.overflowX = w ? 'hidden' : 'auto'; document.getElementById('btnWrap').classList.toggle('on', w); }
+    document.getElementById('fsMinus').addEventListener('click',()=>applyFontSize(store.fontSize-1));
+    document.getElementById('fsPlus').addEventListener('click',()=>applyFontSize(store.fontSize+1));
+    function applyWrap(w){store.wordWrap=w;editor.style.whiteSpace=w?'pre-wrap':'pre';document.getElementById('btnWrap').classList.toggle('on',w);}
     applyWrap(store.wordWrap);
-    document.getElementById('btnWrap').addEventListener('click', () => applyWrap(!store.wordWrap));
+    document.getElementById('btnWrap').addEventListener('click',()=>applyWrap(!store.wordWrap));
 
-    let saveTimer = null;
-    editor.addEventListener('input', () => { scheduleStats(); autoSave(); });
-    function autoSave() {
-      clearTimeout(saveTimer);
-      saveTimer = setTimeout(() => {
-        const f = store.active;
-        if (f && f._loaded && !loadingNote && editor.innerHTML !== f.content) {
-          store.saveCurrent().then(() => { saveInd.classList.add('on'); setTimeout(() => saveInd.classList.remove('on'), 1400); }).catch(err => toast('自动保存失败: ' + err.message));
-        }
-      }, 3000);
+    let saveTimer=null;
+    editor.addEventListener('input',()=>{scheduleStats();autoSave();});
+    function autoSave(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>{const f=store.active;if(f&&f._loaded&&!loadingNote&&editor.innerHTML!==f.content){store.saveCurrent().then(()=>{saveInd.classList.add('on');setTimeout(()=>saveInd.classList.remove('on'),1400);}).catch(e=>toast('自动保存失败: '+e.message));}},3000);}
+    editor.addEventListener('paste',e=>{e.preventDefault();const t=e.clipboardData.getData('text/plain');if(!t)return;document.execCommand('insertText',false,t);requestAnimationFrame(()=>{scheduleStats();autoSave();});});
+    editor.addEventListener('keydown',e=>{if(e.key==='Tab'){e.preventDefault();document.execCommand('insertText',false,'    ');}});
+
+    function updateFmt(){btnBold.classList.toggle('on',document.queryCommandState('bold'));btnULine.classList.toggle('on',document.queryCommandState('underline'));}
+    btnBold.addEventListener('mousedown',e=>{e.preventDefault();document.execCommand('bold');updateFmt();});
+    btnULine.addEventListener('mousedown',e=>{e.preventDefault();document.execCommand('underline');updateFmt();});
+    document.addEventListener('selectionchange',()=>{if(document.activeElement===editor)updateFmt();});
+    editor.addEventListener('keyup',updateFmt);editor.addEventListener('mouseup',updateFmt);
+
+    fileListEl.addEventListener('click',e=>{const item=e.target.closest('.file-item');if(!item)return;const id=item.dataset.id;if(e.target.closest('.act-rename')){startRename(id);return;}if(e.target.closest('.act-del')){store.deleteFile(id);return;}store.switchFile(id);});
+    fileListEl.addEventListener('dblclick',e=>{const n=e.target.closest('.fi-name');if(!n)return;const item=n.closest('.file-item');if(item)startRename(item.dataset.id);});
+    function startRename(id){const f=store.files.find(x=>x.id===String(id));if(!f)return;const item=fileListEl.querySelector('[data-id="'+id+'"]');const ne=item.querySelector('.fi-name');const inp=document.createElement('input');inp.type='text';inp.value=f.name;inp.className='rename-input';ne.replaceWith(inp);inp.focus();inp.select();let done=false;const finish=()=>{if(done)return;done=true;store.renameFile(id,inp.value);};inp.addEventListener('blur',finish);inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();finish();}if(e.key==='Escape'){done=true;renderList();}});}
+
+    document.getElementById('btnNew').addEventListener('click',()=>store.createFile(false));
+    document.getElementById('btnOpen').addEventListener('click',()=>fileInput.click());
+    fileInput.addEventListener('change',e=>{const f=e.target.files[0];if(f)readFile(f);fileInput.value='';});
+    function readFile(file){const r=new FileReader();r.onload=e=>{const h=esc(e.target.result).replace(/\n/g,'<br>');store.createFile(false,file.name.replace(/\.[^.]+$/,''),safeSanitize(h));};r.onerror=()=>toast('文件读取失败');r.readAsText(file,'UTF-8');}
+    document.getElementById('btnDown').addEventListener('click',()=>store.downloadCurrent());
+    document.getElementById('btnClear').addEventListener('click',()=>store.clearCurrent());
+    document.getElementById('btnSide').addEventListener('click',()=>sidebar.classList.toggle('collapsed'));
+
+    let dragN=0;
+    document.addEventListener('dragenter',e=>{e.preventDefault();dragN++;dropOv.classList.add('on');});
+    document.addEventListener('dragleave',e=>{e.preventDefault();dragN--;if(dragN<=0){dragN=0;dropOv.classList.remove('on');}});
+    document.addEventListener('dragover',e=>e.preventDefault());
+    document.addEventListener('drop',e=>{e.preventDefault();dragN=0;dropOv.classList.remove('on');const f=e.dataTransfer.files[0];if(f)readFile(f);});
+
+    document.getElementById('btnFocus').addEventListener('click',()=>{store.isFocus=true;document.body.classList.add('focus');editor.focus();});
+    document.getElementById('focusExit').addEventListener('click',exitFocus);
+    function exitFocus(){store.isFocus=false;document.body.classList.remove('focus');}
+
+    /* ===== 深色模式 ===== */
+    const btnTheme=document.getElementById('btnTheme');
+    function applyTheme(dark){
+      document.body.classList.toggle('dark',dark);
+      localStorage.setItem('theme',dark?'dark':'light');
     }
-    editor.addEventListener('paste', e => { e.preventDefault(); const text = e.clipboardData.getData('text/plain'); if (!text) return; document.execCommand('insertText', false, text); requestAnimationFrame(() => { scheduleStats(); autoSave(); }); });
-    editor.addEventListener('keydown', e => { if (e.key === 'Tab') { e.preventDefault(); document.execCommand('insertText', false, '    '); } });
+    // 读取保存的主题偏好，或跟随系统
+    const savedTheme=localStorage.getItem('theme');
+    if(savedTheme==='dark'||(!savedTheme&&window.matchMedia('(prefers-color-scheme:dark)').matches)){applyTheme(true);}
+    btnTheme.addEventListener('click',()=>applyTheme(!document.body.classList.contains('dark')));
 
-    function updateFmt() { btnBold.classList.toggle('on', document.queryCommandState('bold')); btnULine.classList.toggle('on', document.queryCommandState('underline')); }
-    btnBold.addEventListener('mousedown', e => { e.preventDefault(); document.execCommand('bold'); updateFmt(); });
-    btnULine.addEventListener('mousedown', e => { e.preventDefault(); document.execCommand('underline'); updateFmt(); });
-    document.addEventListener('selectionchange', () => { if (document.activeElement === editor) updateFmt(); });
-    editor.addEventListener('keyup', updateFmt);
-    editor.addEventListener('mouseup', updateFmt);
-
-    fileListEl.addEventListener('click', e => { const item = e.target.closest('.file-item'); if (!item) return; const id = item.dataset.id; if (e.target.closest('.act-rename')) { startRename(id); return; } if (e.target.closest('.act-del')) { store.deleteFile(id); return; } store.switchFile(id); });
-    fileListEl.addEventListener('dblclick', e => { const nameEl = e.target.closest('.fi-name'); if (!nameEl) return; const item = nameEl.closest('.file-item'); if (item) startRename(item.dataset.id); });
-    function startRename(id) {
-      const f = store.files.find(x => x.id === String(id)); if (!f) return;
-      const item = fileListEl.querySelector('[data-id="' + id + '"]');
-      const nameEl = item.querySelector('.fi-name');
-      const input = document.createElement('input'); input.type = 'text'; input.value = f.name; input.className = 'rename-input';
-      nameEl.replaceWith(input); input.focus(); input.select();
-      let done = false; const finish = () => { if (done) return; done = true; store.renameFile(id, input.value); };
-      input.addEventListener('blur', finish);
-      input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); finish(); } if (e.key === 'Escape') { done = true; renderList(); } });
-    }
-
-    document.getElementById('btnNew').addEventListener('click', () => store.createFile(false));
-    document.getElementById('btnOpen').addEventListener('click', () => fileInput.click());
-    fileInput.addEventListener('change', e => { const file = e.target.files[0]; if (file) readFile(file); fileInput.value = ''; });
-    function readFile(file) { const reader = new FileReader(); reader.onload = e => { const html = esc(e.target.result).replace(/\n/g, '<br>'); store.createFile(false, file.name.replace(/\.[^.]+$/, ''), safeSanitize(html)); }; reader.onerror = () => toast('文件读取失败'); reader.readAsText(file, 'UTF-8'); }
-    document.getElementById('btnDown').addEventListener('click', () => store.downloadCurrent());
-    document.getElementById('btnClear').addEventListener('click', () => store.clearCurrent());
-    document.getElementById('btnSide').addEventListener('click', () => sidebar.classList.toggle('collapsed'));
-
-    let dragN = 0;
-    document.addEventListener('dragenter', e => { e.preventDefault(); dragN++; dropOv.classList.add('on'); });
-    document.addEventListener('dragleave', e => { e.preventDefault(); dragN--; if (dragN <= 0) { dragN = 0; dropOv.classList.remove('on'); } });
-    document.addEventListener('dragover', e => e.preventDefault());
-    document.addEventListener('drop', e => { e.preventDefault(); dragN = 0; dropOv.classList.remove('on'); const file = e.dataTransfer.files[0]; if (file) readFile(file); });
-
-    document.getElementById('btnFocus').addEventListener('click', () => { store.isFocus = true; document.body.classList.add('focus'); editor.focus(); });
-    document.getElementById('focusExit').addEventListener('click', exitFocus);
-    function exitFocus() { store.isFocus = false; document.body.classList.remove('focus'); }
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && store.isFocus) exitFocus();
-      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-        e.preventDefault();
-        const f = store.active;
-        if (f && f._loaded && !loadingNote && editor.innerHTML !== f.content) {
-          store.saveCurrent().then(() => { saveInd.classList.add('on'); setTimeout(() => saveInd.classList.remove('on'), 1400); toast('已保存'); }).catch(err => toast('保存失败: ' + err.message));
-        } else { toast('内容未变化'); }
-      }
+    document.addEventListener('keydown',e=>{
+      if(e.key==='Escape'&&store.isFocus)exitFocus();
+      if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();const f=store.active;if(f&&f._loaded&&!loadingNote&&editor.innerHTML!==f.content){store.saveCurrent().then(()=>{saveInd.classList.add('on');setTimeout(()=>saveInd.classList.remove('on'),1400);toast('已保存');}).catch(e=>toast('保存失败: '+e.message));}else{toast('内容未变化');}}
     });
 
-    window.addEventListener('beforeunload', () => {
-      const f = store.active;
-      if (f && f._loaded && editor.innerHTML !== f.content) {
-        const token = localStorage.getItem('token') || '';
-        fetch('https://note2.kehuang.eu.org/api/notes/' + f.id, {
-          method: 'PUT', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ content: editor.innerHTML }), keepalive: true,
-        });
-      }
-    });
+    window.addEventListener('beforeunload',()=>{const f=store.active;if(f&&f._loaded&&editor.innerHTML!==f.content){const tk=localStorage.getItem('token')||'';fetch('https://note2.kehuang.eu.org/api/notes/'+f.id,{method:'PUT',headers:{'Authorization':'Bearer '+tk,'Content-Type':'application/json'},body:JSON.stringify({content:editor.innerHTML}),keepalive:true});}});
 
-    function toast(msg) {
-      const el = document.createElement('div'); el.className = 'toast';
-      el.innerHTML = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg>' + esc(msg);
-      toastBox.appendChild(el); requestAnimationFrame(() => el.classList.add('in'));
-      setTimeout(() => { el.classList.remove('in'); el.classList.add('out'); setTimeout(() => el.remove(), 250); }, 2000);
-    }
+    function toast(msg){const el=document.createElement('div');el.className='toast';el.innerHTML='<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg>'+esc(msg);toastBox.appendChild(el);requestAnimationFrame(()=>el.classList.add('in'));setTimeout(()=>{el.classList.remove('in');el.classList.add('out');setTimeout(()=>el.remove(),250);},2000);}
 
-    store.restore().then(async () => {
-      if (store.files.length === 0) await store.createFile(true);
-      renderList(); await loadEditor(); applyFontSize(store.fontSize); editor.focus();
-    }).catch(err => toast('初始化失败: ' + err.message));
+    store.restore().then(async()=>{if(store.files.length===0)await store.createFile(true);renderList();await loadEditor();applyFontSize(store.fontSize);editor.focus();}).catch(e=>toast('初始化失败: '+e.message));
   })();
   </script>
 </body>
