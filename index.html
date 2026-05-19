@@ -174,9 +174,9 @@
       flex-shrink:0; transition:background .4s, border-color .3s;
     }
     .tb-left,.tb-right { display:flex; align-items:center; gap:4px; }
-    .fmt-group { display:flex; background:var(--bg); border:1px solid var(--border); border-radius:7px; padding:2px; transition:background .4s, border-color .3s; }
+    .fmt-group { display:flex; gap:2px;background:var(--bg); border:1px solid var(--border); border-radius:7px; padding:3px 4px; transition:background .4s, border-color .3s; }
     .fmt-btn {
-      width:34px; height:28px; border:none; border-radius:5px; background:transparent;
+      width:30px; height:28px; border:none; border-radius:5px; background:transparent;
       color:var(--text-2); cursor:pointer; transition:all .15s;
       display:flex; align-items:center; justify-content:center; font-size:14px;
       font-family:var(--font-body);
@@ -350,7 +350,7 @@
     </div>
     <div class="h-right">
       <button class="btn btn-i" id="btnOpen" title="打开文件">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h4l1.5 1.5H14v7a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 12.5V4z" /><path d="M2 6h12l-1.5 7H3.5L2 6z" /></svg>
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h4l1.5 1.5H14v7a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 12.5V4z" /><path d="M2 6h12l-1.5 7H3.5L2 6z" /></svg>
         <span class="lbl">导入</span>
       </button>
       <input type="file" id="fileInput" accept=".txt,.md,.log,.csv,.json,.xml,.html,.css,.js,.py,.java,.c,.cpp,.sh,.yml,.yaml,.toml,.ini,.cfg,.conf,.env">
