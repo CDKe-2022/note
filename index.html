@@ -509,22 +509,18 @@
           this.files.sort((a, b) => b.pinned - a.pinned || a.sort_order - b.sort_order || b.updatedAt - a.updatedAt);
           renderList();
           try { await updateNote(id, { pinned: newPinned }); toast(newPinned ? '已置顶: ' + f.name : '已取消置顶: ' + f.name); }
-          catch (e) { toast('操作失败'); f.pinned = newPinned ? 0 : 1; this.files.sort(...); renderList(); }
+          catch (e) { toast('操作失败'); f.pinned = newPinned ? 0 : 1; this.files.sort((a, b) => b.pinned - a.pinned || a.sort_order - b.sort_order || b.updatedAt - a.updatedAt); renderList(); }
         },
         async moveFile(fromId, toId, pos) {
           const fromIdx = this.files.findIndex(f => f.id === String(fromId));
           const [movedFile] = this.files.splice(fromIdx, 1);
           const toIdx = this.files.findIndex(f => f.id === String(toId));
           this.files.splice(pos === 'before' ? toIdx : toIdx + 1, 0, movedFile);
-
           const group = this.files.filter(f => f.pinned === movedFile.pinned);
           const updates = []; const step = 1000;
           for (let i = 0; i < group.length; i++) {
             const newOrder = (i + 1) * step;
-            if (group[i].sort_order !== newOrder) {
-              group[i].sort_order = newOrder;
-              updates.push({ id: group[i].id, sort_order: newOrder });
-            }
+            if (group[i].sort_order !== newOrder) { group[i].sort_order = newOrder; updates.push({ id: group[i].id, sort_order: newOrder }); }
           }
           renderList();
           try { for (const upd of updates) await updateNote(upd.id, { sort_order: upd.sort_order }); }
@@ -580,8 +576,12 @@
         const f = store.active; if (!f) { editor.innerHTML = ''; scheduleStats(); return; }
         if (!f._loaded) {
           loadingNote = true;
-          try { const n = await fetchNote(f.id); f.content = n.content || ''; f.charCount = n.content ? n.content.replace(/<[^>]*>/g, '').length : 0; f.pinned = n.pinned || 0; f.sort_order = n.sort_order || 0; f._loaded = true; renderList(); }
-          catch (e) { toast('加载笔记失败: ' + e.message); editor.innerHTML = ''; loadingNote = false; scheduleStats(); return; }
+          try {
+            const n = await fetchNote(f.id); f.content = n.content || '';
+            f.charCount = n.content ? n.content.replace(/<[^>]*>/g, '').length : 0;
+            f.pinned = n.pinned || 0; f.sort_order = n.sort_order || 0;
+            f._loaded = true; renderList();
+          } catch (e) { toast('加载笔记失败: ' + e.message); editor.innerHTML = ''; loadingNote = false; scheduleStats(); return; }
           loadingNote = false;
         }
         editor.innerHTML = safeSanitize(f.content || ''); scheduleStats();
@@ -637,9 +637,7 @@
         const rect = item.getBoundingClientRect();
         item.classList.add(e.clientY < rect.top + rect.height / 2 ? 'drag-over-top' : 'drag-over-bot');
       });
-      fileListEl.addEventListener('dragleave', e => {
-        const item = e.target.closest('.file-item'); if (item) item.classList.remove('drag-over-top', 'drag-over-bot');
-      });
+      fileListEl.addEventListener('dragleave', e => { const item = e.target.closest('.file-item'); if (item) item.classList.remove('drag-over-top', 'drag-over-bot'); });
       fileListEl.addEventListener('drop', e => {
         e.preventDefault();
         fileListEl.querySelectorAll('.drag-over-top,.drag-over-bot').forEach(el => el.classList.remove('drag-over-top', 'drag-over-bot'));
