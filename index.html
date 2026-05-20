@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TextVault — 多端共享备忘录</title>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=LXGW+WenKai:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"></script>
   <style>
     :root {
@@ -14,7 +14,7 @@
       --accent: #b87333; --accent-h: #cc8844;
       --accent-bg: rgba(184,115,51,0.10); --accent-bg2: rgba(184,115,51,0.06);
       --danger: #a84040; --success: #3a8850; --side-w: 260px;
-      --font-body: 'LXGW WenKai', 'Noto Serif SC', serif;
+      --font-body: 'Songti SC', 'SimSun', serif;
       --font-mono: 'JetBrains Mono', monospace;
       --shadow-card: 0 1px 2px rgba(0,0,0,.04), 0 6px 18px rgba(0,0,0,.03);
       --h-header: 52px; --h-toolbar: 44px; --h-footer: 32px;
@@ -63,10 +63,7 @@
     }
     .h-left, .h-right { display: flex; align-items: center; gap: var(--gap-xs); }
     .h-left { flex: 1; }
-    .logo {
-      display: flex; align-items: center; gap: var(--gap-sm);
-      user-select: none; margin-left: var(--gap-xs);
-    }
+    .logo { display: flex; align-items: center; gap: var(--gap-sm); user-select: none; margin-left: var(--gap-xs); }
     .logo-mark {
       width: 34px; height: 34px;
       background: linear-gradient(135deg, var(--accent), var(--accent-h));
@@ -89,14 +86,8 @@
     .btn-i svg { display: block; }
     .btn.danger:hover { border-color: var(--danger); color: var(--danger); }
     .btn .lbl { font-weight: 600; }
-    .sep {
-      width: 1px; height: 18px; background: var(--border);
-      margin: 0 var(--gap-xs); flex-shrink: 0; transition: background .3s;
-    }
-    .app-body {
-      position: relative; z-index: 10; display: flex;
-      overflow: hidden; min-height: 0; grid-row: 2;
-    }
+    .sep { width: 1px; height: 18px; background: var(--border); margin: 0 var(--gap-xs); flex-shrink: 0; transition: background .3s; }
+    .app-body { position: relative; z-index: 10; display: flex; overflow: hidden; min-height: 0; grid-row: 2; }
     .sidebar {
       width: var(--side-w); flex-shrink: 0; background: var(--bg-side);
       border-right: 1px solid var(--border); display: flex;
@@ -104,24 +95,14 @@
       transition: margin-left .3s cubic-bezier(.4,0,.2,1), background .4s;
     }
     .sidebar.collapsed { margin-left: calc(-1 * var(--side-w)); }
-    .side-head {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 16px 10px; flex-shrink: 0;
-    }
-    .side-title {
-      font-size: 13px; font-weight: 700; color: var(--text-2);
-      text-transform: uppercase; letter-spacing: 1.5px;
-    }
+    .side-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 10px; flex-shrink: 0; }
+    .side-title { font-size: 13px; font-weight: 700; color: var(--text-2); text-transform: uppercase; letter-spacing: 1.5px; }
     .side-new {
       width: 28px; height: 28px; border: 1px dashed var(--border);
       border-radius: 6px; background: transparent; color: var(--text-3);
-      cursor: pointer; display: flex; align-items: center;
-      justify-content: center; transition: all .2s;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s;
     }
-    .side-new:hover {
-      border-style: solid; border-color: var(--accent);
-      color: var(--accent); background: var(--accent-bg);
-    }
+    .side-new:hover { border-style: solid; border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
     .file-list { flex: 1; min-height: 0; overflow-y: auto; padding: 0 8px 12px; }
     .file-list::-webkit-scrollbar { width: 5px; }
     .file-list::-webkit-scrollbar-track { background: transparent; }
@@ -140,18 +121,24 @@
       content: ''; position: absolute; left: -1px; top: 4px; bottom: 4px;
       width: 3px; border-radius: 0 3px 3px 0; background: var(--accent);
     }
+    .file-item.pinned { background: var(--accent-bg2); }
+    .file-item.pinned:hover { background: var(--accent-bg); }
+    .file-item.pinned.active {
+      background: linear-gradient(to right, var(--accent-bg), var(--bg-card));
+      border-color: var(--border); box-shadow: var(--shadow-card);
+    }
+    .pin-sep { height: 1px; background: var(--border); margin: 6px 10px; opacity: .4; }
+    .file-item[draggable="true"] { cursor: grab; }
+    .file-item[draggable="true"]:active { cursor: grabbing; }
+    .file-item.dragging { opacity: .35; transform: scale(.97); }
+    .file-item.drag-over-top { border-top: 2px solid var(--accent); margin-top: -1px; }
+    .file-item.drag-over-bot { border-bottom: 2px solid var(--accent); margin-bottom: -1px; }
     .fi-icon { color: var(--text-3); flex-shrink: 0; display: flex; }
-    .file-item.active .fi-icon { color: var(--accent); }
+    .file-item.active .fi-icon, .file-item.pinned .fi-icon { color: var(--accent); }
     .fi-info { flex: 1; min-width: 0; }
-    .fi-name {
-      font-size: 14px; font-weight: 600; white-space: nowrap;
-      overflow: hidden; text-overflow: ellipsis; display: block;
-    }
-    .fi-meta {
-      display: block; font-size: 10px; color: var(--text-3);
-      margin-top: 2px; font-family: var(--font-mono);
-    }
-    .fi-acts { display: flex; gap: 2px; opacity: 0; transition: opacity .15s; flex-shrink: 0; }
+    .fi-name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+    .fi-meta { display: block; font-size: 10px; color: var(--text-3); margin-top: 2px; font-family: var(--font-mono); }
+    .fi-acts { display: flex; gap: 1px; opacity: 0; transition: opacity .15s; flex-shrink: 0; }
     .file-item:hover .fi-acts, .file-item.active .fi-acts { opacity: 1; }
     .fa-btn {
       width: 24px; height: 24px; border: none; border-radius: 5px;
@@ -160,10 +147,11 @@
     }
     .fa-btn:hover { background: var(--bg-active); color: var(--text); }
     .fa-btn.del:hover { color: var(--danger); }
+    .fa-btn.pin-on { color: var(--accent); }
+    .fa-btn.pin-on:hover { color: var(--text-3); }
     .rename-input {
       width: 100%; border: 1px solid var(--accent); border-radius: 4px;
-      padding: 1px 5px; font: 600 14px var(--font-body);
-      background: var(--bg-card); color: var(--text); outline: none;
+      padding: 1px 5px; font: 600 14px var(--font-body); background: var(--bg-card); color: var(--text); outline: none;
     }
     .toolbar {
       display: flex; align-items: center; justify-content: space-between;
@@ -204,8 +192,7 @@
     .fs-val { min-width: 26px; text-align: center; font: 12px var(--font-mono); color: var(--text-2); }
     .main-area { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: hidden; }
     .editor-wrap {
-      flex: 1; min-height: 0; position: relative;
-      overflow-y: auto; overflow-x: hidden;
+      flex: 1; min-height: 0; position: relative; overflow-y: auto; overflow-x: hidden;
       background: var(--bg-card); transition: background .4s;
     }
     .editor-wrap::-webkit-scrollbar { width: 6px; }
@@ -213,9 +200,8 @@
     .editor-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
     .editor-wrap::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
     #editor {
-      padding: 28px 32px 48px; background: transparent;
-      border: none; outline: none; color: var(--text);
-      font-family: var(--font-body); font-size: 17px; line-height: 2;
+      padding: 28px 32px 48px; background: transparent; border: none; outline: none;
+      color: var(--text); font-family: var(--font-body); font-size: 17px; line-height: 2;
       letter-spacing: .01em; white-space: pre-wrap; word-wrap: break-word;
       caret-color: var(--accent); min-height: 100%; transition: color .3s;
     }
@@ -228,40 +214,24 @@
     .empty.hide { opacity: 0; }
     .empty-ico {
       width: 72px; height: 72px; border: 2px dashed var(--border);
-      border-radius: 14px; display: flex; align-items: center;
-      justify-content: center; color: var(--text-3);
-      animation: breathe 5s ease-in-out infinite;
+      border-radius: 14px; display: flex; align-items: center; justify-content: center;
+      color: var(--text-3); animation: breathe 5s ease-in-out infinite;
     }
-    @keyframes breathe {
-      0%,100% { opacity: .5; transform: scale(1); }
-      50% { opacity: .7; transform: scale(1.015); }
-    }
+    @keyframes breathe { 0%,100% { opacity: .5; transform: scale(1); } 50% { opacity: .7; transform: scale(1.015); } }
     .empty-t { font-size: 15px; color: var(--text-3); }
     .empty-h { font-size: 12px; color: var(--text-3); opacity: .6; }
-    .empty-h kbd {
-      display: inline-block; padding: 1px 5px;
-      border: 1px solid var(--border); border-radius: 3px;
-      font: 11px var(--font-mono); background: var(--bg-card);
-    }
+    .empty-h kbd { display: inline-block; padding: 1px 5px; border: 1px solid var(--border); border-radius: 3px; font: 11px var(--font-mono); background: var(--bg-card); }
     footer {
       position: relative; z-index: 20; display: flex; align-items: center;
-      justify-content: space-between; padding: 0 var(--pad-page);
-      height: var(--h-footer); background: var(--bg-card);
-      border-top: 1px solid var(--border); grid-row: 3;
-      transition: background .4s, border-color .3s;
+      justify-content: space-between; padding: 0 var(--pad-page); height: var(--h-footer);
+      background: var(--bg-card); border-top: 1px solid var(--border);
+      grid-row: 3; transition: background .4s, border-color .3s;
     }
     .st-l, .st-r { display: flex; align-items: center; gap: 14px; }
     .st { font: 11px var(--font-mono); color: var(--text-3); display: flex; align-items: center; gap: 3px; }
-    .st .dot {
-      width: 5px; height: 5px; border-radius: 50%;
-      background: var(--success); animation: pulse 3s ease-in-out infinite;
-    }
+    .st .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--success); animation: pulse 3s ease-in-out infinite; }
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
-    .save-ind {
-      font: 11px var(--font-body); color: var(--text-3);
-      opacity: 0; transition: opacity .25s;
-      display: flex; align-items: center; gap: 4px;
-    }
+    .save-ind { font: 11px var(--font-body); color: var(--text-3); opacity: 0; transition: opacity .25s; display: flex; align-items: center; gap: 4px; }
     .save-ind.on { opacity: 1; }
     .save-ind svg { color: var(--success); }
     .toast-box { position: fixed; top: 64px; right: 20px; z-index: 999; display: flex; flex-direction: column; gap: 6px; }
@@ -269,8 +239,7 @@
       display: flex; align-items: center; gap: 8px; padding: 9px 14px;
       border-radius: 8px; background: var(--bg-card); border: 1px solid var(--border);
       box-shadow: var(--shadow-card); font-size: 13px; color: var(--text);
-      transform: translateX(120%); opacity: 0;
-      transition: all .3s cubic-bezier(.34,1.56,.64,1);
+      transform: translateX(120%); opacity: 0; transition: all .3s cubic-bezier(.34,1.56,.64,1);
     }
     .toast.in { transform: translateX(0); opacity: 1; }
     .toast.out { transform: translateX(120%); opacity: 0; transition: all .2s ease-in; }
@@ -278,8 +247,7 @@
     .drop-ov {
       position: fixed; inset: 0; background: rgba(184,115,51,.04);
       border: 3px dashed var(--accent); z-index: 100;
-      display: none; align-items: center; justify-content: center;
-      backdrop-filter: blur(3px);
+      display: none; align-items: center; justify-content: center; backdrop-filter: blur(3px);
     }
     .drop-ov.on { display: flex; }
     .drop-ov span { font-size: 17px; color: var(--accent); font-weight: 500; }
@@ -302,8 +270,7 @@
       width: var(--btn-h); height: var(--btn-h);
       border: 1px solid var(--border); border-radius: var(--btn-radius);
       background: var(--bg-card); color: var(--text-3); cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: all .18s; padding: 0;
+      display: flex; align-items: center; justify-content: center; transition: all .18s; padding: 0;
     }
     .btn-theme:hover { background: var(--bg-hover); color: var(--text); border-color: var(--text-3); }
     .btn-theme svg { transition: transform .3s ease; }
@@ -437,8 +404,7 @@
       }
       function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
       function timeAgo(ts) {
-        if (!ts) return '';
-        const d = Date.now() - ts, m = Math.floor(d / 60000);
+        if (!ts) return ''; const d = Date.now() - ts, m = Math.floor(d / 60000);
         if (m < 1) return '刚刚'; if (m < 60) return m + '分钟前';
         const h = Math.floor(m / 60); if (h < 24) return h + '小时前';
         const day = Math.floor(h / 24); if (day < 30) return day + '天前';
@@ -448,6 +414,7 @@
         file: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 1.5h6.5L13 5v9.5a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-13a1 1 0 0 1 1-1z"/><path d="M9.5 1.5V5H13"/></svg>',
         edit: '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 2.5l2 2-8 8-3 1 1-3z"/><path d="M10 4l2 2"/></svg>',
         trash: '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5h10"/><path d="M5.5 4.5V3h5v1.5"/><path d="M4.5 4.5l.8 9h5.4l.8-9"/></svg>',
+        pin: '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 11V2"/><path d="M4.5 5.5L8 2l3.5 3.5"/><line x1="3" y1="14" x2="13" y2="14"/></svg>',
       };
 
       /* ===== API ===== */
@@ -465,10 +432,7 @@
       async function fetchNotes() { return apiRequest('GET'); }
       async function fetchNote(id) { return apiRequest('GET', null, id); }
       async function createNote(name, content) { return apiRequest('POST', { name, content }); }
-      async function updateNote(id, content, name) {
-        const d = {}; if (content !== undefined) d.content = content; if (name !== undefined) d.name = name;
-        return apiRequest('PUT', d, id);
-      }
+      async function updateNote(id, data) { return apiRequest('PUT', data, id); }
       async function deleteNote(id) { return apiRequest('DELETE', null, id); }
       let loadingNote = false;
 
@@ -477,8 +441,12 @@
         files: [], activeId: null, counter: 1, fontSize: 17, wordWrap: true, isFocus: false,
         get active() { return this.files.find(f => f.id === this.activeId) || null; },
         _norm(n, w) {
-          return { id: String(n.id), name: n.name || '未命名', content: w ? (n.content || '') : null,
-            charCount: n.charCount || 0, _loaded: !!w, createdAt: n.createdAt || Date.now(), updatedAt: n.updatedAt || Date.now() };
+          return {
+            id: String(n.id), name: n.name || '未命名', content: w ? (n.content || '') : null,
+            charCount: n.charCount || 0, _loaded: !!w,
+            createdAt: n.createdAt || Date.now(), updatedAt: n.updatedAt || Date.now(),
+            pinned: n.pinned || 0, sort_order: n.sort_order || 0
+          };
         },
         async restore() {
           try {
@@ -489,7 +457,8 @@
         },
         async createFile(silent, name, content) {
           try {
-            const fn = name || '未命名 ' + this.counter++; const n = await createNote(fn, content || '');
+            const fn = name || '未命名 ' + this.counter++;
+            const n = await createNote(fn, content || '');
             const nr = this._norm(n, true); this.files.unshift(nr); this.activeId = nr.id;
             renderList(); await loadEditor(); if (!silent) toast('已新建: ' + nr.name); return nr;
           } catch (e) { toast('创建笔记失败: ' + e.message); return null; }
@@ -500,8 +469,8 @@
         },
         async deleteFile(id) {
           try {
-            await deleteNote(id); const i = this.files.findIndex(f => f.id === String(id)); if (i === -1) return;
-            const nm = this.files[i].name; this.files.splice(i, 1);
+            await deleteNote(id); const i = this.files.findIndex(f => f.id === String(id));
+            if (i === -1) return; const nm = this.files[i].name; this.files.splice(i, 1);
             if (String(this.activeId) === String(id)) this.activeId = this.files.length ? this.files[0].id : null;
             renderList(); await loadEditor(); toast('已删除: ' + nm);
           } catch (e) { toast('删除笔记失败: ' + e.message); }
@@ -509,7 +478,7 @@
         async renameFile(id, nm) {
           const f = this.files.find(x => x.id === String(id));
           if (f && nm.trim()) {
-            try { const u = await updateNote(id, undefined, nm.trim()); f.name = u.name || nm.trim(); f.updatedAt = u.updatedAt || Date.now(); }
+            try { const u = await updateNote(id, { name: nm.trim() }); f.name = u.name || nm.trim(); f.updatedAt = u.updatedAt || Date.now(); }
             catch (e) { toast('重命名失败: ' + e.message); } renderList();
           }
         },
@@ -517,14 +486,14 @@
           if (!this.activeId || loadingNote) return; const f = this.active; if (!f || !f._loaded) return;
           const c = editor.innerHTML; if (c === f.content) return;
           try {
-            const u = await updateNote(f.id, c); f.content = u.content || c;
+            const u = await updateNote(f.id, { content: c }); f.content = u.content || c;
             f.updatedAt = u.updatedAt || Date.now(); f.charCount = c.replace(/<[^>]*>/g, '').length; renderList();
           } catch (e) { toast('保存失败: ' + e.message); }
         },
         async clearCurrent() {
           const f = this.active; if (!f || !f._loaded) return; if (!getEditorText().trim()) return;
           editor.innerHTML = '';
-          try { const u = await updateNote(f.id, ''); f.content = ''; f.charCount = 0; f.updatedAt = u.updatedAt || Date.now(); }
+          try { const u = await updateNote(f.id, { content: '' }); f.content = ''; f.charCount = 0; f.updatedAt = u.updatedAt || Date.now(); }
           catch (e) { toast('清空失败: ' + e.message); }
           scheduleStats(); renderList(); toast('已清空: ' + f.name);
         },
@@ -532,6 +501,34 @@
           const f = this.active, t = getEditorText().trim(); if (!t) { toast('当前文件为空'); return; }
           const b = new Blob([t], { type: 'text/plain;charset=utf-8' }), u = URL.createObjectURL(b), a = document.createElement('a');
           a.href = u; a.download = (f ? f.name : 'textvault') + '.txt'; a.click(); URL.revokeObjectURL(u); toast('已下载: ' + a.download);
+        },
+        async togglePin(id) {
+          const f = this.files.find(x => x.id === String(id)); if (!f) return;
+          const newPinned = f.pinned ? 0 : 1;
+          f.pinned = newPinned;
+          this.files.sort((a, b) => b.pinned - a.pinned || a.sort_order - b.sort_order || b.updatedAt - a.updatedAt);
+          renderList();
+          try { await updateNote(id, { pinned: newPinned }); toast(newPinned ? '已置顶: ' + f.name : '已取消置顶: ' + f.name); }
+          catch (e) { toast('操作失败'); f.pinned = newPinned ? 0 : 1; this.files.sort(...); renderList(); }
+        },
+        async moveFile(fromId, toId, pos) {
+          const fromIdx = this.files.findIndex(f => f.id === String(fromId));
+          const [movedFile] = this.files.splice(fromIdx, 1);
+          const toIdx = this.files.findIndex(f => f.id === String(toId));
+          this.files.splice(pos === 'before' ? toIdx : toIdx + 1, 0, movedFile);
+
+          const group = this.files.filter(f => f.pinned === movedFile.pinned);
+          const updates = []; const step = 1000;
+          for (let i = 0; i < group.length; i++) {
+            const newOrder = (i + 1) * step;
+            if (group[i].sort_order !== newOrder) {
+              group[i].sort_order = newOrder;
+              updates.push({ id: group[i].id, sort_order: newOrder });
+            }
+          }
+          renderList();
+          try { for (const upd of updates) await updateNote(upd.id, { sort_order: upd.sort_order }); }
+          catch (e) { toast('排序保存失败'); }
         },
       };
 
@@ -560,14 +557,22 @@
       function scheduleStats() { if (statsRaf) return; statsRaf = requestAnimationFrame(() => { updateStats(); updateEmpty(); statsRaf = null; }); }
 
       function renderList() {
-        fileListEl.innerHTML = store.files.map(f => {
+        let html = '', lastPinned = false;
+        store.files.forEach((f, i) => {
+          if (i > 0 && lastPinned && !f.pinned) html += '<div class="pin-sep"></div>';
+          lastPinned = f.pinned;
           const a = String(f.id) === String(store.activeId), c = f.charCount || 0;
-          return '<div class="file-item' + (a ? ' active' : '') + '" data-id="' + f.id + '">' +
-            '<span class="fi-icon">' + IC.file + '</span><span class="fi-info"><span class="fi-name">' + esc(f.name) +
-            '</span><span class="fi-meta">' + c + ' 字 &middot; ' + timeAgo(f.updatedAt) + '</span></span>' +
-            '<span class="fi-acts"><button class="fa-btn act-rename" title="重命名">' + IC.edit +
-            '</button><button class="fa-btn del act-del" title="删除">' + IC.trash + '</button></span></div>';
-        }).join('');
+          html += '<div class="file-item' + (a ? ' active' : '') + (f.pinned ? ' pinned' : '') + '" data-id="' + f.id + '" draggable="true">' +
+            '<span class="fi-icon">' + (f.pinned ? IC.pin : IC.file) + '</span>' +
+            '<span class="fi-info"><span class="fi-name">' + esc(f.name) + '</span>' +
+            '<span class="fi-meta">' + c + ' 字 &middot; ' + timeAgo(f.updatedAt) + '</span></span>' +
+            '<span class="fi-acts">' +
+            '<button class="fa-btn act-pin' + (f.pinned ? ' pin-on' : '') + '" title="' + (f.pinned ? '取消置顶' : '置顶') + '">' + IC.pin + '</button>' +
+            '<button class="fa-btn act-rename" title="重命名">' + IC.edit + '</button>' +
+            '<button class="fa-btn del act-del" title="删除">' + IC.trash + '</button>' +
+            '</span></div>';
+        });
+        fileListEl.innerHTML = html;
       }
 
       document.execCommand('defaultParagraphSeparator', false, 'br');
@@ -575,13 +580,12 @@
         const f = store.active; if (!f) { editor.innerHTML = ''; scheduleStats(); return; }
         if (!f._loaded) {
           loadingNote = true;
-          try { const n = await fetchNote(f.id); f.content = n.content || ''; f.charCount = n.content ? n.content.replace(/<[^>]*>/g, '').length : 0; f._loaded = true; renderList(); }
+          try { const n = await fetchNote(f.id); f.content = n.content || ''; f.charCount = n.content ? n.content.replace(/<[^>]*>/g, '').length : 0; f.pinned = n.pinned || 0; f.sort_order = n.sort_order || 0; f._loaded = true; renderList(); }
           catch (e) { toast('加载笔记失败: ' + e.message); editor.innerHTML = ''; loadingNote = false; scheduleStats(); return; }
           loadingNote = false;
         }
         editor.innerHTML = safeSanitize(f.content || ''); scheduleStats();
       }
-
       function applyFontSize(s) { store.fontSize = Math.max(12, Math.min(30, s)); fsVal.textContent = store.fontSize; editor.style.fontSize = store.fontSize + 'px'; }
       applyFontSize(store.fontSize);
       document.getElementById('fsMinus').addEventListener('click', () => applyFontSize(store.fontSize - 1));
@@ -596,9 +600,8 @@
         clearTimeout(saveTimer);
         saveTimer = setTimeout(() => {
           const f = store.active;
-          if (f && f._loaded && !loadingNote && editor.innerHTML !== f.content) {
+          if (f && f._loaded && !loadingNote && editor.innerHTML !== f.content)
             store.saveCurrent().then(() => { saveInd.classList.add('on'); setTimeout(() => saveInd.classList.remove('on'), 1400); }).catch(e => toast('自动保存失败: ' + e.message));
-          }
         }, 3000);
       }
       editor.addEventListener('paste', e => { e.preventDefault(); const t = e.clipboardData.getData('text/plain'); if (!t) return; document.execCommand('insertText', false, t); requestAnimationFrame(() => { scheduleStats(); autoSave(); }); });
@@ -609,13 +612,50 @@
       document.addEventListener('selectionchange', () => { if (document.activeElement === editor) updateFmt(); });
       editor.addEventListener('keyup', updateFmt); editor.addEventListener('mouseup', updateFmt);
 
+      /* 文件列表交互 */
       fileListEl.addEventListener('click', e => {
         const item = e.target.closest('.file-item'); if (!item) return; const id = item.dataset.id;
+        if (e.target.closest('.act-pin')) { store.togglePin(id); return; }
         if (e.target.closest('.act-rename')) { startRename(id); return; }
         if (e.target.closest('.act-del')) { store.deleteFile(id); return; }
         store.switchFile(id);
       });
       fileListEl.addEventListener('dblclick', e => { const n = e.target.closest('.fi-name'); if (!n) return; const item = n.closest('.file-item'); if (item) startRename(item.dataset.id); });
+
+      /* 拖拽排序 */
+      let dragId = null;
+      fileListEl.addEventListener('dragstart', e => {
+        const item = e.target.closest('.file-item'); if (!item) return;
+        dragId = item.dataset.id; item.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', dragId);
+      });
+      fileListEl.addEventListener('dragover', e => {
+        e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+        fileListEl.querySelectorAll('.drag-over-top,.drag-over-bot').forEach(el => el.classList.remove('drag-over-top', 'drag-over-bot'));
+        const item = e.target.closest('.file-item');
+        if (!item || item.dataset.id === dragId) return;
+        const rect = item.getBoundingClientRect();
+        item.classList.add(e.clientY < rect.top + rect.height / 2 ? 'drag-over-top' : 'drag-over-bot');
+      });
+      fileListEl.addEventListener('dragleave', e => {
+        const item = e.target.closest('.file-item'); if (item) item.classList.remove('drag-over-top', 'drag-over-bot');
+      });
+      fileListEl.addEventListener('drop', e => {
+        e.preventDefault();
+        fileListEl.querySelectorAll('.drag-over-top,.drag-over-bot').forEach(el => el.classList.remove('drag-over-top', 'drag-over-bot'));
+        const targetItem = e.target.closest('.file-item'); if (!targetItem || !dragId) return;
+        const targetId = targetItem.dataset.id; if (targetId === dragId) { dragId = null; return; }
+        const fromFile = store.files.find(f => f.id === String(dragId));
+        const toFile = store.files.find(f => f.id === String(targetId));
+        if (fromFile.pinned !== toFile.pinned) { toast('不能跨组拖拽，请先调整置顶状态'); dragId = null; return; }
+        const rect = targetItem.getBoundingClientRect();
+        const pos = e.clientY < rect.top + rect.height / 2 ? 'before' : 'after';
+        store.moveFile(dragId, targetId, pos); dragId = null;
+      });
+      fileListEl.addEventListener('dragend', () => {
+        fileListEl.querySelectorAll('.dragging,.drag-over-top,.drag-over-bot').forEach(el => el.classList.remove('dragging', 'drag-over-top', 'drag-over-bot'));
+        dragId = null;
+      });
 
       function startRename(id) {
         const f = store.files.find(x => x.id === String(id)); if (!f) return;
@@ -626,7 +666,6 @@
         inp.addEventListener('blur', finish);
         inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); finish(); } if (e.key === 'Escape') { done = true; renderList(); } });
       }
-
       document.getElementById('btnNew').addEventListener('click', () => store.createFile(false));
       document.getElementById('btnOpen').addEventListener('click', () => fileInput.click());
       fileInput.addEventListener('change', e => { const f = e.target.files[0]; if (f) readFile(f); fileInput.value = ''; });
@@ -638,31 +677,32 @@
       document.getElementById('btnDown').addEventListener('click', () => store.downloadCurrent());
       document.getElementById('btnClear').addEventListener('click', () => store.clearCurrent());
       document.getElementById('btnSide').addEventListener('click', () => sidebar.classList.toggle('collapsed'));
-
       let dragN = 0;
-      document.addEventListener('dragenter', e => { e.preventDefault(); dragN++; dropOv.classList.add('on'); });
+      document.addEventListener('dragenter', e => { if (e.dataTransfer && e.dataTransfer.types.includes('Files')) { e.preventDefault(); dragN++; dropOv.classList.add('on'); } });
       document.addEventListener('dragleave', e => { e.preventDefault(); dragN--; if (dragN <= 0) { dragN = 0; dropOv.classList.remove('on'); } });
-      document.addEventListener('dragover', e => e.preventDefault());
-      document.addEventListener('drop', e => { e.preventDefault(); dragN = 0; dropOv.classList.remove('on'); const f = e.dataTransfer.files[0]; if (f) readFile(f); });
-
+      document.addEventListener('dragover', e => { if (e.dataTransfer && e.dataTransfer.types.includes('Files')) e.preventDefault(); });
+      document.addEventListener('drop', e => {
+        if (!e.dataTransfer || !e.dataTransfer.types.includes('Files')) return;
+        e.preventDefault(); dragN = 0; dropOv.classList.remove('on');
+        const f = e.dataTransfer.files[0]; if (f) readFile(f);
+      });
       document.getElementById('btnFocus').addEventListener('click', () => { store.isFocus = true; document.body.classList.add('focus'); editor.focus(); });
       document.getElementById('focusExit').addEventListener('click', exitFocus);
       function exitFocus() { store.isFocus = false; document.body.classList.remove('focus'); }
 
-      /* ===== 深色模式 ===== */
+      /* 深色模式 */
       const btnTheme = document.getElementById('btnTheme');
       function applyTheme(dark) { document.body.classList.toggle('dark', dark); localStorage.setItem('theme', dark ? 'dark' : 'light'); }
       const savedTheme = localStorage.getItem('theme');
       if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme:dark)').matches)) applyTheme(true);
       btnTheme.addEventListener('click', () => applyTheme(!document.body.classList.contains('dark')));
-
       document.addEventListener('keydown', e => {
         if (e.key === 'Escape' && store.isFocus) exitFocus();
         if ((e.ctrlKey || e.metaKey) && e.key === 's') {
           e.preventDefault(); const f = store.active;
-          if (f && f._loaded && !loadingNote && editor.innerHTML !== f.content) {
+          if (f && f._loaded && !loadingNote && editor.innerHTML !== f.content)
             store.saveCurrent().then(() => { saveInd.classList.add('on'); setTimeout(() => saveInd.classList.remove('on'), 1400); toast('已保存'); }).catch(e => toast('保存失败: ' + e.message));
-          } else { toast('内容未变化'); }
+          else toast('内容未变化');
         }
       });
       window.addEventListener('beforeunload', () => {
@@ -671,14 +711,12 @@
           fetch('https://note2.kehuang.eu.org/api/notes/' + f.id, { method: 'PUT', headers: { Authorization: 'Bearer ' + tk, 'Content-Type': 'application/json' }, body: JSON.stringify({ content: editor.innerHTML }), keepalive: true });
         }
       });
-
       function toast(msg) {
         const el = document.createElement('div'); el.className = 'toast';
         el.innerHTML = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg>' + esc(msg);
         toastBox.appendChild(el); requestAnimationFrame(() => el.classList.add('in'));
         setTimeout(() => { el.classList.remove('in'); el.classList.add('out'); setTimeout(() => el.remove(), 250); }, 2000);
       }
-
       store.restore().then(async () => {
         if (store.files.length === 0) await store.createFile(true);
         renderList(); await loadEditor(); applyFontSize(store.fontSize); editor.focus();
