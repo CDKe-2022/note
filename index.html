@@ -538,16 +538,8 @@
         btnBold = document.getElementById('btnBold'), btnULine = document.getElementById('btnULine');
 
       function getEditorText() { return editor.innerText.replace(/\u00A0/g, ' ').trimEnd(); }
-      function countWords(t) {
-        if (!t) return 0;
-        const c = t.match(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff\u3000-\u303f]/g), cc = c ? c.length : 0;
-        const r = t.replace(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/g, ' ');
-        return cc + r.trim().split(/\s+/).filter(w => w.length > 0).length;
-      }
-      function updateStats() {
-        const t = getEditorText(); stChars.textContent = '字符: ' + t.length;
-        stWords.textContent = '字数: ' + countWords(t); stLines.textContent = '行数: ' + (t ? t.split('\n').length : 0);
-      }
+      function countWords(t){if(!t)return 0;const c=t.match(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff\u3000-\u303f\uff00-\uffef]/g);const cc=c?c.length:0;const r=t.replace(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff\u3000-\u303f\uff00-\uffef]/g,' ');return cc+r.trim().split(/\s+/).filter(w=>w.length>0).length;}
+      function updateStats(){const t=getEditorText();stChars.textContent='字符: '+t.replace(/\n/g,'').length;stWords.textContent='字数: '+countWords(t);stLines.textContent='行数: '+(t?t.split('\n').length:0);}
       function updateEmpty() { emptyState.classList.toggle('hide', getEditorText().length > 0); }
       let statsRaf = null;
       function scheduleStats() { if (statsRaf) return; statsRaf = requestAnimationFrame(() => { updateStats(); updateEmpty(); statsRaf = null; }); }
