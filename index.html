@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TextVault — 多端共享备忘录</title>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js" integrity="sha512-7M3S9Oz9gZ9YJ6n0vD9cMwpM4Mz3yF2Z9cS9l0K8z8c9cS9l0K8z8c9cS=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"></script>
   <style>
     :root{--bg:#f3f1eb;--bg-side:#ebe7de;--bg-card:#fff;--bg-hover:#f0ece5;--bg-active:#e4dfd6;--border:#d5cfc4;--text:#26231f;--text-2:#6e6860;--text-3:#9e9890;--accent:#b87333;--accent-h:#cc8844;--accent-bg:rgba(184,115,51,.1);--accent-bg2:rgba(184,115,51,.06);--danger:#a84040;--success:#3a8850;--side-w:260px;--font-body:'Times New Roman','Songti SC','SimSun',serif;--font-mono:'JetBrains Mono',monospace;--shadow-card:0 1px 2px rgba(0,0,0,.04),0 6px 18px rgba(0,0,0,.03);--h-header:52px;--h-toolbar:44px;--h-footer:32px;--btn-h:30px;--btn-radius:7px;--gap-xs:4px;--gap-sm:8px;--gap-md:12px;--pad-page:20px}
     body.dark{--bg:#1a1918;--bg-side:#1f1e1c;--bg-card:#252422;--bg-hover:#2e2c29;--bg-active:#363330;--border:#3d3a36;--text:#d6d1c7;--text-2:#a09a90;--text-3:#6e6860;--accent:#cc9044;--accent-h:#dda050;--accent-bg:rgba(204,144,68,.12);--accent-bg2:rgba(204,144,68,.06);--danger:#c45050;--success:#4a9960;--shadow-card:0 1px 2px rgba(0,0,0,.2),0 6px 18px rgba(0,0,0,.15)}
@@ -74,8 +74,8 @@
     @keyframes breathe{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:.7;transform:scale(1.015)}}
     .empty-t{font-size:15px;color:var(--text-3)}.empty-h{font-size:12px;color:var(--text-3);opacity:.6}.empty-h kbd{display:inline-block;padding:1px 5px;border:1px solid var(--border);border-radius:3px;font:11px var(--font-mono);background:var(--bg-card)}
     .find-bar{position:sticky;top:0;z-index:5;background:var(--bg-card);border-bottom:1px solid var(--border);padding:6px 12px;display:none;gap:6px;align-items:center;font-size:13px}
-    .find-bar input{border:1px solid var(--border);border-radius:4px;padding:2px 6px;font:13px var(--font-mono);background:var(--bg);color:var(--text);outline:none}
-    .find-bar input:focus{border-color:var(--accent)}.find-bar button{border:none;background:var(--accent-bg);color:var(--accent);padding:2px 8px;border-radius:4px;cursor:pointer}
+    .find-bar input{border:1px solid var(--border);border-radius:4px;padding:2px 6px;font:13px var(--font-mono);background:var(--bg);color:var(--text);outline:none}.find-bar input:focus{border-color:var(--accent)}
+    .find-bar button{border:none;background:var(--accent-bg);color:var(--accent);padding:2px 8px;border-radius:4px;cursor:pointer}
     footer{position:relative;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:0 var(--pad-page);height:var(--h-footer);background:var(--bg-card);border-top:1px solid var(--border);grid-row:3;transition:background .4s,border-color .3s}
     .st-l,.st-r{display:flex;align-items:center;gap:14px}.st{font:11px var(--font-mono);color:var(--text-3);display:flex;align-items:center;gap:3px}.st .dot{width:5px;height:5px;border-radius:50%;background:var(--success);animation:pulse 3s ease-in-out infinite}
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
@@ -109,20 +109,24 @@
   </header>
   <div class="app-body">
     <aside class="sidebar" id="sidebar">
-      <div class="side-head"><span class="side-title">文件列表</span><div class="side-actions"><button class="side-new" id="btnNew" title="新建文件"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg></button><button class="side-new" id="btnCloseSide" title="收起侧栏"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="10 3 5 8 10 13"/></svg></button></div></div>
+      <div class="side-head"><span class="side-title">文件列表</span><div class="side-actions">
+        <button class="side-new" id="btnNew" title="新建文件"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg></button>
+        <button class="side-new" id="btnCloseSide" title="收起侧栏"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="10 3 5 8 10 13"/></svg></button>
+      </div></div>
       <div class="file-list" id="fileList"></div>
     </aside>
     <div class="main-area">
-      <div class="toolbar">
-        <div class="tb-left">
-          <button class="t-btn" id="btnOpenSide" title="展开侧栏"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 3 10 8 5 13"/></svg></button>
-          <div class="sep" id="sepOpenSide"></div>
-          <div class="fmt-group"><button class="fmt-btn" id="btnBold" title="加粗 (Ctrl+B)"><span class="fmt-b">B</span></button><button class="fmt-btn" id="btnULine" title="下划线 (Ctrl+U)"><span class="fmt-u">U</span></button></div>
-          <div class="sep"></div>
-          <button class="t-btn on" id="btnWrap" title="自动换行"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h12M2 7h12M2 11h8"/><path d="M10 11l-2.5-2M10 11l-2.5 2"/></svg></button>
-        </div>
-        <div class="tb-right"><div class="fs-ctrl"><button class="fs-btn" id="fsMinus" title="缩小字体"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="8" x2="13" y2="8"/></svg></button><span class="fs-val" id="fsVal">17</span><button class="fs-btn" id="fsPlus" title="放大字体"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="3" x2="8" y2="13"/><line x1="3" y1="8" x2="13" y2="8"/></svg></button></div></div>
-      </div>
+      <div class="toolbar"><div class="tb-left">
+        <button class="t-btn" id="btnOpenSide" title="展开侧栏"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 3 10 8 5 13"/></svg></button>
+        <div class="sep" id="sepOpenSide"></div>
+        <div class="fmt-group"><button class="fmt-btn" id="btnBold" title="加粗 (Ctrl+B)"><span class="fmt-b">B</span></button><button class="fmt-btn" id="btnULine" title="下划线 (Ctrl+U)"><span class="fmt-u">U</span></button></div>
+        <div class="sep"></div>
+        <button class="t-btn on" id="btnWrap" title="自动换行"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h12M2 7h12M2 11h8"/><path d="M10 11l-2.5-2M10 11l-2.5 2"/></svg></button>
+      </div><div class="tb-right"><div class="fs-ctrl">
+        <button class="fs-btn" id="fsMinus" title="缩小字体"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="8" x2="13" y2="8"/></svg></button>
+        <span class="fs-val" id="fsVal">17</span>
+        <button class="fs-btn" id="fsPlus" title="放大字体"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="3" x2="8" y2="13"/><line x1="3" y1="8" x2="13" y2="8"/></svg></button>
+      </div></div></div>
       <div class="editor-wrap">
         <div class="find-bar" id="findBar"><input id="findInput" placeholder="查找"><input id="replaceInput" placeholder="替换"><button id="findNext">下一个</button><button id="replaceBtn">替换</button><button id="replaceAllBtn">全部</button><button id="closeFind">✕</button></div>
         <div class="empty" id="emptyState"><div class="empty-ico"><svg width="26" height="26" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="1" width="7" height="3" rx=".8"/><path d="M4 3H2.5v12h11V3H12"/><path d="M5.5 7h5M5.5 10h3"/></svg></div><div class="empty-t">粘贴或输入文本</div><div class="empty-h"><kbd>Ctrl</kbd>+<kbd>V</kbd> 粘贴 &middot; <kbd>Ctrl</kbd>+<kbd>B</kbd> 加粗 &middot; <kbd>Ctrl</kbd>+<kbd>U</kbd> 下划线</div></div>
@@ -141,12 +145,12 @@
   (function(){
     'use strict';
     const PURIFY_CFG={ALLOWED_TAGS:['br','b','strong','u','i','em','span','div','p'],ALLOWED_ATTR:['style'],ALLOW_DATA_ATTR:false};
-    // 降级正则方案（DOMPurify 加载失败时使用，存在局限）
+    // 降级正则方案（DOMPurify加载失败时使用，存在局限）
     function safeSanitize(h){if(window.DOMPurify)return DOMPurify.sanitize(h,PURIFY_CFG);return h.replace(/<[^>]*(style|on\w+)[^>]*>/gi,'').replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,'')}
     function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
     function timeAgo(ts){if(!ts)return'';const d=Date.now()-ts,m=Math.floor(d/60000);if(m<1)return'刚刚';if(m<60)return m+'分钟前';const h=Math.floor(m/60);if(h<24)return h+'小时前';const day=Math.floor(h/24);if(day<30)return day+'天前';return new Date(ts).toLocaleDateString('zh-CN')}
     const IC={file:'<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 1.5h6.5L13 5v9.5a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-13a1 1 0 0 1 1-1z"/><path d="M9.5 1.5V5H13"/></svg>',edit:'<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 2.5l2 2-8 8-3 1 1-3z"/><path d="M10 4l2 2"/></svg>',trash:'<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5h10"/><path d="M5.5 4.5V3h5v1.5"/><path d="M4.5 4.5l.8 9h5.4l.8-9"/></svg>',pin:'<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 11V2"/><path d="M4.5 5.5L8 2l3.5 3.5"/><line x1="3" y1="14" x2="13" y2="14"/></svg>'};
-    
+
     /* ===== 离线同步队列 ===== */
     let syncQueue=JSON.parse(localStorage.getItem('syncQueue')||'[]');
     function addToQueue(act){syncQueue.push(act);localStorage.setItem('syncQueue',JSON.stringify(syncQueue))}
@@ -158,7 +162,7 @@
       let url=API_BASE;if(id!==undefined&&id!==null)url+='/'+id;
       const opt={method,headers};if(data&&method!=='GET'&&method!=='DELETE')opt.body=JSON.stringify(data);
       try{const res=await fetch(url,opt);if(!res.ok){let msg;try{msg=(await res.json()).error||res.statusText}catch{msg=res.statusText}throw new Error(msg)}if(res.status===204)return null;return res.json()}
-      catch(e){addToQueue({url,opt});throw e}
+      catch(e){if(method==='POST')addToQueue({url,opt});throw e}
     }
     async function fetchNotes(){return apiRequest('GET')}
     async function fetchNote(id){return apiRequest('GET',null,id)}
@@ -167,34 +171,55 @@
     async function deleteNote(id){return apiRequest('DELETE',null,id)}
     let loadingNote=false;
 
-    /* ===== Undo 快照 ===== */
+    /* ===== Undo快照 ===== */
     let undoStack=[],redoStack=[];
     function pushUndo(){undoStack.push(editor.innerHTML);if(undoStack.length>50)undoStack.shift();redoStack=[]}
     function doUndo(){if(!undoStack.length)return;redoStack.push(editor.innerHTML);editor.innerHTML=undoStack.pop();scheduleStats();autoSave()}
     function doRedo(){if(!redoStack.length)return;undoStack.push(editor.innerHTML);editor.innerHTML=redoStack.pop();scheduleStats();autoSave()}
 
+    /* ===== Store（含预分配ID） ===== */
     const store={
-      files:[],activeId:null,counter:1,fontSize:17,wordWrap:true,isFocus:false,
+      files:[],activeId:null,counter:1,fontSize:17,wordWrap:true,isFocus:false,_creating:false,
       get active(){return this.files.find(f=>f.id===this.activeId)||null},
       _norm(n,w){return{id:String(n.id),name:n.name||'未命名',content:w?(n.content||''):null,charCount:n.charCount||0,_loaded:!!w,createdAt:n.createdAt||Date.now(),updatedAt:n.updatedAt||Date.now(),pinned:n.pinned||0,sort_order:n.sort_order||0}},
       async restore(){try{const ns=await fetchNotes();this.files=ns.map(n=>this._norm(n,false));this.counter=this.files.filter(n=>n.name.startsWith('未命名')).length+1;if(this.files.length>0)this.activeId=this.files[0].id;return true}catch(e){toast('获取笔记失败: '+e.message);return false}},
-      async createFile(s,n,c){try{const fn=n||'未命名 '+this.counter++;const nd=await createNote(fn,c||'');const nr=this._norm(nd,true);this.files.unshift(nr);this.activeId=nr.id;renderList();await loadEditor();if(!s)toast('已新建: '+nr.name);return nr}catch(e){toast('创建笔记失败: '+e.message);return null}},
+      async createFile(silent,name,content){
+        if(this._creating)return null;this._creating=true;
+        const fn=name||'未命名 '+this.counter++;
+        // 预分配临时ID，立即渲染
+        const tempId='local_'+Date.now()+'_'+Math.random().toString(36).slice(2,8);
+        const nr=this._norm({id:tempId,name:fn,content:content||'',charCount:content?content.replace(/<[^>]*>/g,'').length:0,createdAt:Date.now(),updatedAt:Date.now(),pinned:0,sort_order:0},true);
+        this.files.unshift(nr);this.activeId=tempId;
+        renderList();editor.innerHTML=content?safeSanitize(content):'';scheduleStats();
+        if(!silent)toast('已新建: '+fn);
+        // 异步同步到服务器
+        try{const n=await createNote(fn,content||'');const realId=String(n.id);
+          if(realId!==tempId){nr.id=realId;nr.updatedAt=n.updatedAt||Date.now();if(this.activeId===tempId)this.activeId=realId;renderList()}
+        }catch(e){console.warn('同步创建失败:',e.message)}
+        this._creating=false;return nr
+      },
       async switchFile(id){if(String(id)===String(this.activeId))return;await this.saveCurrent();this.activeId=String(id);renderList();await loadEditor()},
       async deleteFile(id){try{await deleteNote(id);const i=this.files.findIndex(f=>f.id===String(id));if(i===-1)return;const nm=this.files[i].name;this.files.splice(i,1);if(String(this.activeId)===String(id))this.activeId=this.files.length?this.files[0].id:null;renderList();await loadEditor();toast('已删除: '+nm)}catch(e){toast('删除笔记失败: '+e.message)}},
       async renameFile(id,nm){const f=this.files.find(x=>x.id===String(id));if(f&&nm.trim()){try{const u=await updateNote(id,{name:nm.trim()});f.name=u.name||nm.trim();f.updatedAt=u.updatedAt||Date.now()}catch(e){toast('重命名失败: '+e.message)}renderList()}},
-      async saveCurrent(){if(!this.activeId||loadingNote)return;const f=this.active;if(!f||!f._loaded)return;const c=editor.innerHTML;if(c===f.content)return;try{const u=await updateNote(f.id,{content:c});f.content=u.content||c;f.updatedAt=u.updatedAt||Date.now();f.charCount=c.replace(/<[^>]*>/g,'').length;renderList()}catch(e){toast('保存失败: '+e.message)}},
+      async saveCurrent(){
+        if(!this.activeId||loadingNote)return;const f=this.active;if(!f||!f._loaded)return;
+        // 临时ID跳过保存，等服务器返回真实ID
+        if(f.id.startsWith('local_'))return;
+        const c=editor.innerHTML;if(c===f.content)return;
+        try{const u=await updateNote(f.id,{content:c});f.content=u.content||c;f.updatedAt=u.updatedAt||Date.now();f.charCount=c.replace(/<[^>]*>/g,'').length;renderList()}catch(e){toast('保存失败: '+e.message)}
+      },
       async clearCurrent(){const f=this.active;if(!f||!f._loaded)return;if(!getEditorText().trim())return;pushUndo();editor.innerHTML='';try{const u=await updateNote(f.id,{content:''});f.content='';f.charCount=0;f.updatedAt=u.updatedAt||Date.now()}catch(e){toast('清空失败: '+e.message)}scheduleStats();renderList();toast('已清空: '+f.name)},
       downloadCurrent(){const f=this.active,t=getEditorText().trim();if(!t){toast('当前文件为空');return}const b=new Blob([t],{type:'text/plain;charset=utf-8'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=(f?f.name:'textvault')+'.txt';a.click();URL.revokeObjectURL(u);toast('已下载: '+a.download)},
       async togglePin(id){const f=this.files.find(x=>x.id===String(id));if(!f)return;const np=f.pinned?0:1;f.pinned=np;this.files.sort((a,b)=>b.pinned-a.pinned||a.sort_order-b.sort_order||b.updatedAt-a.updatedAt);renderList();try{await updateNote(id,{pinned:np});toast(np?'已置顶: '+f.name:'已取消置顶: '+f.name)}catch(e){toast('操作失败');f.pinned=np?0:1;this.files.sort((a,b)=>b.pinned-a.pinned||a.sort_order-b.sort_order||b.updatedAt-a.updatedAt);renderList()}},
-      async moveFile(fid,tid,pos){const fi=this.files.findIndex(f=>f.id===String(fid));const[mf]=this.files.splice(fi,1);const ti=this.files.findIndex(f=>f.id===String(tid));this.files.splice(pos==='before'?ti:ti+1,0,mf);const grp=this.files.filter(f=>f.pinned===mf.pinned),ups=[];const step=1000;for(let i=0;i<grp.length;i++){const no=(i+1)*step;if(grp[i].sort_order!==no){grp[i].sort_order=no;ups.push({id:grp[i].id,sort_order:no})}}renderList();try{for(const u of ups)await updateNote(u.id,{sort_order:u.sort_order})}catch(e){toast('排序保存失败')}}
+      async moveFile(fid,tid,pos){const fi=this.files.findIndex(f=>f.id===String(fid));const[mf]=this.files.splice(fi,1);const ti=this.files.findIndex(f=>f.id===String(tid));this.files.splice(pos==='before'?ti:ti+1,0,mf);const grp=this.files.filter(f=>f.pinned===mf.pinned),ups=[];const step=1000;for(let i=0;i<grp.length;i++){const no=(i+1)*step;if(grp[i].sort_order!==no){grp[i].sort_order=no;ups.push({id:grp[i].id,sort_order:no})}}renderList();try{for(const u of ups)await updateNote(u.id,{sort_order:u.sort_order})}catch(e){toast('排序保存失败')}},
     };
+
     const editor=document.getElementById('editor'),emptyState=document.getElementById('emptyState'),fileListEl=document.getElementById('fileList'),sidebar=document.getElementById('sidebar'),fsVal=document.getElementById('fsVal'),stChars=document.getElementById('stChars'),stWords=document.getElementById('stWords'),stLines=document.getElementById('stLines'),saveInd=document.getElementById('saveInd'),toastBox=document.getElementById('toastBox'),dropOv=document.getElementById('dropOv'),fileInput=document.getElementById('fileInput'),btnBold=document.getElementById('btnBold'),btnULine=document.getElementById('btnULine');
     function getEditorText(){return editor.innerText.replace(/\u00A0/g,' ').trimEnd()}
     function countWords(t){if(!t)return 0;const c=t.match(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff\u3000-\u303f\uff00-\uffef]/g);const cc=c?c.length:0;const r=t.replace(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff\u3000-\u303f\uff00-\uffef]/g,' ');return cc+r.trim().split(/\s+/).filter(w=>w.length>0).length}
     function updateStats(){const t=getEditorText();stChars.textContent='字符: '+t.replace(/\n/g,'').length;stWords.textContent='字数: '+countWords(t);stLines.textContent='行数: '+(t?t.split('\n').length:0)}
     function updateEmpty(){emptyState.classList.toggle('hide',getEditorText().length>0)}
-    let statsRaf=null;
-    function scheduleStats(){if(statsRaf)return;statsRaf=requestAnimationFrame(()=>{updateStats();updateEmpty();statsRaf=null})}
+    let statsRaf=null;function scheduleStats(){if(statsRaf)return;statsRaf=requestAnimationFrame(()=>{updateStats();updateEmpty();statsRaf=null})}
     function renderList(){let h='',lp=false;store.files.forEach((f,i)=>{if(i>0&&lp&&!f.pinned)h+='<div class="pin-sep"></div>';lp=f.pinned;const a=String(f.id)===String(store.activeId),c=f.charCount||0;h+='<div class="file-item'+(a?' active':'')+(f.pinned?' pinned':'')+'" data-id="'+f.id+'" draggable="true"><span class="fi-icon">'+(f.pinned?IC.pin:IC.file)+'</span><span class="fi-info"><span class="fi-name">'+esc(f.name)+'</span><span class="fi-meta">'+c+' 字 &middot; '+timeAgo(f.updatedAt)+'</span></span><span class="fi-acts"><button class="fa-btn act-pin'+(f.pinned?' pin-on':'')+'" title="'+(f.pinned?'取消置顶':'置顶')+'">'+IC.pin+'</button><button class="fa-btn act-rename" title="重命名">'+IC.edit+'</button><button class="fa-btn del act-del" title="删除">'+IC.trash+'</button></span></div>'});fileListEl.innerHTML=h}
     document.execCommand('defaultParagraphSeparator',false,'br');
     async function loadEditor(){const f=store.active;if(!f){editor.innerHTML='';scheduleStats();return}if(!f._loaded){loadingNote=true;try{const n=await fetchNote(f.id);f.content=n.content||'';f.charCount=n.content?n.content.replace(/<[^>]*>/g,'').length:0;f.pinned=n.pinned||0;f.sort_order=n.sort_order||0;f._loaded=true;renderList()}catch(e){toast('加载笔记失败: '+e.message);editor.innerHTML='';loadingNote=false;scheduleStats();return}loadingNote=false}editor.innerHTML=safeSanitize(f.content||'');scheduleStats()}
@@ -203,12 +228,9 @@
     function applyWrap(w){store.wordWrap=w;editor.style.whiteSpace=w?'pre-wrap':'pre';document.getElementById('btnWrap').classList.toggle('on',w)}
     applyWrap(store.wordWrap);document.getElementById('btnWrap').addEventListener('click',()=>applyWrap(!store.wordWrap));
     let saveTimer=null;
-    // 输入节流：200ms 保存，500ms 统计
+    // 输入节流200ms
     let inputTimer=null;editor.addEventListener('input',()=>{pushUndo();clearTimeout(inputTimer);inputTimer=setTimeout(()=>{scheduleStats();autoSave()},200)});
     function autoSave(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>{const f=store.active;if(f&&f._loaded&&!loadingNote&&editor.innerHTML!==f.content)store.saveCurrent().then(()=>{saveInd.classList.add('on');setTimeout(()=>saveInd.classList.remove('on'),1400)}).catch(e=>toast('自动保存失败: '+e.message))},3000)}
-    // 定期清理冗余标签
-    setInterval(()=>{if(!editor.innerHTML)return;editor.querySelectorAll('span').forEach(s=>{if(!s.attributes.length)s.replaceWith(...s.childNodes)})},10000);
-
     editor.addEventListener('paste',e=>{e.preventDefault();const t=e.clipboardData.getData('text/plain');if(!t)return;pushUndo();document.execCommand('insertText',false,t);requestAnimationFrame(()=>{scheduleStats();autoSave()})});
     editor.addEventListener('keydown',e=>{
       if(e.key==='Tab'){e.preventDefault();document.execCommand('insertText',false,'    ')}
@@ -217,19 +239,15 @@
       if((e.ctrlKey||e.metaKey)&&e.key==='d'){e.preventDefault();duplicateLine()}
       if((e.ctrlKey||e.metaKey)&&e.key==='f'){e.preventDefault();document.getElementById('findBar').style.display='flex';document.getElementById('findInput').focus()}
     });
-    // 复制当前行 Ctrl+D
-    function duplicateLine(){
-      const sel=window.getSelection();if(!sel.rangeCount)return;pushUndo();
-      const node=sel.anchorNode;let block=node.nodeType===3?node.parentElement:node;
-      while(block.parentElement!==editor&&block.parentElement!==null)block=block.parentElement;
-      if(block.parentElement===editor){const clone=block.cloneNode(true);editor.insertBefore(clone,block.nextSibling);const r=document.createRange();r.selectNodeContents(clone);r.collapse(true);sel.removeAllRanges();sel.addRange(r)}
-    }
-    // 查找替换逻辑
-    const findInput=document.getElementById('findInput'),replaceInput=document.getElementById('replaceInput');
+    // Ctrl+D复制当前行
+    function duplicateLine(){const sel=window.getSelection();if(!sel.rangeCount)return;pushUndo();const node=sel.anchorNode;let block=node.nodeType===3?node.parentElement:node;while(block.parentElement!==editor&&block.parentElement!==null)block=block.parentElement;if(block.parentElement===editor){const clone=block.cloneNode(true);editor.insertBefore(clone,block.nextSibling);const r=document.createRange();r.selectNodeContents(clone);r.collapse(true);sel.removeAllRanges();sel.addRange(r)}}
+    // 查找替换
     document.getElementById('closeFind').addEventListener('click',()=>document.getElementById('findBar').style.display='none');
-    document.getElementById('findNext').addEventListener('click',()=>window.find(findInput.value));
-    document.getElementById('replaceBtn').addEventListener('click',()=>{if(window.find(findInput.value)){pushUndo();document.execCommand('insertText',false,replaceInput.value)}});
-    document.getElementById('replaceAllBtn').addEventListener('click',()=>{pushUndo();const r=new RegExp(findInput.value.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'g');editor.innerHTML=editor.innerHTML.replace(r,replaceInput.value);scheduleStats();autoSave()});
+    document.getElementById('findNext').addEventListener('click',()=>window.find(document.getElementById('findInput').value));
+    document.getElementById('replaceBtn').addEventListener('click',()=>{if(window.find(document.getElementById('findInput').value)){pushUndo();document.execCommand('insertText',false,document.getElementById('replaceInput').value)}});
+    document.getElementById('replaceAllBtn').addEventListener('click',()=>{pushUndo();const r=new RegExp(document.getElementById('findInput').value.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'g');editor.innerHTML=editor.innerHTML.replace(r,document.getElementById('replaceInput').value);scheduleStats();autoSave()});
+    // 定期清理冗余标签
+    setInterval(()=>{if(!editor.innerHTML)return;editor.querySelectorAll('span').forEach(s=>{if(!s.attributes.length)s.replaceWith(...s.childNodes)})},10000);
 
     function updateFmt(){btnBold.classList.toggle('on',document.queryCommandState('bold'));btnULine.classList.toggle('on',document.queryCommandState('underline'))}
     btnBold.addEventListener('mousedown',e=>{e.preventDefault();pushUndo();document.execCommand('bold');updateFmt()});
