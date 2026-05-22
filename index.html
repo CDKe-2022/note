@@ -7,8 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"></script>
 <style>
-:root{--bg:#f3f1eb;--bg-side:#ebe7de;--bg-card:#fff;--bg-hover:#f0ece5;--bg-active:#e4dfd6;--border:#d5cfc4;--text:#26231f;--text-2:#6e6860;--text-3:#9e9890;--accent:#b87333;--accent-h:#cc8844;--accent-bg:rgba(184,115,51,.1);--accent-bg2:rgba(184,115,51,.06);--danger:#a84040;--success:#3a8850;--side-w:260px;--font-body:'Times New Roman','Songti SC','SimSun',serif;--font-mono:'JetBrains Mono',monospace;--shadow-card:0 1px 2px rgba(0,0,0,.04),0 6px 18px rgba(0,0,0,.03);--h-header:52px;--h-toolbar:44px;--h-footer:32px;--btn-h:30px;--btn-radius:7px;--gap-xs:4px;--gap-sm:8px;--gap-md:12px;--pad-page:20px}
-body.dark{--bg:#1a1918;--bg-side:#1f1e1c;--bg-card:#252422;--bg-hover:#2e2c29;--bg-active:#363330;--border:#3d3a36;--text:#d6d1c7;--text-2:#a09a90;--text-3:#6e6860;--accent:#cc9044;--accent-h:#dda050;--accent-bg:rgba(204,144,68,.12);--accent-bg2:rgba(204,144,68,.06);--danger:#c45050;--success:#4a9960;--shadow-card:0 1px 2px rgba(0,0,0,.2),0 6px 18px rgba(0,0,0,.15)}
+:root{--bg:#f3f1eb;--bg-side:#f0ece5;--bg-gutter:#f5f2ec;--bg-card:#fff;--bg-hover:#f0ece5;--bg-active:#e4dfd6;--border:#d5cfc4;--border-subtle:#e8e3da;--text:#26231f;--text-2:#6e6860;--text-3:#9e9890;--text-ln:#c4bfb4;--accent:#b87333;--accent-h:#cc8844;--accent-bg:rgba(184,115,51,.1);--accent-bg2:rgba(184,115,51,.06);--danger:#a84040;--success:#3a8850;--side-w:256px;--font-body:'Times New Roman','Songti SC','SimSun',serif;--font-mono:'JetBrains Mono',monospace;--shadow-card:0 1px 2px rgba(0,0,0,.04),0 6px 18px rgba(0,0,0,.03);--shadow-float:0 1px 3px rgba(0,0,0,.03),0 6px 20px rgba(0,0,0,.04);--h-header:52px;--h-toolbar:44px;--h-footer:32px;--btn-h:30px;--btn-radius:7px;--gap-xs:4px;--gap-sm:8px;--gap-md:12px;--pad-page:20px;--editor-lh:34px;--r-lg:12px;--r-md:8px;--r-sm:6px;--body-gap:5px}
+body.dark{--bg:#1a1918;--bg-side:#1c1b19;--bg-gutter:#1e1d1b;--bg-card:#252422;--bg-hover:#2e2c29;--bg-active:#363330;--border:#3d3a36;--border-subtle:#333029;--text:#d6d1c7;--text-2:#a09a90;--text-3:#6e6860;--text-ln:#4a4640;--accent:#cc9044;--accent-h:#dda050;--accent-bg:rgba(204,144,68,.12);--accent-bg2:rgba(204,144,68,.06);--danger:#c45050;--success:#4a9960;--shadow-card:0 1px 2px rgba(0,0,0,.2),0 6px 18px rgba(0,0,0,.15);--shadow-float:0 1px 3px rgba(0,0,0,.15),0 6px 20px rgba(0,0,0,.1)}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}html,body{height:100%;overflow:hidden}
 body{font-family:var(--font-body);background:var(--bg);color:var(--text);display:grid;grid-template-rows:var(--h-header) 1fr var(--h-footer);transition:background .4s,color .3s}
 .bg-deco{position:fixed;inset:0;pointer-events:none;z-index:0}
@@ -25,9 +25,9 @@ header{position:relative;z-index:20;display:flex;align-items:center;padding:0 va
 .btn-i{width:var(--btn-h);height:var(--btn-h);padding:0}.btn-i svg{display:block}
 .btn.danger:hover{border-color:var(--danger);color:var(--danger)}.btn .lbl{font-weight:600}
 .sep{width:1px;height:18px;background:var(--border);margin:0 var(--gap-xs);flex-shrink:0;transition:background .3s}
-.app-body{position:relative;z-index:10;display:flex;overflow:hidden;min-height:0;grid-row:2}
-.sidebar{width:var(--side-w);flex-shrink:0;background:var(--bg-side);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;transition:margin-left .3s cubic-bezier(.4,0,.2,1),background .4s}
-.sidebar.collapsed{margin-left:calc(-1 * var(--side-w))}
+.app-body{position:relative;z-index:10;display:flex;overflow:hidden;min-height:0;grid-row:2;gap:var(--body-gap);padding-right:var(--body-gap)}
+.sidebar{width:var(--side-w);flex-shrink:0;background:var(--bg-side);display:flex;flex-direction:column;overflow:hidden;border-radius:0 var(--r-lg) var(--r-lg) 0;box-shadow:var(--shadow-float);transition:margin-left .3s cubic-bezier(.4,0,.2,1),background .4s}
+.sidebar.collapsed{margin-left:calc(-1 * var(--side-w) - var(--body-gap))}
 .side-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;flex-shrink:0}
 .side-title{font-size:13px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:1.5px}
 .side-actions{display:flex;gap:4px}
@@ -53,7 +53,7 @@ header{position:relative;z-index:20;display:flex;align-items:center;padding:0 va
 .fa-btn{width:24px;height:24px;border:none;border-radius:5px;background:transparent;color:var(--text-3);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
 .fa-btn:hover{background:var(--bg-active);color:var(--text)}.fa-btn.del:hover{color:var(--danger)}.fa-btn.pin-on{color:var(--accent)}.fa-btn.pin-on:hover{color:var(--text-3)}
 .rename-input{width:100%;border:1px solid var(--accent);border-radius:4px;padding:1px 5px;font:600 14px var(--font-body);background:var(--bg-card);color:var(--text);outline:none}
-.toolbar{display:flex;align-items:center;justify-content:space-between;padding:0 var(--pad-page);height:var(--h-toolbar);background:var(--bg-card);border-bottom:1px solid var(--border);flex-shrink:0;transition:background .4s,border-color .3s}
+.toolbar{display:flex;align-items:center;justify-content:space-between;padding:0 var(--pad-page);height:var(--h-toolbar);background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--r-md);flex-shrink:0;margin:0 var(--body-gap) 0 0;transition:background .4s,border-color .3s}
 .tb-left,.tb-right{display:flex;align-items:center;gap:var(--gap-xs)}
 .fmt-group{display:flex;gap:var(--gap-xs);background:var(--bg);border:1px solid var(--border);border-radius:var(--btn-radius);padding:2px;transition:background .4s,border-color .3s}
 .fmt-btn{width:30px;height:26px;border:none;border-radius:5px;background:transparent;color:var(--text-2);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;font-size:14px;font-family:var(--font-body)}
@@ -65,10 +65,14 @@ header{position:relative;z-index:20;display:flex;align-items:center;padding:0 va
 .fs-ctrl{display:flex;align-items:center;gap:var(--gap-xs)}
 .fs-btn{width:26px;height:26px;border:1px solid var(--border);border-radius:5px;background:var(--bg-card);color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
 .fs-btn:hover{border-color:var(--accent);color:var(--accent)}.fs-val{min-width:26px;text-align:center;font:12px var(--font-mono);color:var(--text-2)}
-.main-area{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden;transition:padding-left .3s}
-.editor-wrap{flex:1;min-height:0;position:relative;overflow-y:auto;overflow-x:hidden;background:var(--bg-card);transition:background .4s}
+.main-area{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden}
+.editor-wrap{flex:1;min-height:0;position:relative;overflow-y:auto;overflow-x:hidden;background:var(--bg-card);border-radius:0 0 var(--r-md) 0;box-shadow:var(--shadow-float);transition:background .4s}
 .editor-wrap::-webkit-scrollbar{width:6px}.editor-wrap::-webkit-scrollbar-track{background:transparent}.editor-wrap::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}.editor-wrap::-webkit-scrollbar-thumb:hover{background:var(--text-3)}
-#editor{padding:28px 32px 48px;background:transparent;border:none;outline:none;color:var(--text);font-family:var(--font-body);font-size:17px;line-height:2;letter-spacing:.01em;white-space:pre-wrap;word-wrap:break-word;caret-color:var(--accent);min-height:100%;transition:color .3s}
+.editor-content{display:flex;min-height:100%}
+.line-gutter{width:36px;flex-shrink:0;padding:28px 0 48px 0;text-align:right;font-family:var(--font-mono);font-size:10px;color:var(--text-ln);user-select:none;background:var(--bg-gutter);border-right:1px solid var(--border-subtle);border-radius:0 0 0 var(--r-md);transition:background .4s,border-color .3s}
+.ln{height:var(--editor-lh);display:flex;align-items:center;justify-content:flex-end;padding-right:8px;transition:color .15s}
+.ln.active{color:var(--accent);font-weight:500}
+#editor{flex:1;min-width:0;padding:28px 32px 48px;background:transparent;border:none;outline:none;color:var(--text);font-family:var(--font-body);font-size:17px;line-height:2;letter-spacing:.01em;white-space:pre-wrap;word-wrap:break-word;caret-color:var(--accent);min-height:100%;transition:color .3s}
 #editor ::selection,#editor *::selection{background:var(--accent-bg);color:var(--text)}
 .empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;pointer-events:none;z-index:2;transition:opacity .3s}.empty.hide{opacity:0}
 .empty-ico{width:72px;height:72px;border:2px dashed var(--border);border-radius:14px;display:flex;align-items:center;justify-content:center;color:var(--text-3);animation:breathe 5s ease-in-out infinite}
@@ -82,19 +86,19 @@ footer{position:relative;z-index:20;display:flex;align-items:center;justify-cont
 .toast{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:8px;background:var(--bg-card);border:1px solid var(--border);box-shadow:var(--shadow-card);font-size:13px;color:var(--text);transform:translateX(120%);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1)}
 .toast.in{transform:translateX(0);opacity:1}.toast.out{transform:translateX(120%);opacity:0;transition:all .2s ease-in}.toast svg{color:var(--accent);flex-shrink:0}
 .drop-ov{position:fixed;inset:0;background:rgba(184,115,51,.04);border:3px dashed var(--accent);z-index:100;display:none;align-items:center;justify-content:center;backdrop-filter:blur(3px)}.drop-ov.on{display:flex}.drop-ov span{font-size:17px;color:var(--accent);font-weight:500}
-body.focus{grid-template-rows:1fr}body.focus header,body.focus footer,body.focus .sidebar,body.focus .toolbar{display:none}body.focus .app-body{grid-row:1}body.focus #editor{padding:60px 40px 100px}body.focus .focus-exit{display:flex}
+body.focus{grid-template-rows:1fr}body.focus header,body.focus footer,body.focus .sidebar,body.focus .toolbar{display:none}body.focus .app-body{grid-row:1}body.focus #editor{padding:60px 40px 100px}body.focus .line-gutter{padding-top:60px;padding-bottom:100px}body.focus .focus-exit{display:flex}
 .focus-exit{display:none;position:fixed;top:14px;right:14px;z-index:200;width:var(--btn-h);height:var(--btn-h);border:1px solid var(--border);border-radius:var(--btn-radius);background:var(--bg-card);color:var(--text-3);cursor:pointer;align-items:center;justify-content:center;box-shadow:0 3px 12px rgba(0,0,0,.08);transition:all .15s}.focus-exit:hover{color:var(--text);border-color:var(--text-3)}
 #fileInput{display:none}
-.btn-theme{width:var(--btn-h);height:var(--btn-h);border:1px solid var(--border);border-radius:var(--btn-radius);background:var(--bg-card);color:var(--text-3);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;padding:0}.btn-theme:hover{background:var(--bg-hover);color:var(--text);border-color:var(--text-3)}.btn-theme svg{transition:transform .3s}.btn-theme:hover svg{transform:rotate(20deg)}
+.btn-theme,.btn-help{width:var(--btn-h);height:var(--btn-h);border:1px solid var(--border);border-radius:var(--btn-radius);background:var(--bg-card);color:var(--text-3);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;padding:0;font-family:var(--font-mono)}.btn-theme:hover,.btn-help:hover{background:var(--bg-hover);color:var(--text);border-color:var(--text-3)}
+.btn-theme svg{transition:transform .3s}.btn-theme:hover svg{transform:rotate(20deg)}
+.btn-help{font-size:14px;font-weight:700}
 body.dark .btn-theme .icon-sun{display:block}body.dark .btn-theme .icon-moon{display:none}body:not(.dark) .btn-theme .icon-sun{display:none}body:not(.dark) .btn-theme .icon-moon{display:block}
-
-/* ===== 搜索面板 ===== */
-.search-panel{position:fixed;top:52px;left:50%;transform:translateX(-50%) translateY(-8px);width:540px;max-height:72vh;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;box-shadow:0 4px 12px rgba(0,0,0,.06),0 20px 48px rgba(0,0,0,.12);z-index:80;display:none;flex-direction:column;overflow:hidden;opacity:0;transition:transform .25s cubic-bezier(.4,0,.2,1),opacity .2s}
+/* 搜索面板 */
+.search-panel{position:fixed;top:52px;left:50%;transform:translateX(-50%) translateY(-8px);width:540px;max-height:72vh;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:0 4px 12px rgba(0,0,0,.06),0 20px 48px rgba(0,0,0,.12);z-index:80;display:none;flex-direction:column;overflow:hidden;opacity:0;transition:transform .25s cubic-bezier(.4,0,.2,1),opacity .2s}
 .search-panel.open{display:flex;transform:translateX(-50%) translateY(0);opacity:1}
 .sp-head{display:flex;align-items:center;border-bottom:1px solid var(--border);flex-shrink:0;padding:0 4px}
 .sp-tab{flex:1;padding:11px 0;text-align:center;font-size:13px;font-weight:600;color:var(--text-3);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;user-select:none;letter-spacing:.3px}
-.sp-tab:hover{color:var(--text-2);background:var(--accent-bg2)}
-.sp-tab.active{color:var(--accent);border-bottom-color:var(--accent);background:var(--accent-bg2)}
+.sp-tab:hover{color:var(--text-2);background:var(--accent-bg2)}.sp-tab.active{color:var(--accent);border-bottom-color:var(--accent);background:var(--accent-bg2)}
 .sp-close{width:32px;height:32px;border:none;border-radius:8px;background:transparent;color:var(--text-3);cursor:pointer;display:flex;align-items:center;justify-content:center;margin:4px 6px 4px 0;flex-shrink:0;transition:all .15s}
 .sp-close:hover{background:var(--bg-hover);color:var(--text)}
 .sp-body{flex:1;min-height:0;overflow-y:auto;padding:14px 16px}
@@ -104,20 +108,15 @@ body.dark .btn-theme .icon-sun{display:block}body.dark .btn-theme .icon-moon{dis
 .sp-input{width:100%;height:38px;border:1px solid var(--border);border-radius:9px;padding:0 12px 0 34px;font:14px var(--font-body);background:var(--bg);color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s}
 .sp-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
 .sp-input::placeholder{color:var(--text-3)}
-.sp-replace-row{display:flex;gap:6px;margin-bottom:8px;align-items:center}
-.sp-replace-input{flex:1;height:32px;border:1px solid var(--border);border-radius:7px;padding:0 10px;font:13px var(--font-mono);background:var(--bg);color:var(--text);outline:none;transition:border-color .2s}
-.sp-replace-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+.sp-actions{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;align-items:center}
+.sp-match-count{font:12px var(--font-mono);color:var(--text-3);margin-left:auto;flex-shrink:0}
+.sp-match-count .cur{color:var(--accent);font-weight:600}
 .sp-btn{height:28px;padding:0 10px;border:1px solid var(--border);border-radius:6px;background:var(--bg-card);color:var(--text-2);font:600 12px var(--font-body);cursor:pointer;transition:all .15s;white-space:nowrap}
 .sp-btn:hover{background:var(--bg-hover);color:var(--text);border-color:var(--text-3)}
 .sp-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}.sp-btn.primary:hover{background:var(--accent-h);border-color:var(--accent-h)}
-.sp-actions{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;align-items:center}
-/* A5: 匹配计数 */
-.sp-match-count{font:12px var(--font-mono);color:var(--text-3);margin-left:auto;flex-shrink:0}
-.sp-match-count .cur{color:var(--accent);font-weight:600}
-.sp-nav-btns{display:flex;gap:2px}
-.sp-nav-btn{width:24px;height:24px;border:1px solid var(--border);border-radius:4px;background:var(--bg-card);color:var(--text-3);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s}
-.sp-nav-btn:hover{background:var(--bg-hover);color:var(--text);border-color:var(--text-3)}
-.sp-nav-btn:active{transform:scale(.93)}
+.sp-replace-row{display:flex;gap:6px;margin-bottom:8px;align-items:center}
+.sp-replace-input{flex:1;height:32px;border:1px solid var(--border);border-radius:7px;padding:0 10px;font:13px var(--font-mono);background:var(--bg);color:var(--text);outline:none;transition:border-color .2s}
+.sp-replace-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
 .sp-loading{display:flex;align-items:center;justify-content:center;gap:8px;padding:24px;color:var(--text-3);font-size:13px}
 .sp-loading .spinner{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -134,11 +133,10 @@ body.dark .btn-theme .icon-sun{display:block}body.dark .btn-theme .icon-moon{dis
 .sr-preview mark{background:var(--accent-bg);color:var(--accent);padding:0 2px;border-radius:2px;font-weight:600}
 .sr-count{flex-shrink:0;font:600 11px var(--font-mono);color:var(--accent);background:var(--accent-bg);padding:2px 7px;border-radius:10px;align-self:flex-start;margin-top:2px}
 .sp-footer{padding:8px 16px 10px;border-top:1px solid var(--border);flex-shrink:0;font:11px var(--font-mono);color:var(--text-3);display:flex;justify-content:space-between}
-
-/* ===== D4: 快捷键帮助面板 ===== */
+/* 快捷键帮助 */
 .help-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:150;display:none;align-items:center;justify-content:center;backdrop-filter:blur(2px);opacity:0;transition:opacity .2s}
 .help-overlay.open{display:flex;opacity:1}
-.help-panel{width:520px;max-height:80vh;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.15);overflow:hidden;display:flex;flex-direction:column;transform:scale(.95);transition:transform .25s cubic-bezier(.4,0,.2,1)}
+.help-panel{width:520px;max-height:80vh;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:0 8px 32px rgba(0,0,0,.15);overflow:hidden;display:flex;flex-direction:column;transform:scale(.95);transition:transform .25s cubic-bezier(.4,0,.2,1)}
 .help-overlay.open .help-panel{transform:scale(1)}
 .hp-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px 14px;border-bottom:1px solid var(--border)}
 .hp-title{font-size:17px;font-weight:700;color:var(--text)}
@@ -146,8 +144,7 @@ body.dark .btn-theme .icon-sun{display:block}body.dark .btn-theme .icon-moon{dis
 .hp-close:hover{background:var(--bg-hover);color:var(--text)}
 .hp-body{flex:1;min-height:0;overflow-y:auto;padding:16px 22px 20px}
 .hp-body::-webkit-scrollbar{width:5px}.hp-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-.hp-section{margin-bottom:20px}
-.hp-section:last-child{margin-bottom:0}
+.hp-section{margin-bottom:20px}.hp-section:last-child{margin-bottom:0}
 .hp-sec-title{font-size:12px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
 .hp-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0}
 .hp-row-desc{font-size:13px;color:var(--text-2)}
@@ -155,10 +152,12 @@ body.dark .btn-theme .icon-sun{display:block}body.dark .btn-theme .icon-moon{dis
 .hp-key{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:24px;padding:0 7px;border:1px solid var(--border);border-radius:5px;background:var(--bg);font:600 11px var(--font-mono);color:var(--text-2);box-shadow:0 1px 2px rgba(0,0,0,.04)}
 .hp-key.accent{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
 .hp-plus{font-size:11px;color:var(--text-3);font-weight:600}
-
 @media(max-width:768px){
 .sidebar{position:absolute;z-index:30;height:100%;box-shadow:4px 0 16px rgba(0,0,0,.08)}.sidebar.collapsed{margin-left:calc(-1 * var(--side-w))}
-header,.toolbar{padding:0 var(--gap-sm)}#editor{padding:24px 16px 48px;max-width:100%}.btn .lbl,.logo-name{display:none}footer{padding:0 var(--gap-sm)}.st-r{display:none}body.focus #editor{padding:28px 16px 60px;max-width:100%}
+header{padding:0 var(--gap-sm)}.toolbar{margin:0 var(--gap-sm) 0 0;padding:0 var(--gap-sm)}
+#editor{padding:24px 16px 48px;max-width:100%}.line-gutter{padding:24px 0 48px 0;width:28px}.ln{font-size:9px;padding-right:5px}
+.btn .lbl,.logo-name{display:none}footer{padding:0 var(--gap-sm)}.st-r{display:none}
+body.focus #editor{padding:28px 16px 60px;max-width:100%}body.focus .line-gutter{padding-top:28px;padding-bottom:60px}
 .search-panel{width:calc(100vw - 16px);left:8px;transform:translateX(0) translateY(-8px)}.search-panel.open{transform:translateX(0) translateY(0)}
 .help-panel{width:calc(100vw - 24px);max-height:85vh}
 }
@@ -169,18 +168,19 @@ header,.toolbar{padding:0 var(--gap-sm)}#editor{padding:24px 16px 48px;max-width
 <header>
 <div class="h-left"><div class="logo"><div class="logo-mark"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 1.5h6.5L13 5v9.5a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-13a1 1 0 0 1 1-1z"/><path d="M9.5 1.5V5H13"/></svg></div><div class="logo-name">Text<span>Vault</span></div></div></div>
 <div class="h-right">
-<button class="btn" id="btnOpen" title="导入文件"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 14V4.5"/><path d="M4.5 7.5L8 4l3.5 3.5"/><path d="M2 2h12"/></svg><span class="lbl">导入</span></button>
+<button class="btn" id="btnOpen" title="导入文件 (Ctrl+O)"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 14V4.5"/><path d="M4.5 7.5L8 4l3.5 3.5"/><path d="M2 2h12"/></svg><span class="lbl">导入</span></button>
 <input type="file" id="fileInput" accept=".txt,.md,.log,.csv,.json,.xml,.html,.css,.js,.py,.java,.c,.cpp,.sh,.yml,.yaml,.toml,.ini,.cfg,.conf,.env">
 <button class="btn" id="btnDown" title="下载当前文件"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v9.5"/><path d="M4.5 8.5L8 12l3.5-3.5"/><path d="M2 14h12"/></svg><span class="lbl">下载</span></button>
 <div class="sep"></div>
 <button class="btn btn-i" id="btnFocus" title="专注模式"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 2 2 6 2"/><polyline points="10 2 14 2 14 6"/><polyline points="14 10 14 14 10 14"/><polyline points="6 14 2 14 2 10"/></svg></button>
 <button class="btn-theme" id="btnTheme" title="切换深色模式"><svg class="icon-moon" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8.5A6 6 0 0 1 7.5 2 6 6 0 1 0 14 8.5z"/></svg><svg class="icon-sun" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3"/><path d="M8 1.5v1M8 13.5v1M1.5 8h1M13.5 8h1M3.4 3.4l.7.7M11.9 11.9l.7.7M3.4 12.6l.7-.7M11.9 4.1l.7-.7"/></svg></button>
+<button class="btn-help" id="btnHelp" title="快捷键帮助 (?)">?</button>
 </div>
 </header>
 <div class="app-body">
 <aside class="sidebar" id="sidebar">
 <div class="side-head"><span class="side-title">文件列表</span><div class="side-actions">
-<button class="side-new" id="btnNew" title="新建文件"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg></button>
+<button class="side-new" id="btnNew" title="新建文件 (Ctrl+N)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg></button>
 <button class="side-new" id="btnCloseSide" title="收起侧栏"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="10 3 5 8 10 13"/></svg></button>
 </div></div>
 <div class="file-list" id="fileList"></div>
@@ -203,7 +203,10 @@ header,.toolbar{padding:0 var(--gap-sm)}#editor{padding:24px 16px 48px;max-width
 </div></div></div>
 <div class="editor-wrap">
 <div class="empty" id="emptyState"><div class="empty-ico"><svg width="26" height="26" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="1" width="7" height="3" rx=".8"/><path d="M4 3H2.5v12h11V3H12"/><path d="M5.5 7h5M5.5 10h3"/></svg></div><div class="empty-t">粘贴或输入文本</div><div class="empty-h"><kbd>Ctrl</kbd>+<kbd>V</kbd> 粘贴 &middot; <kbd>Ctrl</kbd>+<kbd>F</kbd> 搜索 &middot; <kbd>?</kbd> 快捷键</div></div>
+<div class="editor-content">
+<div class="line-gutter" id="lineGutter"><div class="ln active">1</div></div>
 <div id="editor" contenteditable="true" spellcheck="false"></div>
+</div>
 </div>
 </div>
 </div>
@@ -217,86 +220,75 @@ header,.toolbar{padding:0 var(--gap-sm)}#editor{padding:24px 16px 48px;max-width
 
 <!-- 搜索面板 -->
 <div class="search-panel" id="searchPanel">
-  <div class="sp-head">
-    <div class="sp-tab active" data-mode="global" id="tabGlobal">全局搜索</div>
-    <div class="sp-tab" data-mode="current" id="tabCurrent">当前文件</div>
-    <button class="sp-close" id="spClose" title="关闭"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg></button>
-  </div>
-  <div class="sp-body" id="spBody">
-    <div id="globalSearchView">
-      <div class="sp-input-wrap">
-        <svg class="sp-ico" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.5" cy="6.5" r="4.5"/><line x1="10" y1="10" x2="14" y2="14"/></svg>
-        <input class="sp-input" id="globalSearchInput" placeholder="搜索所有文件… ↑↓ 导航  Enter 跳转" autocomplete="off">
-      </div>
-      <div id="globalResults"></div>
-    </div>
-    <div id="currentSearchView" style="display:none">
-      <div class="sp-input-wrap">
-        <svg class="sp-ico" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.5" cy="6.5" r="4.5"/><line x1="10" y1="10" x2="14" y2="14"/></svg>
-        <input class="sp-input" id="currentSearchInput" placeholder="在当前文件中查找… Enter 下一个" autocomplete="off">
-      </div>
-      <div class="sp-actions">
-        <button class="sp-btn primary" id="spFindNext">下一个</button>
-        <button class="sp-btn primary" id="spFindPrev">上一个</button>
-        <button class="sp-btn" id="spReplace">替换</button>
-        <button class="sp-btn" id="spReplaceAll">全部替换</button>
-        <div class="sp-match-count" id="spMatchCount"></div>
-        <div class="sp-nav-btns">
-          <button class="sp-nav-btn" id="spPrev" title="上一个匹配"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="12 10 8 6 4 10"/></svg></button>
-          <button class="sp-nav-btn" id="spNext" title="下一个匹配"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 6 8 10 12 6"/></svg></button>
-        </div>
-      </div>
-      <div class="sp-replace-row">
-        <input class="sp-replace-input" id="replaceInput" placeholder="替换为...">
-      </div>
-    </div>
-  </div>
-  <div class="sp-footer">
-    <span id="spFooterLeft">输入关键词开始搜索</span>
-    <span>Ctrl+F 搜索 · Esc 关闭 · ? 快捷键</span>
-  </div>
+<div class="sp-head">
+<div class="sp-tab active" data-mode="global" id="tabGlobal">全局搜索</div>
+<div class="sp-tab" data-mode="current" id="tabCurrent">当前文件</div>
+<button class="sp-close" id="spClose" title="关闭"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg></button>
+</div>
+<div class="sp-body" id="spBody">
+<div id="globalSearchView">
+<div class="sp-input-wrap">
+<svg class="sp-ico" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.5" cy="6.5" r="4.5"/><line x1="10" y1="10" x2="14" y2="14"/></svg>
+<input class="sp-input" id="globalSearchInput" placeholder="搜索所有文件… ↑↓ 导航  Enter 跳转" autocomplete="off">
+</div>
+<div class="sp-actions">
+<button class="sp-btn primary" id="gPrev" title="上一个 (Shift+Enter)"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="12 10 8 6 4 10"/></svg></button>
+<button class="sp-btn primary" id="gNext" title="下一个 (Enter)">下一个</button>
+<div class="sp-match-count" id="gMatchCount"></div>
+</div>
+<div id="globalResults"></div>
+</div>
+<div id="currentSearchView" style="display:none">
+<div class="sp-input-wrap">
+<svg class="sp-ico" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.5" cy="6.5" r="4.5"/><line x1="10" y1="10" x2="14" y2="14"/></svg>
+<input class="sp-input" id="currentSearchInput" placeholder="在当前文件中查找…" autocomplete="off">
+</div>
+<div class="sp-actions">
+<button class="sp-btn primary" id="spFindPrev">上一个</button>
+<button class="sp-btn primary" id="spFindNext">下一个</button>
+<button class="sp-btn" id="spReplace">替换</button>
+<button class="sp-btn" id="spReplaceAll">全部替换</button>
+<div class="sp-match-count" id="spMatchCount"></div>
+</div>
+<div class="sp-replace-row"><input class="sp-replace-input" id="replaceInput" placeholder="替换为..."></div>
+</div>
+</div>
+<div class="sp-footer"><span id="spFooterLeft">输入关键词开始搜索</span><span>Ctrl+F · Esc · ?</span></div>
 </div>
 
-<!-- D4: 快捷键帮助面板 -->
+<!-- 快捷键帮助 -->
 <div class="help-overlay" id="helpOverlay">
-  <div class="help-panel">
-    <div class="hp-head">
-      <span class="hp-title">键盘快捷键</span>
-      <button class="hp-close" id="hpClose" title="关闭"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg></button>
-    </div>
-    <div class="hp-body">
-      <div class="hp-section">
-        <div class="hp-sec-title">文件操作</div>
-        <div class="hp-row"><span class="hp-row-desc">新建文件</span><div class="hp-keys"><span class="hp-key">Ctrl</span><span class="hp-plus">+</span><span class="hp-key">N</span></div></div>
-        <div class="hp-row"><span class="hp-row-desc">保存当前文件</span><div class="hp-keys"><span class="hp-key">Ctrl</span><span class="hp-plus">+</span><span class="hp-key accent">S</span></div></div>
-        <div class="hp-row"><span class="hp-row-desc">导入文件</span><div class="hp-keys"><span class="hp-key">Ctrl</span><span class="hp-plus">+</span><span class="hp-key">O</span></div></div>
-      </div>
-      <div class="hp-section">
-        <div class="hp-sec-title">搜索与替换</div>
-        <div class="hp-row"><span class="hp-row-desc">打开搜索面板</span><div class="hp-keys"><span class="hp-key">Ctrl</span><span class="hp-plus">+</span><span class="hp-key accent">F</span></div></div>
-        <div class="hp-row"><span class="hp-row-desc">搜索下一个匹配</span><div class="hp-keys"><span class="hp-key">Enter</span></div></div>
-        <div class="hp-row"><span class="hp-row-desc">搜索上一个匹配</span><div class="hp-keys"><span class="hp-key">Shift</span><span class="hp-plus">+</span><span class="hp-key">Enter</span></div></div>
-        <div class="hp-row"><span class="hp-row-desc">全局搜索结果导航</span><div class="hp-keys"><span class="hp-key">↑</span><span class="hp-key">↓</span><span class="hp-key">Enter</span></div></div>
-        <div class="hp-row"><span class="hp-row-desc">关闭搜索面板</span><div class="hp-keys"><span class="hp-key">Esc</span></div></div>
-      </div>
-      <div class="hp-section">
-        <div class="hp-sec-title">编辑</div>
-        <div class="hp-row"><span class="hp-row-desc">撤销</span><div class="hp-keys"><span class="hp-key">Ctrl</span><span class="hp-plus">+</span><span class="hp-key">Z</span></div></div>
-        <div class="hp-row"><span class="hp-row-desc">重做</span><div class="hp-keys"><span class="hp-key">Ctrl</span><span class="hp-plus">+</span><span class="hp-key">Y</span><span class="hp-plus">/</span><span class="hp-key">Ctrl</span><span class="hp-plus">+</span><span class="hp-key">Shift</span><span class="hp-plus">+</span><span class="hp-key">Z</span></div></div>
-        <div class="hp-row"><span class="hp-row-desc">加粗</span><div class="hp-keys"><span class="hp-key">Ctrl</span><span class="hp-plus">+</span><span class="hp-key">B</span></div></div>
-        <div class="hp-row"><span class="hp-row-desc">下划线</span><div class="hp-keys"><span class="hp-key">Ctrl</span><span class="hp-plus">+</span><span class="hp-key">U</span></div></div>
-        <div class="hp-row"><span class="hp-row-desc">复制当前行</span><div class="hp-keys"><span class="hp-key">Ctrl</span><span class="hp-plus">+</span><span class="hp-key">D</span></div></div>
-        <div class="hp-row"><span class="hp-row-desc">插入缩进</span><div class="hp-keys"><span class="hp-key">Tab</span></div></div>
-      </div>
-      <div class="hp-section">
-        <div class="hp-sec-title">视图</div>
-        <div class="hp-row"><span class="hp-row-desc">专注模式</span><div class="hp-keys"><span class="hp-key accent">F11</span></div></div>
-        <div class="hp-row"><span class="hp-row-desc">退出专注/关闭面板</span><div class="hp-keys"><span class="hp-key">Esc</span></div></div>
-        <div class="hp-row"><span class="hp-row-desc">切换深色模式</span><div class="hp-keys"><span class="hp-key">Ctrl</span><span class="hp-plus">+</span><span class="hp-key">Shift</span><span class="hp-plus">+</span><span class="hp-key">D</span></div></div>
-        <div class="hp-row"><span class="hp-row-desc">快捷键帮助</span><div class="hp-keys"><span class="hp-key accent">?</span></div></div>
-      </div>
-    </div>
-  </div>
+<div class="help-panel">
+<div class="hp-head"><span class="hp-title">键盘快捷键</span><button class="hp-close" id="hpClose" title="关闭"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg></button></div>
+<div class="hp-body">
+<div class="hp-section"><div class="hp-sec-title">文件操作</div>
+<div class="hp-row"><span class="hp-row-desc">新建文件</span><div class="hp-keys"><span class="hp-key">Ctrl</span><span class="hp-plus">+</span><span class="hp-key">N</span></div></div>
+<div class="hp-row"><span class="hp-row-desc">保存当前文件</span><div class="hp-keys"><span class="hp-key">Ctrl</span><span class="hp-plus">+</span><span class="hp-key accent">S</span></div></div>
+<div class="hp-row"><span class="hp-row-desc">导入文件</span><div class="hp-keys"><span class="hp-key">Ctrl</span><span class="hp-plus">+</span><span class="hp-key">O</span></div></div>
+</div>
+<div class="hp-section"><div class="hp-sec-title">搜索与替换</div>
+<div class="hp-row"><span class="hp-row-desc">打开搜索面板</span><div class="hp-keys"><span class="hp-key">Ctrl</span><span class="hp-plus">+</span><span class="hp-key accent">F</span></div></div>
+<div class="hp-row"><span class="hp-row-desc">下一个匹配</span><div class="hp-keys"><span class="hp-key accent">Enter</span></div></div>
+<div class="hp-row"><span class="hp-row-desc">上一个匹配</span><div class="hp-keys"><span class="hp-key">Shift</span><span class="hp-plus">+</span><span class="hp-key">Enter</span></div></div>
+<div class="hp-row"><span class="hp-row-desc">全局搜索导航</span><div class="hp-keys"><span class="hp-key">↑</span><span class="hp-key">↓</span><span class="hp-key">Enter</span></div></div>
+<div class="hp-row"><span class="hp-row-desc">关闭搜索面板</span><div class="hp-keys"><span class="hp-key">Esc</span></div></div>
+</div>
+<div class="hp-section"><div class="hp-sec-title">编辑</div>
+<div class="hp-row"><span class="hp-row-desc">撤销</span><div class="hp-keys"><span class="hp-key">Ctrl</span><span class="hp-plus">+</span><span class="hp-key">Z</span></div></div>
+<div class="hp-row"><span class="hp-row-desc">重做</span><div class="hp-keys"><span class="hp-key">Ctrl</span><span class="hp-plus">+</span><span class="hp-key">Y</span></div></div>
+<div class="hp-row"><span class="hp-row-desc">加粗</span><div class="hp-keys"><span class="hp-key">Ctrl</span><span class="hp-plus">+</span><span class="hp-key">B</span></div></div>
+<div class="hp-row"><span class="hp-row-desc">下划线</span><div class="hp-keys"><span class="hp-key">Ctrl</span><span class="hp-plus">+</span><span class="hp-key">U</span></div></div>
+<div class="hp-row"><span class="hp-row-desc">复制当前行</span><div class="hp-keys"><span class="hp-key">Ctrl</span><span class="hp-plus">+</span><span class="hp-key">D</span></div></div>
+<div class="hp-row"><span class="hp-row-desc">插入缩进</span><div class="hp-keys"><span class="hp-key">Tab</span></div></div>
+</div>
+<div class="hp-section"><div class="hp-sec-title">视图</div>
+<div class="hp-row"><span class="hp-row-desc">专注模式</span><div class="hp-keys"><span class="hp-key accent">F11</span></div></div>
+<div class="hp-row"><span class="hp-row-desc">退出专注/关闭面板</span><div class="hp-keys"><span class="hp-key">Esc</span></div></div>
+<div class="hp-row"><span class="hp-row-desc">切换深色模式</span><div class="hp-keys"><span class="hp-key">Ctrl</span><span class="hp-plus">+</span><span class="hp-key">Shift</span><span class="hp-plus">+</span><span class="hp-key">D</span></div></div>
+<div class="hp-row"><span class="hp-row-desc">快捷键帮助</span><div class="hp-keys"><span class="hp-key accent">?</span></div></div>
+</div>
+</div>
+</div>
 </div>
 
 <script>
@@ -311,7 +303,6 @@ function highlightSnippet(text,query,maxLen){if(!query||!text)return esc((text||
 
 const IC={file:'<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 1.5h6.5L13 5v9.5a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-13a1 1 0 0 1 1-1z"/><path d="M9.5 1.5V5H13"/></svg>',edit:'<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 2.5l2 2-8 8-3 1 1-3z"/><path d="M10 4l2 2"/></svg>',trash:'<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5h10"/><path d="M5.5 4.5V3h5v1.5"/><path d="M4.5 4.5l.8 9h5.4l.8-9"/></svg>',pin:'<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 11V2"/><path d="M4.5 5.5L8 2l3.5 3.5"/><line x1="3" y1="14" x2="13" y2="14"/></svg>'};
 
-/* 离线同步队列 */
 let syncQueue=JSON.parse(localStorage.getItem('syncQueue')||'[]');
 function addToQueue(act){syncQueue.push(act);localStorage.setItem('syncQueue',JSON.stringify(syncQueue))}
 setInterval(async()=>{if(!navigator.onLine||!syncQueue.length)return;const q=[...syncQueue];syncQueue=[];for(let i=0;i<q.length;i++){try{await fetch(q[i].url,q[i].opt)}catch(e){syncQueue=q.slice(i);break}}localStorage.setItem('syncQueue',JSON.stringify(syncQueue))},30000);
@@ -327,141 +318,118 @@ let loadingNote=false;
 
 let undoStack=[],redoStack=[];
 function pushUndo(){undoStack.push(editor.innerHTML);if(undoStack.length>50)undoStack.shift();redoStack=[]}
-function doUndo(){if(!undoStack.length)return;redoStack.push(editor.innerHTML);editor.innerHTML=undoStack.pop();scheduleStats();autoSave()}
-function doRedo(){if(!redoStack.length)return;undoStack.push(editor.innerHTML);editor.innerHTML=redoStack.pop();scheduleStats();autoSave()}
+function doUndo(){if(!undoStack.length)return;redoStack.push(editor.innerHTML);editor.innerHTML=undoStack.pop();scheduleStats();autoSave();updateLineNumbers()}
+function doRedo(){if(!redoStack.length)return;undoStack.push(editor.innerHTML);editor.innerHTML=redoStack.pop();scheduleStats();autoSave();updateLineNumbers()}
 
 const store={
 files:[],activeId:null,counter:1,fontSize:17,wordWrap:true,isFocus:false,_creating:false,
 get active(){return this.files.find(f=>f.id===this.activeId)||null},
 _norm(n,w){return{id:String(n.id),name:n.name||'未命名',content:w?(n.content||''):null,charCount:n.charCount||0,_loaded:!!w,createdAt:n.createdAt||Date.now(),updatedAt:n.updatedAt||Date.now(),pinned:n.pinned||0,sort_order:n.sort_order||0}},
 async restore(){try{const ns=await fetchNotes();this.files=ns.map(n=>this._norm(n,false));this.counter=this.files.filter(n=>n.name.startsWith('未命名')).length+1;if(this.files.length>0)this.activeId=this.files[0].id;return true}catch(e){toast('获取笔记失败: '+e.message);return false}},
-async createFile(silent,name,content){if(this._creating)return null;this._creating=true;const fn=name||'未命名 '+this.counter++;const tempId='local_'+Date.now()+'_'+Math.random().toString(36).slice(2,8);const nr=this._norm({id:tempId,name:fn,content:content||'',charCount:content?content.replace(/<[^>]*>/g,'').length:0,createdAt:Date.now(),updatedAt:Date.now(),pinned:0,sort_order:0},true);this.files.unshift(nr);this.activeId=tempId;renderList();editor.innerHTML=content?safeSanitize(content):'';scheduleStats();if(!silent)toast('已新建: '+fn);try{const n=await createNote(fn,content||'');const realId=String(n.id);if(realId!==tempId){nr.id=realId;nr.updatedAt=n.updatedAt||Date.now();if(this.activeId===tempId)this.activeId=realId;renderList()}}catch(e){console.warn('同步创建失败:',e.message)}this._creating=false;return nr},
+async createFile(silent,name,content){if(this._creating)return null;this._creating=true;const fn=name||'未命名 '+this.counter++;const tempId='local_'+Date.now()+'_'+Math.random().toString(36).slice(2,8);const nr=this._norm({id:tempId,name:fn,content:content||'',charCount:content?content.replace(/<[^>]*>/g,'').length:0,createdAt:Date.now(),updatedAt:Date.now(),pinned:0,sort_order:0},true);this.files.unshift(nr);this.activeId=tempId;renderList();editor.innerHTML=content?safeSanitize(content):'';scheduleStats();updateLineNumbers();if(!silent)toast('已新建: '+fn);try{const n=await createNote(fn,content||'');const realId=String(n.id);if(realId!==tempId){nr.id=realId;nr.updatedAt=n.updatedAt||Date.now();if(this.activeId===tempId)this.activeId=realId;renderList()}}catch(e){console.warn('同步创建失败:',e.message)}this._creating=false;return nr},
 async switchFile(id){if(String(id)===String(this.activeId))return;await this.saveCurrent();this.activeId=String(id);renderList();await loadEditor()},
 async deleteFile(id){try{await deleteNote(id);const i=this.files.findIndex(f=>f.id===String(id));if(i===-1)return;const nm=this.files[i].name;this.files.splice(i,1);if(String(this.activeId)===String(id))this.activeId=this.files.length?this.files[0].id:null;renderList();await loadEditor();toast('已删除: '+nm)}catch(e){toast('删除笔记失败: '+e.message)}},
 async renameFile(id,nm){const f=this.files.find(x=>x.id===String(id));if(f&&nm.trim()){try{const u=await updateNote(id,{name:nm.trim()});f.name=u.name||nm.trim();f.updatedAt=u.updatedAt||Date.now()}catch(e){toast('重命名失败: '+e.message)}renderList()}},
 async saveCurrent(){if(!this.activeId||loadingNote)return;const f=this.active;if(!f||!f._loaded)return;if(f.id.startsWith('local_'))return;const c=editor.innerHTML;if(c===f.content)return;try{const u=await updateNote(f.id,{content:c});f.content=u.content||c;f.updatedAt=u.updatedAt||Date.now();f.charCount=c.replace(/<[^>]*>/g,'').length;renderList()}catch(e){toast('保存失败: '+e.message)}},
-async clearCurrent(){const f=this.active;if(!f||!f._loaded)return;if(!getEditorText().trim())return;pushUndo();editor.innerHTML='';try{const u=await updateNote(f.id,{content:''});f.content='';f.charCount=0;f.updatedAt=u.updatedAt||Date.now()}catch(e){toast('清空失败: '+e.message)}scheduleStats();renderList();toast('已清空: '+f.name)},
+async clearCurrent(){const f=this.active;if(!f||!f._loaded)return;if(!getEditorText().trim())return;pushUndo();editor.innerHTML='';try{const u=await updateNote(f.id,{content:''});f.content='';f.charCount=0;f.updatedAt=u.updatedAt||Date.now()}catch(e){toast('清空失败: '+e.message)}scheduleStats();renderList();updateLineNumbers();toast('已清空: '+f.name)},
 downloadCurrent(){const f=this.active,t=getEditorText().trim();if(!t){toast('当前文件为空');return}const b=new Blob([t],{type:'text/plain;charset=utf-8'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=(f?f.name:'textvault')+'.txt';a.click();URL.revokeObjectURL(u);toast('已下载: '+a.download)},
 async togglePin(id){const f=this.files.find(x=>x.id===String(id));if(!f)return;const np=f.pinned?0:1;f.pinned=np;this.files.sort((a,b)=>b.pinned-a.pinned||a.sort_order-b.sort_order||b.updatedAt-a.updatedAt);renderList();try{await updateNote(id,{pinned:np});toast(np?'已置顶: '+f.name:'已取消置顶: '+f.name)}catch(e){toast('操作失败');f.pinned=np?0:1;this.files.sort((a,b)=>b.pinned-a.pinned||a.sort_order-b.sort_order||b.updatedAt-a.updatedAt);renderList()}},
 async moveFile(fid,tid,pos){const fi=this.files.findIndex(f=>f.id===String(fid));const[mf]=this.files.splice(fi,1);const ti=this.files.findIndex(f=>f.id===String(tid));this.files.splice(pos==='before'?ti:ti+1,0,mf);const grp=this.files.filter(f=>f.pinned===mf.pinned),ups=[];const step=1000;for(let i=0;i<grp.length;i++){const no=(i+1)*step;if(grp[i].sort_order!==no){grp[i].sort_order=no;ups.push({id:grp[i].id,sort_order:no})}}renderList();try{for(const u of ups)await updateNote(u.id,{sort_order:u.sort_order})}catch(e){toast('排序保存失败')}},
 };
 
-const editor=document.getElementById('editor'),emptyState=document.getElementById('emptyState'),fileListEl=document.getElementById('fileList'),sidebar=document.getElementById('sidebar'),fsVal=document.getElementById('fsVal'),stChars=document.getElementById('stChars'),stWords=document.getElementById('stWords'),stLines=document.getElementById('stLines'),saveInd=document.getElementById('saveInd'),toastBox=document.getElementById('toastBox'),dropOv=document.getElementById('dropOv'),fileInput=document.getElementById('fileInput'),btnBold=document.getElementById('btnBold'),btnULine=document.getElementById('btnULine');
+const editor=document.getElementById('editor'),emptyState=document.getElementById('emptyState'),fileListEl=document.getElementById('fileList'),sidebar=document.getElementById('sidebar'),fsVal=document.getElementById('fsVal'),stChars=document.getElementById('stChars'),stWords=document.getElementById('stWords'),stLines=document.getElementById('stLines'),saveInd=document.getElementById('saveInd'),toastBox=document.getElementById('toastBox'),dropOv=document.getElementById('dropOv'),fileInput=document.getElementById('fileInput'),btnBold=document.getElementById('btnBold'),btnULine=document.getElementById('btnULine'),lineGutter=document.getElementById('lineGutter'),helpOverlay=document.getElementById('helpOverlay');
 
-/* ===== 搜索面板 ===== */
-const searchPanel=document.getElementById('searchPanel'),tabGlobal=document.getElementById('tabGlobal'),tabCurrent=document.getElementById('tabCurrent'),globalSearchView=document.getElementById('globalSearchView'),currentSearchView=document.getElementById('currentSearchView'),globalSearchInput=document.getElementById('globalSearchInput'),currentSearchInput=document.getElementById('currentSearchInput'),replaceInputEl=document.getElementById('replaceInput'),globalResultsEl=document.getElementById('globalResults'),spMatchCount=document.getElementById('spMatchCount'),spFooterLeft=document.getElementById('spFooterLeft'),helpOverlay=document.getElementById('helpOverlay');
+/* 行号 */
+function getCurrentLineNumber(){const sel=window.getSelection();if(!sel.rangeCount||document.activeElement!==editor)return 0;const range=sel.getRangeAt(0),pre=range.cloneRange();pre.selectNodeContents(editor);pre.setEnd(range.startContainer,range.startOffset);return pre.toString().split('\n').length}
+let lnRaf=null;
+function updateLineNumbers(){if(lnRaf)return;lnRaf=requestAnimationFrame(()=>{const text=getEditorText(),lines=text.split('\n'),count=Math.max(lines.length,1);const cur=getCurrentLineNumber();let h='';for(let i=1;i<=count;i++)h+='<div class="ln'+(i===cur?' active':'')+'">'+i+'</div>';lineGutter.innerHTML=h;lnRaf=null})}
+
+/* 搜索面板 */
+const searchPanel=document.getElementById('searchPanel'),tabGlobal=document.getElementById('tabGlobal'),tabCurrent=document.getElementById('tabCurrent'),globalSearchView=document.getElementById('globalSearchView'),currentSearchView=document.getElementById('currentSearchView'),globalSearchInput=document.getElementById('globalSearchInput'),currentSearchInput=document.getElementById('currentSearchInput'),replaceInputEl=document.getElementById('replaceInput'),globalResultsEl=document.getElementById('globalResults'),spMatchCount=document.getElementById('spMatchCount'),gMatchCount=document.getElementById('gMatchCount'),spFooterLeft=document.getElementById('spFooterLeft');
 let searchMode='global',globalSearchTimer=null;
-/* A1: 全局搜索键盘导航 */
-let globalResults=[],selectedResultIdx=-1;
-/* A5: 当前文件匹配导航 */
-let currentMatches=[],currentMatchIdx=-1,currentMatchTotal=0;
+let globalAllMatches=[],globalNavIdx=-1,globalResultItems=[];
+let currentMatchTotal=0,currentMatchIdx=-1;
 
 function openSearchPanel(mode){searchPanel.classList.add('open');if(mode)switchSearchMode(mode);setTimeout(()=>{if(searchMode==='global')globalSearchInput.focus();else currentSearchInput.focus()},80)}
 function closeSearchPanel(){searchPanel.classList.remove('open')}
 function switchSearchMode(mode){searchMode=mode;tabGlobal.classList.toggle('active',mode==='global');tabCurrent.classList.toggle('active',mode==='current');globalSearchView.style.display=mode==='global'?'':'none';currentSearchView.style.display=mode==='current'?'':'none';if(mode==='global')setTimeout(()=>globalSearchInput.focus(),50);else setTimeout(()=>currentSearchInput.focus(),50)}
-
 tabGlobal.addEventListener('click',()=>switchSearchMode('global'));
 tabCurrent.addEventListener('click',()=>switchSearchMode('current'));
 document.getElementById('spClose').addEventListener('click',closeSearchPanel);
 document.getElementById('btnSearch').addEventListener('click',()=>openSearchPanel('global'));
 document.addEventListener('mousedown',e=>{if(searchPanel.classList.contains('open')&&!searchPanel.contains(e.target)&&!e.target.closest('#btnSearch'))closeSearchPanel();if(helpOverlay.classList.contains('open')&&!helpOverlay.querySelector('.help-panel').contains(e.target))closeHelp()});
 
-/* ===== 全局搜索（修复：当前文件从编辑器取实时内容） ===== */
+/* 全局搜索 */
 async function performGlobalSearch(query){
-  if(!query.trim()){globalResultsEl.innerHTML='<div class="sp-empty"><svg width="28" height="28" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.5" cy="6.5" r="4.5"/><line x1="10" y1="10" x2="14" y2="14"/></svg>输入关键词搜索所有文件</div>';spFooterLeft.textContent='输入关键词开始搜索';globalResults=[];selectedResultIdx=-1;return}
-  globalResultsEl.innerHTML='<div class="sp-loading"><div class="spinner"></div>正在搜索...</div>';
-  globalResults=[];selectedResultIdx=-1;
-  const lq=query.toLowerCase();
-  for(const file of store.files){
-    let plainText='';
-    if(String(file.id)===String(store.activeId)){plainText=stripHtml(editor.innerHTML)}
-    else if(file._loaded&&file.content){plainText=stripHtml(file.content)}
-    else{try{const n=await fetchNote(file.id);plainText=stripHtml(n.content||'');file.content=n.content||'';file._loaded=true;file.charCount=plainText.length}catch(e){continue}}
-    const lower=plainText.toLowerCase();
-    if(lower.includes(lq)){
-      let count=0,pos=0;while((pos=lower.indexOf(lq,pos))!==-1){count++;pos+=lq.length}
-      const lines=plainText.split('\n'),matchLines=[];
-      for(const line of lines){if(line.toLowerCase().includes(lq)){matchLines.push(line.trim());if(matchLines.length>=3)break}}
-      globalResults.push({fileId:file.id,fileName:file.name,matchCount:count,preview:matchLines.join('\n'),isCurrent:String(file.id)===String(store.activeId)});
-    }
-  }
-  if(globalResults.length===0){globalResultsEl.innerHTML='<div class="sp-empty"><svg width="28" height="28" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.5" cy="6.5" r="4.5"/><line x1="10" y1="10" x2="14" y2="14"/></svg>未找到匹配的文件</div>';spFooterLeft.textContent='无结果';return}
-  let totalMatches=0;let html='';
-  globalResults.forEach((r,i)=>{totalMatches+=r.matchCount;html+='<div class="sr-item'+(r.isCurrent?' current':'')+'" data-idx="'+i+'" data-fid="'+r.fileId+'"><span class="sr-icon">'+IC.file+'</span><div class="sr-body"><div class="sr-name">'+esc(r.fileName)+'</div><div class="sr-preview">'+highlightSnippet(r.preview,query,100)+'</div></div><span class="sr-count">'+r.matchCount+'</span></div>'});
-  globalResultsEl.innerHTML=html;spFooterLeft.textContent=globalResults.length+' 个文件，共 '+totalMatches+' 处匹配';
-  globalResultsEl.querySelectorAll('.sr-item').forEach(item=>{item.addEventListener('click',async()=>{const fid=item.dataset.fid;await store.switchFile(fid);closeSearchPanel();editor.focus();if(globalSearchInput.value)setTimeout(()=>window.find(globalSearchInput.value),200)})});
+if(!query.trim()){globalResultsEl.innerHTML='<div class="sp-empty"><svg width="28" height="28" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.5" cy="6.5" r="4.5"/><line x1="10" y1="10" x2="14" y2="14"/></svg>输入关键词搜索所有文件</div>';spFooterLeft.textContent='输入关键词开始搜索';globalAllMatches=[];globalResultItems=[];globalNavIdx=-1;gMatchCount.innerHTML='';return}
+globalResultsEl.innerHTML='<div class="sp-loading"><div class="spinner"></div>正在搜索...</div>';
+globalResultItems=[];globalNavIdx=-1;
+const lq=query.toLowerCase(),perFile=[];
+for(const file of store.files){
+let plainText='';
+if(String(file.id)===String(store.activeId)){plainText=stripHtml(editor.innerHTML)}
+else if(file._loaded&&file.content){plainText=stripHtml(file.content)}
+else{try{const n=await fetchNote(file.id);plainText=stripHtml(n.content||'');file.content=n.content||'';file._loaded=true;file.charCount=plainText.length}catch(e){continue}}
+const lower=plainText.toLowerCase();
+if(lower.includes(lq)){
+let count=0,pos=0;while((pos=lower.indexOf(lq,pos))!==-1){count++;pos+=lq.length}
+const lines=plainText.split('\n'),matchLines=[];
+for(const line of lines){if(line.toLowerCase().includes(lq)){matchLines.push(line.trim());if(matchLines.length>=3)break}}
+perFile.push({fileId:file.id,fileName:file.name,matchCount:count,preview:matchLines.join('\n'),isCurrent:String(file.id)===String(store.activeId)});
+}}
+globalAllMatches=[];let gIdx=0;
+for(const r of perFile){for(let i=0;i<r.matchCount;i++){globalAllMatches.push({fileId:r.fileId,fileName:r.fileName,matchIdxInFile:i,totalInFile:r.matchCount,globalIdx:gIdx++})}}
+if(globalAllMatches.length===0){globalResultsEl.innerHTML='<div class="sp-empty"><svg width="28" height="28" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.5" cy="6.5" r="4.5"/><line x1="10" y1="10" x2="14" y2="14"/></svg>未找到匹配的文件</div>';spFooterLeft.textContent='无结果';gMatchCount.innerHTML='';return}
+let totalMatches=globalAllMatches.length,html='';
+perFile.forEach((r,i)=>{html+='<div class="sr-item'+(r.isCurrent?' current':'')+'" data-idx="'+i+'" data-fid="'+r.fileId+'"><span class="sr-icon">'+IC.file+'</span><div class="sr-body"><div class="sr-name">'+esc(r.fileName)+'</div><div class="sr-preview">'+highlightSnippet(r.preview,query,100)+'</div></div><span class="sr-count">'+r.matchCount+'</span></div>'});
+globalResultsEl.innerHTML=html;spFooterLeft.textContent=perFile.length+' 个文件，共 '+totalMatches+' 处匹配';
+gMatchCount.innerHTML='<span class="cur">0</span>/'+totalMatches;
+globalResultItems=Array.from(globalResultsEl.querySelectorAll('.sr-item'));
+globalResultItems.forEach(item=>{item.addEventListener('click',async()=>{const fid=item.dataset.fid;const firstGlobal=globalAllMatches.findIndex(m=>m.fileId===fid);globalNavIdx=firstGlobal>=0?firstGlobal:0;await navigateGlobalResult();closeSearchPanel();editor.focus()})});
 }
 
-/* A1: 全局搜索键盘导航 */
-function highlightResult(idx){
-  globalResultsEl.querySelectorAll('.sr-item').forEach((el,i)=>{el.classList.toggle('selected',i===idx)});
-  const el=globalResultsEl.querySelector('[data-idx="'+idx+'"]');if(el)el.scrollIntoView({block:'nearest',behavior:'smooth'});
+function updateGlobalNavUI(){gMatchCount.innerHTML=globalAllMatches.length>0?'<span class="cur">'+(globalNavIdx+1)+'</span>/'+globalAllMatches.length:'';if(globalResultItems.length>0){const cur=globalAllMatches[globalNavIdx];globalResultItems.forEach((el,i)=>{el.classList.remove('selected');if(cur&&String(store.files[i]&&store.files[i].id)===String(cur.fileId))el.classList.add('selected')})}}
+
+async function navigateGlobalResult(){
+if(globalNavIdx<0||globalNavIdx>=globalAllMatches.length)return;
+const m=globalAllMatches[globalNavIdx];
+if(String(store.activeId)!==String(m.fileId))await store.switchFile(m.fileId);
+const sel=window.getSelection(),range=document.createRange();
+range.selectNodeContents(editor);range.collapse(true);sel.removeAllRanges();sel.addRange(range);
+const q=globalSearchInput.value;
+for(let i=0;i<=m.matchIdxInFile;i++){if(!window.find(q,false,false,true,false))break}
+updateGlobalNavUI();updateLineNumbers();
 }
-async function openSelectedResult(){
-  if(selectedResultIdx<0||selectedResultIdx>=globalResults.length)return;
-  const r=globalResults[selectedResultIdx];await store.switchFile(r.fileId);closeSearchPanel();editor.focus();
-  if(globalSearchInput.value)setTimeout(()=>window.find(globalSearchInput.value),200);
-}
+
+document.getElementById('gNext').addEventListener('click',()=>{if(!globalAllMatches.length)return;globalNavIdx=(globalNavIdx+1)%globalAllMatches.length;navigateGlobalResult()});
+document.getElementById('gPrev').addEventListener('click',()=>{if(!globalAllMatches.length)return;globalNavIdx=globalNavIdx<=0?globalAllMatches.length-1:globalNavIdx-1;navigateGlobalResult()});
+
 globalSearchInput.addEventListener('input',()=>{clearTimeout(globalSearchTimer);const q=globalSearchInput.value;globalSearchTimer=setTimeout(()=>performGlobalSearch(q),350)});
 globalSearchInput.addEventListener('keydown',e=>{
-  if(e.key==='ArrowDown'){e.preventDefault();if(globalResults.length){selectedResultIdx=(selectedResultIdx+1)%globalResults.length;highlightResult(selectedResultIdx)}}
-  else if(e.key==='ArrowUp'){e.preventDefault();if(globalResults.length){selectedResultIdx=selectedResultIdx<=0?globalResults.length-1:selectedResultIdx-1;highlightResult(selectedResultIdx)}}
-  else if(e.key==='Enter'){e.preventDefault();if(selectedResultIdx>=0)openSelectedResult();else performGlobalSearch(globalSearchInput.value)}
+if(e.key==='ArrowDown'){e.preventDefault();if(globalResultItems.length){let ci=globalResultItems.findIndex(el=>el.classList.contains('selected'));if(ci<0)ci=-1;ci=(ci+1)%globalResultItems.length;globalResultItems.forEach(el=>el.classList.remove('selected'));globalResultItems[ci].classList.add('selected');globalResultItems[ci].scrollIntoView({block:'nearest',behavior:'smooth'})}}
+else if(e.key==='ArrowUp'){e.preventDefault();if(globalResultItems.length){let ci=globalResultItems.findIndex(el=>el.classList.contains('selected'));if(ci<0)ci=0;ci=ci<=0?globalResultItems.length-1:ci-1;globalResultItems.forEach(el=>el.classList.remove('selected'));globalResultItems[ci].classList.add('selected');globalResultItems[ci].scrollIntoView({block:'nearest',behavior:'smooth'})}}
+else if(e.key==='Enter'){e.preventDefault();if(globalNavIdx>=0){if(e.shiftKey){globalNavIdx=globalNavIdx<=0?globalAllMatches.length-1:globalNavIdx-1}else{globalNavIdx=(globalNavIdx+1)%globalAllMatches.length}navigateGlobalResult()}else performGlobalSearch(globalSearchInput.value)}
 });
 
-/* ===== A5: 当前文件搜索 — 实时匹配计数+导航 ===== */
-function computeCurrentMatches(){
-  const q=currentSearchInput.value;
-  if(!q){currentMatches=[];currentMatchIdx=-1;currentMatchTotal=0;updateMatchCountUI();return}
-  const text=getEditorText(),lq=q.toLowerCase(),lower=text.toLowerCase();
-  currentMatches=[];let pos=0;
-  while((pos=lower.indexOf(lq,pos))!==-1){currentMatches.push(pos);pos+=lq.length}
-  currentMatchTotal=currentMatches.length;
-  if(currentMatchTotal===0)currentMatchIdx=-1;
-  else if(currentMatchIdx>=currentMatchTotal)currentMatchIdx=0;
-  else if(currentMatchIdx<0)currentMatchIdx=0;
-  updateMatchCountUI();
-}
-function updateMatchCountUI(){
-  if(currentMatchTotal===0)spMatchCount.innerHTML=currentSearchInput.value?'<span class="cur">0</span>/0':'';
-  else spMatchCount.innerHTML='<span class="cur">'+(currentMatchIdx+1)+'</span>/'+currentMatchTotal;
-}
-function findCurrentMatch(direction){
-  const q=currentSearchInput.value;if(!q)return;
-  if(currentMatchTotal===0){computeCurrentMatches();return}
-  if(direction==='next'){currentMatchIdx=(currentMatchIdx+1)%currentMatchTotal}
-  else{currentMatchIdx=currentMatchIdx<=0?currentMatchTotal-1:currentMatchIdx-1}
-  updateMatchCountUI();
-  /* 使用window.find定位（从开头重新搜索到目标位置） */
-  const found=direction==='next'?window.find(q,false,false,true):window.find(q,false,true,true);
-  if(!found&&currentMatchTotal>0){/* 回绕 */window.find(q,false, direction==='next',true)}
-}
+/* 当前文件搜索 */
+function computeCurrentMatches(){const q=currentSearchInput.value;if(!q){currentMatchTotal=0;currentMatchIdx=-1;updateMatchCountUI();return}const text=getEditorText(),lq=q.toLowerCase(),lower=text.toLowerCase();let count=0,pos=0;while((pos=lower.indexOf(lq,pos))!==-1){count++;pos+=lq.length}currentMatchTotal=count;if(currentMatchTotal===0)currentMatchIdx=-1;else if(currentMatchIdx>=currentMatchTotal)currentMatchIdx=0;else if(currentMatchIdx<0)currentMatchIdx=0;updateMatchCountUI()}
+function updateMatchCountUI(){spMatchCount.innerHTML=currentMatchTotal>0?'<span class="cur">'+(currentMatchIdx+1)+'</span>/'+currentMatchTotal:currentSearchInput.value?'<span class="cur">0</span>/0':''}
+function findCurrentMatch(dir){const q=currentSearchInput.value;if(!q)return;if(currentMatchTotal===0){computeCurrentMatches();return}if(dir==='next'){currentMatchIdx=(currentMatchIdx+1)%currentMatchTotal}else{currentMatchIdx=currentMatchIdx<=0?currentMatchTotal-1:currentMatchIdx-1}updateMatchCountUI();const found=dir==='next'?window.find(q,false,false,true):window.find(q,false,true,true);if(!found&&currentMatchTotal>0)window.find(q,false,dir==='next',true);updateLineNumbers()}
+
 currentSearchInput.addEventListener('input',()=>{computeCurrentMatches();if(currentMatchTotal>0)window.find(currentSearchInput.value)});
-currentSearchInput.addEventListener('keydown',e=>{
-  if(e.key==='Enter'){e.preventDefault();findCurrentMatch(e.shiftKey?'prev':'next')}
-});
+currentSearchInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();findCurrentMatch(e.shiftKey?'prev':'next')}});
 document.getElementById('spFindNext').addEventListener('click',()=>findCurrentMatch('next'));
 document.getElementById('spFindPrev').addEventListener('click',()=>findCurrentMatch('prev'));
-document.getElementById('spPrev').addEventListener('click',()=>findCurrentMatch('prev'));
-document.getElementById('spNext').addEventListener('click',()=>findCurrentMatch('next'));
-document.getElementById('spReplace').addEventListener('click',()=>{
-  const q=currentSearchInput.value;if(!q)return;
-  if(window.find(q)){pushUndo();document.execCommand('insertText',false,replaceInputEl.value);computeCurrentMatches();autoSave()}
-});
-document.getElementById('spReplaceAll').addEventListener('click',()=>{
-  const q=currentSearchInput.value;if(!q)return;pushUndo();
-  const re=new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'g');
-  const before=editor.innerHTML;editor.innerHTML=before.replace(re,replaceInputEl.value);
-  if(editor.innerHTML!==before){const m=before.match(re);toast('已替换 '+(m?m.length:0)+' 处');scheduleStats();autoSave()}
-  computeCurrentMatches();
-});
+document.getElementById('spReplace').addEventListener('click',()=>{const q=currentSearchInput.value;if(!q)return;if(window.find(q)){pushUndo();document.execCommand('insertText',false,replaceInputEl.value);computeCurrentMatches();autoSave();updateLineNumbers()}});
+document.getElementById('spReplaceAll').addEventListener('click',()=>{const q=currentSearchInput.value;if(!q)return;pushUndo();const re=new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'g');const before=editor.innerHTML;editor.innerHTML=before.replace(re,replaceInputEl.value);if(editor.innerHTML!==before){const m=before.match(re);toast('已替换 '+(m?m.length:0)+' 处');scheduleStats();autoSave()}computeCurrentMatches();updateLineNumbers()});
 
-/* ===== D4: 快捷键帮助面板 ===== */
+/* 快捷键帮助 */
 function openHelp(){helpOverlay.classList.add('open')}
 function closeHelp(){helpOverlay.classList.remove('open')}
 document.getElementById('hpClose').addEventListener('click',closeHelp);
+document.getElementById('btnHelp').addEventListener('click',openHelp);
 
-/* ===== 基础功能 ===== */
+/* 基础功能 */
 function getEditorText(){return editor.innerText.replace(/\u00A0/g,' ').trimEnd()}
 function countWords(t){if(!t)return 0;const c=t.match(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff\u3000-\u303f\uff00-\uffef]/g);const cc=c?c.length:0;const r=t.replace(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff\u3000-\u303f\uff00-\uffef]/g,' ');return cc+r.trim().split(/\s+/).filter(w=>w.length>0).length}
 function updateStats(){const t=getEditorText();stChars.textContent='字符: '+t.replace(/\n/g,'').length;stWords.textContent='字数: '+countWords(t);stLines.textContent='行数: '+(t?t.split('\n').length:0)}
@@ -471,19 +439,19 @@ let statsRaf=null;function scheduleStats(){if(statsRaf)return;statsRaf=requestAn
 function renderList(){let h='',lp=false;store.files.forEach((f,i)=>{if(i>0&&lp&&!f.pinned)h+='<div class="pin-sep"></div>';lp=f.pinned;const a=String(f.id)===String(store.activeId),c=f.charCount||0;h+='<div class="file-item'+(a?' active':'')+(f.pinned?' pinned':'')+'" data-id="'+f.id+'" draggable="true"><span class="fi-icon">'+(f.pinned?IC.pin:IC.file)+'</span><span class="fi-info"><span class="fi-name">'+esc(f.name)+'</span><span class="fi-meta">'+c+' 字 &middot; '+timeAgo(f.updatedAt)+'</span></span><span class="fi-acts"><button class="fa-btn act-pin'+(f.pinned?' pin-on':'')+'" title="'+(f.pinned?'取消置顶':'置顶')+'">'+IC.pin+'</button><button class="fa-btn act-rename" title="重命名">'+IC.edit+'</button><button class="fa-btn del act-del" title="删除">'+IC.trash+'</button></span></div>'});fileListEl.innerHTML=h}
 
 document.execCommand('defaultParagraphSeparator',false,'br');
-async function loadEditor(){const f=store.active;if(!f){editor.innerHTML='';scheduleStats();return}if(!f._loaded){loadingNote=true;try{const n=await fetchNote(f.id);f.content=n.content||'';f.charCount=n.content?n.content.replace(/<[^>]*>/g,'').length:0;f.pinned=n.pinned||0;f.sort_order=n.sort_order||0;f._loaded=true;renderList()}catch(e){toast('加载笔记失败: '+e.message);editor.innerHTML='';loadingNote=false;scheduleStats();return}loadingNote=false}editor.innerHTML=safeSanitize(f.content||'');scheduleStats()}
+async function loadEditor(){const f=store.active;if(!f){editor.innerHTML='';scheduleStats();updateLineNumbers();return}if(!f._loaded){loadingNote=true;try{const n=await fetchNote(f.id);f.content=n.content||'';f.charCount=n.content?n.content.replace(/<[^>]*>/g,'').length:0;f.pinned=n.pinned||0;f.sort_order=n.sort_order||0;f._loaded=true;renderList()}catch(e){toast('加载笔记失败: '+e.message);editor.innerHTML='';loadingNote=false;scheduleStats();updateLineNumbers();return}loadingNote=false}editor.innerHTML=safeSanitize(f.content||'');scheduleStats();updateLineNumbers()}
 
-function applyFontSize(s){store.fontSize=Math.max(12,Math.min(30,s));fsVal.textContent=store.fontSize;editor.style.fontSize=store.fontSize+'px'}
+function applyFontSize(s){store.fontSize=Math.max(12,Math.min(30,s));fsVal.textContent=store.fontSize;editor.style.fontSize=store.fontSize+'px';document.documentElement.style.setProperty('--editor-lh',(store.fontSize*2)+'px');updateLineNumbers()}
 applyFontSize(store.fontSize);document.getElementById('fsMinus').addEventListener('click',()=>applyFontSize(store.fontSize-1));document.getElementById('fsPlus').addEventListener('click',()=>applyFontSize(store.fontSize+1));
 
 function applyWrap(w){store.wordWrap=w;editor.style.whiteSpace=w?'pre-wrap':'pre';document.getElementById('btnWrap').classList.toggle('on',w)}
 applyWrap(store.wordWrap);document.getElementById('btnWrap').addEventListener('click',()=>applyWrap(!store.wordWrap));
 
 let saveTimer=null,inputTimer=null;
-editor.addEventListener('input',()=>{pushUndo();clearTimeout(inputTimer);inputTimer=setTimeout(()=>{scheduleStats();autoSave()},200)});
+editor.addEventListener('input',()=>{pushUndo();clearTimeout(inputTimer);inputTimer=setTimeout(()=>{scheduleStats();autoSave();updateLineNumbers()},200)});
 function autoSave(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>{const f=store.active;if(f&&f._loaded&&!loadingNote&&editor.innerHTML!==f.content)store.saveCurrent().then(()=>{saveInd.classList.add('on');setTimeout(()=>saveInd.classList.remove('on'),1400)}).catch(e=>toast('自动保存失败: '+e.message))},3000)}
 
-editor.addEventListener('paste',e=>{e.preventDefault();const t=e.clipboardData.getData('text/plain');if(!t)return;pushUndo();document.execCommand('insertText',false,t);requestAnimationFrame(()=>{scheduleStats();autoSave()})});
+editor.addEventListener('paste',e=>{e.preventDefault();const t=e.clipboardData.getData('text/plain');if(!t)return;pushUndo();document.execCommand('insertText',false,t);requestAnimationFrame(()=>{scheduleStats();autoSave();updateLineNumbers()})});
 
 editor.addEventListener('keydown',e=>{
 if(e.key==='Tab'){e.preventDefault();document.execCommand('insertText',false,' ')}
@@ -503,7 +471,7 @@ setInterval(()=>{if(!editor.innerHTML)return;editor.querySelectorAll('span').for
 function updateFmt(){btnBold.classList.toggle('on',document.queryCommandState('bold'));btnULine.classList.toggle('on',document.queryCommandState('underline'))}
 btnBold.addEventListener('mousedown',e=>{e.preventDefault();pushUndo();document.execCommand('bold');updateFmt()});
 btnULine.addEventListener('mousedown',e=>{e.preventDefault();pushUndo();document.execCommand('underline');updateFmt()});
-document.addEventListener('selectionchange',()=>{if(document.activeElement===editor)updateFmt()});editor.addEventListener('keyup',updateFmt);editor.addEventListener('mouseup',updateFmt);
+document.addEventListener('selectionchange',()=>{if(document.activeElement===editor){updateFmt();updateLineNumbers()}});editor.addEventListener('keyup',()=>{updateFmt();updateLineNumbers()});editor.addEventListener('mouseup',()=>{updateFmt();updateLineNumbers()});
 
 fileListEl.addEventListener('click',e=>{const item=e.target.closest('.file-item');if(!item)return;const id=item.dataset.id;if(e.target.closest('.act-pin')){store.togglePin(id);return}if(e.target.closest('.act-rename')){startRename(id);return}if(e.target.closest('.act-del')){store.deleteFile(id);return}store.switchFile(id)});
 fileListEl.addEventListener('dblclick',e=>{const n=e.target.closest('.fi-name');if(!n)return;const item=n.closest('.file-item');if(item)startRename(item.dataset.id)});
@@ -544,18 +512,10 @@ function applyTheme(dark){document.body.classList.toggle('dark',dark);localStora
 const savedTheme=localStorage.getItem('theme');if(savedTheme==='dark'||(!savedTheme&&window.matchMedia('(prefers-color-scheme:dark)').matches))applyTheme(true);
 btnTheme.addEventListener('click',()=>applyTheme(!document.body.classList.contains('dark')));
 
-/* 全局快捷键 */
 document.addEventListener('keydown',e=>{
-  /* ? 键打开帮助（不在输入框中时） */
-  if(e.key==='?'&&!e.ctrlKey&&!e.metaKey&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'&&document.activeElement!==editor){
-    e.preventDefault();if(helpOverlay.classList.contains('open'))closeHelp();else openHelp();return;
-  }
-  if(e.key==='Escape'){
-    if(helpOverlay.classList.contains('open')){closeHelp();return}
-    if(searchPanel.classList.contains('open')){closeSearchPanel();return}
-    if(store.isFocus)exitFocus();return;
-  }
-  if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();const f=store.active;if(f&&f._loaded&&!loadingNote&&editor.innerHTML!==f.content)store.saveCurrent().then(()=>{saveInd.classList.add('on');setTimeout(()=>saveInd.classList.remove('on'),1400);toast('已保存')}).catch(e=>toast('保存失败: '+e.message));else toast('内容未变化')}
+if(e.key==='?'&&!e.ctrlKey&&!e.metaKey&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'&&document.activeElement!==editor){e.preventDefault();if(helpOverlay.classList.contains('open'))closeHelp();else openHelp();return}
+if(e.key==='Escape'){if(helpOverlay.classList.contains('open')){closeHelp();return}if(searchPanel.classList.contains('open')){closeSearchPanel();return}if(store.isFocus)exitFocus();return}
+if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();const f=store.active;if(f&&f._loaded&&!loadingNote&&editor.innerHTML!==f.content)store.saveCurrent().then(()=>{saveInd.classList.add('on');setTimeout(()=>saveInd.classList.remove('on'),1400);toast('已保存')}).catch(e=>toast('保存失败: '+e.message));else toast('内容未变化')}
 });
 
 window.addEventListener('beforeunload',()=>{const f=store.active;if(f&&f._loaded&&editor.innerHTML!==f.content){const tk=localStorage.getItem('token')||'';fetch('https://note2.kehuang.eu.org/api/notes/'+f.id,{method:'PUT',headers:{Authorization:'Bearer '+tk,'Content-Type':'application/json'},body:JSON.stringify({content:editor.innerHTML}),keepalive:true})}});
