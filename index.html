@@ -72,7 +72,7 @@ body.dark .sidebar{box-shadow:2px 0 10px rgba(0,0,0,.2)}
 #editor{padding:28px 32px 48px;background:transparent;border:none;outline:none;color:var(--text);font-family:var(--font-body);font-size:17px;line-height:2;letter-spacing:.01em;white-space:pre-wrap;word-wrap:break-word;caret-color:var(--accent);min-height:100%;transition:color .3s}
 #editor ::selection,#editor *::selection{background:var(--accent-bg);color:var(--text)}
   /* 修复：下伸字母遮挡下划线的问题，将下划线位置下移 */
-#editor u, #editor span[style*="underline"] {text-underline-offset: 3px;text-decoration-thickness: 1px;}
+#editor u, #editor span[style*="underline"] {text-underline-offset: 5px;text-decoration-thickness: 1px;}
 .empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;pointer-events:none;z-index:2;transition:opacity .3s}.empty.hide{opacity:0}
 .empty-ico{width:72px;height:72px;border:2px dashed var(--border);border-radius:18px;display:flex;align-items:center;justify-content:center;color:var(--text-3);animation:breathe 5s ease-in-out infinite}
 @keyframes breathe{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:.7;transform:scale(1.015)}}
