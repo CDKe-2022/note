@@ -182,5 +182,3 @@ async function cleanupIdempotency(db) {
 本项目采用 [MIT License](LICENSE) 开源。
 ```
 ***
-**说明：**
-这份 `README.md` 结构清晰，包含了徽章、特性介绍、详细部署步骤（D1、Worker、前端、Token设置）以及快捷键说明。部署指南中的 Worker 代码已经帮你写成了精简版并包含在 Markdown 中，方便看仓库的人一键复制。你可以直接将代码块中的 `https://your-frontend.pages.dev` 替换成你真实的域名以作为最终版本提交。
